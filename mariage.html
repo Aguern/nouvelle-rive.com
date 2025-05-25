@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mariage Marine & Nicolas</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Karla:ital,wght@1,400&display=swap');
+
+    body {
+      font-family: 'Karla', sans-serif;
+      background-color: #f7f7fc;
+      color: #333;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    .banner {
+      width: 100vw;
+      max-height: 300px;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      margin-bottom: 2rem;
+    }
+
+    h1 {
+      font-size: 2rem;
+      color: #333;
+    }
+
+    h2 {
+      font-size: 1.2rem;
+      color: #818edb;
+      margin-top: 0.5rem;
+    }
+
+    p {
+      margin: 1rem 0;
+    }
+
+    .btn-fixed {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #818edb;
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: bold;
+      border: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      z-index: 1000;
+    }
+
+    .btn-fixed:hover {
+      background-color: #6f7ac7;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 100;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .modal-buttons button {
+      margin: 1rem;
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .public-btn {
+      background-color: #818edb;
+      color: white;
+    }
+
+    .private-btn {
+      background-color: #ddd;
+    }
+
+    #gallery {
+      margin-top: 3rem;
+    }
+
+    /* Galerie à marges fines et vignettes plein cadre */
+    #drive-gallery {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      padding: 1rem 0;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    #drive-gallery > div {
+      position: relative;
+      width: 100%;
+      height: 0;
+      padding-bottom: 100%;
+      background: black;
+      overflow: hidden;
+    }
+
+    #drive-gallery img,
+    #drive-gallery video {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      cursor: pointer;
+    }
+
+    @media (min-width: 768px) {
+      #drive-gallery {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    input[type='file'] {
+      display: none;
+    }
+
+    .lightbox {
+      display: none;
+      position: fixed;
+      z-index: 200;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.9);
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .lightbox-content {
+      max-width: 90%;
+      max-height: 80vh;
+    }
+
+    .lightbox img,
+    .lightbox video {
+      max-width: 100%;
+      max-height: 80vh;
+      border-radius: 0;
+    }
+
+    /* Croix de fermeture */
+    .lightbox .close-btn {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      font-size: 2rem;
+      color: white;
+      line-height: 1;
+      cursor: pointer;
+      z-index: 1002;
+    }
+
+    /* Bouton téléchargement en bas à droite */
+    .download-btn {
+      position: absolute;
+      bottom: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      z-index: 1001;
+    }
+
+    .download-btn img {
+      width: 28px;
+      height: 28px;
+      filter: invert(1);
+    }
+
+    body.lightbox-open .btn-fixed {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <img src="header.png" class="banner" alt="bannière"/>
+  </header>
+
+  <h1>Mariage Marine et Nicolas</h1>
+  <h2>19 juillet 2025</h2>
+  <p>N'hésitez pas à nous partager vos photos ou vidéos<br />afin de nous laisser un souvenir de cette journée si spéciale.</p>
+
+  <button class="btn-fixed" onclick="document.getElementById('mediaInput').click()">Partager mon souvenir</button>
+  <input id="mediaInput" type="file" accept="image/*,video/*" capture onchange="handleFile(this.files[0])" />
+
+  <div id="popup" class="modal">
+    <div class="modal-content">
+      <p>Souhaitez-vous afficher ce média dans la galerie ?</p>
+      <div class="modal-buttons">
+        <button class="public-btn" onclick="sendMedia(true)">📢 Oui</button>
+        <button class="private-btn" onclick="sendMedia(false)">🔒 Non</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="gallery">
+    <h2>Galerie des invités</h2>
+    <div id="drive-gallery"></div>
+  </div>
+
+  <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+    <div id="lightbox-content"></div>
+    <button class="close-btn" onclick="closeLightbox({target:document.getElementById('lightbox')});">&times;</button>
+    <button class="download-btn" id="downloadBtn" onclick="downloadMedia()">
+      <img src="telecharger-un-fichier.png" alt="Télécharger"/>
+    </button>
+  </div>
+
+  <script>
+    const folderId = "1J4fn2yvUhe0MEZY6KZtDb_2PJutP7FL7";
+    const apiKey = "AIzaSyAKdgvWZ4dX7oS0btyCHtMSS-bgErTtnhY";
+
+    async function loadGallery() {
+      const endpoint = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+(mimeType+contains+'image/'+or+mimeType+contains+'video/')&key=${apiKey}&fields=files(id,name,mimeType,thumbnailLink,webContentLink)`;
+      const res = await fetch(endpoint);
+      const data = await res.json();
+      const container = document.getElementById("drive-gallery");
+
+      container.innerHTML = "";
+      data.files.forEach(file => {
+        const thumb = file.thumbnailLink?.replace("=s220", "=s600") || "";
+        const webLink = file.webContentLink;
+
+        const wrapper = document.createElement("div");
+        const element = file.mimeType.includes("video")
+          ? document.createElement("video")
+          : document.createElement("img");
+
+        element.src = file.mimeType.includes("video")
+          ? `https://drive.google.com/uc?export=download&id=${file.id}`
+          : thumb;
+        element.alt = file.name;
+        element.setAttribute("data-full", webLink);
+        element.onclick = () => openLightbox(file.mimeType, element.src, webLink);
+
+        wrapper.appendChild(element);
+        container.appendChild(wrapper);
+      });
+    }
+
+    function openLightbox(type, src, downloadLink) {
+      const content = document.getElementById("lightbox-content");
+      const lightbox = document.getElementById("lightbox");
+      const btn = document.getElementById("downloadBtn");
+
+      content.innerHTML = "";
+
+      const el = document.createElement(type.includes("video") ? "video" : "img");
+      el.src = src;
+      if (type.includes("video")) el.controls = true;
+      content.appendChild(el);
+
+      btn.setAttribute("data-src", downloadLink);
+      document.body.classList.add("lightbox-open");
+      lightbox.style.display = "flex";
+    }
+
+    function downloadMedia() {
+      const src = document.getElementById("downloadBtn").getAttribute("data-src");
+      const a = document.createElement("a");
+      a.href = src;
+      a.download = "";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    function closeLightbox(event) {
+      if (event.target.id === "lightbox" || event.key === "Escape") {
+        document.getElementById("lightbox").style.display = "none";
+        document.body.classList.remove("lightbox-open");
+      }
+    }
+
+    document.addEventListener("keydown", closeLightbox);
+    window.addEventListener("DOMContentLoaded", loadGallery);
+
+    let selectedFile = null;
+    function handleFile(file) {
+      selectedFile = file;
+      document.getElementById('popup').style.display = 'flex';
+    }
+
+    async function sendMedia(isPublic) {
+      const reader = new FileReader();
+      reader.onloadend = async () => {
+        const base64 = reader.result.split(',')[1];
+        const fd = new URLSearchParams();
+        fd.append('fileContent', encodeURIComponent(base64));
+        fd.append('fileType', selectedFile.type);
+        fd.append('fileName', selectedFile.name);
+        fd.append('public', isPublic ? 'true' : 'false');
+        const res = await fetch(
+          '', // à remplacer par l'URL App Script
+          { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: fd }
+        );
+        alert(await res.text());
+        document.getElementById('popup').style.display = 'none';
+      };
+      reader.readAsDataURL(selectedFile);
+    }
+  </script>
+
+</body>
+</html>
