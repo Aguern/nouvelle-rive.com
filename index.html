@@ -218,8 +218,8 @@
     <div class="modal-content">
       <p>Souhaitez-vous afficher ce média dans la galerie ?</p>
       <div class="modal-buttons">
-        <button class="public-btn" onclick="sendMedia(true)">📢 Oui</button>
-        <button class="private-btn" onclick="sendMedia(false)">🔒 Non</button>
+        <button class="public-btn" onclick="sendMedia(true)">📢 Afficher en public</button>
+        <button class="private-btn" onclick="sendMedia(false)">🔒 Uniquement pour les marié</button>
       </div>
     </div>
   </div>
@@ -322,7 +322,7 @@
         fd.append('fileName', selectedFile.name);
         fd.append('public', isPublic ? 'true' : 'false');
         const res = await fetch(
-          '', // à remplacer par l'URL App Script
+          'https://script.google.com/macros/s/AKfycbx1tKY8CNcb1snBapGEbN0lQOkJF5-QUG299dYwWSEyTIOIuoqTcqe-22a5Q-VByQo0/exec', 
           { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: fd }
         );
         alert(await res.text());
