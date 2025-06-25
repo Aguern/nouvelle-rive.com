@@ -77,8 +77,9 @@
       padding: 2rem;
       border-radius: 20px;
       text-align: center;
-      width: 90%;
+      width: calc(90% - 2rem);
       max-width: 400px;
+      margin: 1rem;
       box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     }
 
@@ -555,9 +556,14 @@
     }
 
     async function sendMedia(isPublic) {
-      // Afficher le loader et masquer les boutons
-      document.getElementById('loader').style.display = 'block';
-      document.getElementById('modalButtons').style.display = 'none';
+      // Afficher le loader avec message de transfert
+      const modalContent = document.querySelector('.modal-content');
+      modalContent.innerHTML = `
+        <div style="padding: 2rem;">
+          <p style="font-size: 1.2rem; margin-bottom: 1.5rem;">Transfert en cours...</p>
+          <div class="loader" style="display: block;"></div>
+        </div>
+      `;
       
       const reader = new FileReader();
       reader.onloadend = async () => {
@@ -576,11 +582,7 @@
           
           const result = await res.text();
           
-          // Masquer le loader
-          document.getElementById('loader').style.display = 'none';
-          
           // Afficher le message de succès avec style
-          const modalContent = document.querySelector('.modal-content');
           modalContent.innerHTML = `
             <div style="padding: 2rem;">
               <div style="font-size: 3rem; margin-bottom: 1rem;">✅</div>
@@ -601,7 +603,6 @@
                 <button class="private-btn" onclick="sendMedia(false)">🔒 Uniquement pour les mariés</button>
               </div>
             `;
-            document.getElementById('modalButtons').style.display = 'flex';
             
             // Recharger la galerie si le média était public
             if (isPublic) {
@@ -610,9 +611,26 @@
           }, 3000);
           
         } catch (error) {
-          document.getElementById('loader').style.display = 'none';
-          document.getElementById('modalButtons').style.display = 'flex';
-          alert('Une erreur est survenue. Veuillez réessayer.');
+          modalContent.innerHTML = `
+            <div style="padding: 2rem;">
+              <div style="font-size: 3rem; margin-bottom: 1rem;">❌</div>
+              <h3 style="color: #f44336; margin-bottom: 1rem;">Erreur</h3>
+              <p style="font-size: 1.1rem;">Une erreur est survenue. Veuillez réessayer.</p>
+            </div>
+          `;
+          
+          setTimeout(() => {
+            document.getElementById('popup').style.display = 'none';
+            // Réinitialiser le contenu
+            modalContent.innerHTML = `
+              <p style="font-size: 1.2rem; margin-bottom: 0.5rem;">Souhaitez-vous afficher ce média dans la galerie ?</p>
+              <div class="loader" id="loader"></div>
+              <div class="modal-buttons" id="modalButtons">
+                <button class="public-btn" onclick="sendMedia(true)">📢 Afficher en public</button>
+                <button class="private-btn" onclick="sendMedia(false)">🔒 Uniquement pour les mariés</button>
+              </div>
+            `;
+          }, 3000);
         }
       };
       reader.readAsDataURL(selectedFile);
