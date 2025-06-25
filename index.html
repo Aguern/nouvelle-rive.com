@@ -290,7 +290,7 @@
   
   <!-- Inputs cachés pour caméra et galerie -->
   <input id="cameraInput" type="file" accept="image/*,video/*" capture="environment" onchange="handleFile(this.files[0])" />
-  <input id="galleryInput" type="file" accept="image/*,video/*" onchange="handleFile(this.files[0])" />
+  <input id="galleryInput" type="file" accept="image/*,video/*" multiple onchange="handleFile(this.files[0])" />
 
   <!-- Menu de sélection photo/caméra -->
   <div class="source-selection-backdrop" onclick="hideSourceSelection()"></div>
