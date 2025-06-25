@@ -199,6 +199,81 @@
     body.lightbox-open .btn-fixed {
       display: none !important;
     }
+
+    /* Styles pour le menu de sélection photo/caméra */
+    .source-selection {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+      padding: 1rem;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+      z-index: 1100;
+      animation: slideUp 0.3s ease-out;
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(100%);
+      }
+      to {
+        transform: translateY(0);
+      }
+    }
+
+    .source-selection-option {
+      display: flex;
+      align-items: center;
+      padding: 1rem;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      font-size: 1.1rem;
+      color: #333;
+      border-radius: 10px;
+      transition: background-color 0.2s;
+    }
+
+    .source-selection-option:hover,
+    .source-selection-option:active {
+      background-color: #f0f0f0;
+    }
+
+    .source-selection-option svg {
+      width: 24px;
+      height: 24px;
+      margin-right: 1rem;
+      fill: #818edb;
+    }
+
+    .source-selection-backdrop {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1099;
+    }
+
+    .source-selection-cancel {
+      margin-top: 0.5rem;
+      padding: 1rem;
+      width: 100%;
+      border: none;
+      background: #f0f0f0;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      color: #666;
+    }
   </style>
 </head>
 <body>
@@ -211,15 +286,36 @@
   <h2>19 juillet 2025</h2>
   <p>N'hésitez pas à nous partager vos photos ou vidéos<br />afin de nous laisser un souvenir de cette journée si spéciale.</p>
 
-  <button class="btn-fixed" onclick="document.getElementById('mediaInput').click()">Partager mon souvenir</button>
-  <input id="mediaInput" type="file" accept="image/*,video/*" capture onchange="handleFile(this.files[0])" />
+  <button class="btn-fixed" onclick="showSourceSelection()">Partager mon souvenir</button>
+  
+  <!-- Inputs cachés pour caméra et galerie -->
+  <input id="cameraInput" type="file" accept="image/*,video/*" capture="environment" onchange="handleFile(this.files[0])" />
+  <input id="galleryInput" type="file" accept="image/*,video/*" onchange="handleFile(this.files[0])" />
+
+  <!-- Menu de sélection photo/caméra -->
+  <div class="source-selection-backdrop" onclick="hideSourceSelection()"></div>
+  <div class="source-selection" id="sourceSelection">
+    <button class="source-selection-option" onclick="selectCamera()">
+      <svg viewBox="0 0 24 24">
+        <path d="M12 15.2c-1.8 0-3.2-1.4-3.2-3.2s1.4-3.2 3.2-3.2 3.2 1.4 3.2 3.2-1.4 3.2-3.2 3.2zm9-11.2h-3.2l-1.8-2h-8l-1.8 2h-3.2c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2v-12c0-1.1-.9-2-2-2zm-9 13c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5-2.2 5-5 5z"/>
+      </svg>
+      Caméra
+    </button>
+    <button class="source-selection-option" onclick="selectGallery()">
+      <svg viewBox="0 0 24 24">
+        <path d="M21 19v-14c0-1.1-.9-2-2-2h-14c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zm-12.5-5.5l2.5 3.01 3.5-4.51 4.5 6h-14l3.5-4.5z"/>
+      </svg>
+      Photos
+    </button>
+    <button class="source-selection-cancel" onclick="hideSourceSelection()">Annuler</button>
+  </div>
 
   <div id="popup" class="modal">
     <div class="modal-content">
       <p>Souhaitez-vous afficher ce média dans la galerie ?</p>
       <div class="modal-buttons">
         <button class="public-btn" onclick="sendMedia(true)">📢 Afficher en public</button>
-        <button class="private-btn" onclick="sendMedia(false)">🔒 Uniquement pour les marié</button>
+        <button class="private-btn" onclick="sendMedia(false)">🔒 Uniquement pour les mariés</button>
       </div>
     </div>
   </div>
@@ -306,10 +402,33 @@
     document.addEventListener("keydown", closeLightbox);
     window.addEventListener("DOMContentLoaded", loadGallery);
 
+    // Nouvelles fonctions pour la sélection photo/caméra
+    function showSourceSelection() {
+      document.getElementById('sourceSelection').style.display = 'block';
+      document.querySelector('.source-selection-backdrop').style.display = 'block';
+    }
+
+    function hideSourceSelection() {
+      document.getElementById('sourceSelection').style.display = 'none';
+      document.querySelector('.source-selection-backdrop').style.display = 'none';
+    }
+
+    function selectCamera() {
+      hideSourceSelection();
+      document.getElementById('cameraInput').click();
+    }
+
+    function selectGallery() {
+      hideSourceSelection();
+      document.getElementById('galleryInput').click();
+    }
+
     let selectedFile = null;
     function handleFile(file) {
-      selectedFile = file;
-      document.getElementById('popup').style.display = 'flex';
+      if (file) {
+        selectedFile = file;
+        document.getElementById('popup').style.display = 'flex';
+      }
     }
 
     async function sendMedia(isPublic) {
