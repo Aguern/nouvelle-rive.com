@@ -41,6 +41,31 @@
       margin: 1rem 0;
     }
 
+    .btn-share-site {
+      background-color: transparent;
+      color: #818edb;
+      border: 1px solid #818edb;
+      padding: 0.8rem 1.5rem;
+      border-radius: 25px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      margin: 1.5rem 0 2rem 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .btn-share-site:hover {
+      background-color: #818edb;
+      color: white;
+    }
+
+    .btn-share-site svg {
+      width: 16px;
+      height: 16px;
+    }
+
     .btn-fixed {
       position: fixed;
       bottom: 20px;
@@ -75,35 +100,17 @@
     .modal-content {
       background-color: white;
       padding: 2rem;
-      border-radius: 20px;
+      border-radius: 10px;
       text-align: center;
-      width: calc(90% - 2rem);
-      max-width: 400px;
-      margin: 1rem;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    }
-
-    .modal-buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      margin-top: 1.5rem;
     }
 
     .modal-buttons button {
-      margin: 0;
-      padding: 1.2rem 2rem;
+      margin: 1rem;
+      padding: 1rem 2rem;
       border: none;
-      border-radius: 12px;
+      border-radius: 6px;
       cursor: pointer;
       font-weight: bold;
-      font-size: 1.1rem;
-      transition: all 0.2s;
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
     }
 
     .public-btn {
@@ -111,38 +118,8 @@
       color: white;
     }
 
-    .public-btn:hover {
-      background-color: #6f7ac7;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(129, 142, 219, 0.4);
-    }
-
     .private-btn {
-      background-color: #f0f0f0;
-      color: #333;
-    }
-
-    .private-btn:hover {
-      background-color: #e0e0e0;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-
-    /* Loader */
-    .loader {
-      display: none;
-      border: 3px solid #f3f3f3;
-      border-top: 3px solid #818edb;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      animation: spin 1s linear infinite;
-      margin: 2rem auto;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+      background-color: #ddd;
     }
 
     #gallery {
@@ -228,11 +205,11 @@
       z-index: 1002;
     }
 
-    /* Bouton téléchargement en haut à gauche */
+    /* Bouton téléchargement en bas à droite */
     .download-btn {
       position: absolute;
-      top: 1rem;
-      left: 1rem;
+      bottom: 1rem;
+      right: 1rem;
       background: none;
       border: none;
       z-index: 1001;
@@ -242,34 +219,6 @@
       width: 28px;
       height: 28px;
       filter: invert(1);
-    }
-
-    /* Navigation dans la lightbox */
-    .lightbox-nav {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(255, 255, 255, 0.2);
-      border: none;
-      color: white;
-      font-size: 2.5rem;
-      padding: 1rem 1.5rem;
-      cursor: pointer;
-      border-radius: 8px;
-      transition: background-color 0.2s;
-      z-index: 1001;
-    }
-
-    .lightbox-nav:hover {
-      background: rgba(255, 255, 255, 0.3);
-    }
-
-    .lightbox-nav.prev {
-      left: 1rem;
-    }
-
-    .lightbox-nav.next {
-      right: 1rem;
     }
 
     body.lightbox-open .btn-fixed {
@@ -361,14 +310,21 @@
   <h1>Mariage Marine et Nicolas</h1>
   <h2>19 juillet 2025</h2>
   <p>N'hésitez pas à nous partager vos photos ou vidéos<br />afin de nous laisser un souvenir de cette journée si spéciale.</p>
+  
+  <button class="btn-share-site" onclick="shareSite()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/>
+    </svg>
+    Partager ce site
+  </button>
 
-  <button class="btn-fixed" onclick="openMediaSelector()">Partager mon souvenir</button>
+  <button class="btn-fixed" onclick="showSourceSelection()">Partager mon souvenir</button>
   
-  <!-- Inputs pour différents cas -->
-  <input id="mediaInput" type="file" accept="image/*,video/*" onchange="handleFile(this.files[0])" />
+  <!-- Inputs cachés pour caméra et galerie -->
   <input id="cameraInput" type="file" accept="image/*,video/*" capture="environment" onchange="handleFile(this.files[0])" />
-  
-  <!-- Menu de sélection pour Android uniquement -->
+  <input id="galleryInput" type="file" accept="image/*,video/*" onchange="handleFile(this.files[0])" />
+
+  <!-- Menu de sélection photo/caméra -->
   <div class="source-selection-backdrop" onclick="hideSourceSelection()"></div>
   <div class="source-selection" id="sourceSelection">
     <button class="source-selection-option" onclick="selectCamera()">
@@ -381,16 +337,15 @@
       <svg viewBox="0 0 24 24">
         <path d="M21 19v-14c0-1.1-.9-2-2-2h-14c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zm-12.5-5.5l2.5 3.01 3.5-4.51 4.5 6h-14l3.5-4.5z"/>
       </svg>
-      Galerie
+      Photos
     </button>
     <button class="source-selection-cancel" onclick="hideSourceSelection()">Annuler</button>
   </div>
 
   <div id="popup" class="modal">
     <div class="modal-content">
-      <p style="font-size: 1.2rem; margin-bottom: 0.5rem;">Souhaitez-vous afficher ce média dans la galerie ?</p>
-      <div class="loader" id="loader"></div>
-      <div class="modal-buttons" id="modalButtons">
+      <p>Souhaitez-vous afficher ce média dans la galerie ?</p>
+      <div class="modal-buttons">
         <button class="public-btn" onclick="sendMedia(true)">📢 Afficher en public</button>
         <button class="private-btn" onclick="sendMedia(false)">🔒 Uniquement pour les mariés</button>
       </div>
@@ -408,15 +363,11 @@
     <button class="download-btn" id="downloadBtn" onclick="downloadMedia()">
       <img src="telecharger-un-fichier.png" alt="Télécharger"/>
     </button>
-    <button class="lightbox-nav prev" onclick="navigateGallery(-1)">‹</button>
-    <button class="lightbox-nav next" onclick="navigateGallery(1)">›</button>
   </div>
 
   <script>
     const folderId = "1J4fn2yvUhe0MEZY6KZtDb_2PJutP7FL7";
     const apiKey = "AIzaSyAKdgvWZ4dX7oS0btyCHtMSS-bgErTtnhY";
-    let galleryFiles = [];
-    let currentImageIndex = 0;
 
     async function loadGallery() {
       const endpoint = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+(mimeType+contains+'image/'+or+mimeType+contains+'video/')&key=${apiKey}&fields=files(id,name,mimeType,thumbnailLink,webContentLink)`;
@@ -424,10 +375,8 @@
       const data = await res.json();
       const container = document.getElementById("drive-gallery");
 
-      galleryFiles = data.files;
       container.innerHTML = "";
-      
-      data.files.forEach((file, index) => {
+      data.files.forEach(file => {
         const thumb = file.thumbnailLink?.replace("=s220", "=s600") || "";
         const webLink = file.webContentLink;
 
@@ -441,15 +390,14 @@
           : thumb;
         element.alt = file.name;
         element.setAttribute("data-full", webLink);
-        element.onclick = () => openLightbox(file.mimeType, element.src, webLink, index);
+        element.onclick = () => openLightbox(file.mimeType, element.src, webLink);
 
         wrapper.appendChild(element);
         container.appendChild(wrapper);
       });
     }
 
-    function openLightbox(type, src, downloadLink, index) {
-      currentImageIndex = index;
+    function openLightbox(type, src, downloadLink) {
       const content = document.getElementById("lightbox-content");
       const lightbox = document.getElementById("lightbox");
       const btn = document.getElementById("downloadBtn");
@@ -464,31 +412,6 @@
       btn.setAttribute("data-src", downloadLink);
       document.body.classList.add("lightbox-open");
       lightbox.style.display = "flex";
-      
-      updateNavigationButtons();
-    }
-
-    function navigateGallery(direction) {
-      currentImageIndex += direction;
-      
-      if (currentImageIndex < 0) currentImageIndex = galleryFiles.length - 1;
-      if (currentImageIndex >= galleryFiles.length) currentImageIndex = 0;
-      
-      const file = galleryFiles[currentImageIndex];
-      const thumb = file.thumbnailLink?.replace("=s220", "=s600") || "";
-      const src = file.mimeType.includes("video")
-        ? `https://drive.google.com/uc?export=download&id=${file.id}`
-        : thumb;
-      
-      openLightbox(file.mimeType, src, file.webContentLink, currentImageIndex);
-    }
-
-    function updateNavigationButtons() {
-      const prevBtn = document.querySelector('.lightbox-nav.prev');
-      const nextBtn = document.querySelector('.lightbox-nav.next');
-      
-      prevBtn.style.display = galleryFiles.length > 1 ? 'block' : 'none';
-      nextBtn.style.display = galleryFiles.length > 1 ? 'block' : 'none';
     }
 
     function downloadMedia() {
@@ -502,7 +425,7 @@
     }
 
     function closeLightbox(event) {
-      if (event.target.id === "lightbox" || event.key === "Escape" || event.target.classList.contains('close-btn')) {
+      if (event.target.id === "lightbox" || event.key === "Escape") {
         document.getElementById("lightbox").style.display = "none";
         document.body.classList.remove("lightbox-open");
       }
@@ -511,22 +434,7 @@
     document.addEventListener("keydown", closeLightbox);
     window.addEventListener("DOMContentLoaded", loadGallery);
 
-    // Détection de l'OS et gestion adaptative
-    function isIOS() {
-      return /iPhone|iPad|iPod/i.test(navigator.userAgent) || 
-             (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-    }
-
-    function openMediaSelector() {
-      if (isIOS()) {
-        // Sur iOS, ouvrir directement l'input qui affichera le menu natif
-        document.getElementById('mediaInput').click();
-      } else {
-        // Sur Android et autres, afficher notre menu personnalisé
-        showSourceSelection();
-      }
-    }
-
+    // Nouvelles fonctions pour la sélection photo/caméra
     function showSourceSelection() {
       document.getElementById('sourceSelection').style.display = 'block';
       document.querySelector('.source-selection-backdrop').style.display = 'block';
@@ -544,7 +452,38 @@
 
     function selectGallery() {
       hideSourceSelection();
-      document.getElementById('mediaInput').click();
+      document.getElementById('galleryInput').click();
+    }
+
+    // Fonction de partage du site
+    async function shareSite() {
+      const shareData = {
+        title: 'Mariage Marine & Nicolas',
+        text: 'Venez partager vos souvenirs du mariage de Marine & Nicolas ! 📸💕',
+        url: window.location.href
+      };
+
+      try {
+        // Vérifier si l'API Web Share est supportée
+        if (navigator.share) {
+          await navigator.share(shareData);
+        } else {
+          // Fallback : copier le lien et afficher un message
+          await navigator.clipboard.writeText(window.location.href);
+          alert('Lien copié dans le presse-papiers !\n\nVous pouvez maintenant le partager via WhatsApp, SMS ou email.');
+        }
+      } catch (err) {
+        // En cas d'erreur ou d'annulation, proposer la copie du lien
+        if (err.name !== 'AbortError') {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            alert('Lien copié dans le presse-papiers !');
+          } catch (clipboardErr) {
+            // Fallback ultime si même le clipboard ne fonctionne pas
+            prompt('Copiez ce lien pour le partager :', window.location.href);
+          }
+        }
+      }
     }
 
     let selectedFile = null;
@@ -556,82 +495,20 @@
     }
 
     async function sendMedia(isPublic) {
-      // Afficher le loader avec message de transfert
-      const modalContent = document.querySelector('.modal-content');
-      modalContent.innerHTML = `
-        <div style="padding: 2rem;">
-          <p style="font-size: 1.2rem; margin-bottom: 1.5rem;">Transfert en cours...</p>
-          <div class="loader" style="display: block;"></div>
-        </div>
-      `;
-      
       const reader = new FileReader();
       reader.onloadend = async () => {
-        try {
-          const base64 = reader.result.split(',')[1];
-          const fd = new URLSearchParams();
-          fd.append('fileContent', encodeURIComponent(base64));
-          fd.append('fileType', selectedFile.type);
-          fd.append('fileName', selectedFile.name);
-          fd.append('public', isPublic ? 'true' : 'false');
-          
-          const res = await fetch(
-            'https://script.google.com/macros/s/AKfycbx1tKY8CNcb1snBapGEbN0lQOkJF5-QUG299dYwWSEyTIOIuoqTcqe-22a5Q-VByQo0/exec', 
-            { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: fd }
-          );
-          
-          const result = await res.text();
-          
-          // Afficher le message de succès avec style
-          modalContent.innerHTML = `
-            <div style="padding: 2rem;">
-              <div style="font-size: 3rem; margin-bottom: 1rem;">🎉</div>
-              <h3 style="color: #4CAF50; margin-bottom: 1rem;">Merci !</h3>
-              <p style="font-size: 1.1rem;">${result}</p>
-            </div>
-          `;
-          
-          // Fermer automatiquement après 3 secondes
-          setTimeout(() => {
-            document.getElementById('popup').style.display = 'none';
-            // Réinitialiser le contenu pour la prochaine fois
-            modalContent.innerHTML = `
-              <p style="font-size: 1.2rem; margin-bottom: 0.5rem;">Souhaitez-vous afficher ce média dans la galerie ?</p>
-              <div class="loader" id="loader"></div>
-              <div class="modal-buttons" id="modalButtons">
-                <button class="public-btn" onclick="sendMedia(true)">📢 Afficher en public</button>
-                <button class="private-btn" onclick="sendMedia(false)">🔒 Uniquement pour les mariés</button>
-              </div>
-            `;
-            
-            // Recharger la galerie si le média était public
-            if (isPublic) {
-              loadGallery();
-            }
-          }, 3000);
-          
-        } catch (error) {
-          modalContent.innerHTML = `
-            <div style="padding: 2rem;">
-              <div style="font-size: 3rem; margin-bottom: 1rem;">❌</div>
-              <h3 style="color: #f44336; margin-bottom: 1rem;">Erreur</h3>
-              <p style="font-size: 1.1rem;">Une erreur est survenue. Veuillez réessayer.</p>
-            </div>
-          `;
-          
-          setTimeout(() => {
-            document.getElementById('popup').style.display = 'none';
-            // Réinitialiser le contenu
-            modalContent.innerHTML = `
-              <p style="font-size: 1.2rem; margin-bottom: 0.5rem;">Souhaitez-vous afficher ce média dans la galerie ?</p>
-              <div class="loader" id="loader"></div>
-              <div class="modal-buttons" id="modalButtons">
-                <button class="public-btn" onclick="sendMedia(true)">📢 Afficher en public</button>
-                <button class="private-btn" onclick="sendMedia(false)">🔒 Uniquement pour les mariés</button>
-              </div>
-            `;
-          }, 3000);
-        }
+        const base64 = reader.result.split(',')[1];
+        const fd = new URLSearchParams();
+        fd.append('fileContent', encodeURIComponent(base64));
+        fd.append('fileType', selectedFile.type);
+        fd.append('fileName', selectedFile.name);
+        fd.append('public', isPublic ? 'true' : 'false');
+        const res = await fetch(
+          'https://script.google.com/macros/s/AKfycbx1tKY8CNcb1snBapGEbN0lQOkJF5-QUG299dYwWSEyTIOIuoqTcqe-22a5Q-VByQo0/exec', 
+          { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: fd }
+        );
+        alert(await res.text());
+        document.getElementById('popup').style.display = 'none';
       };
       reader.readAsDataURL(selectedFile);
     }
