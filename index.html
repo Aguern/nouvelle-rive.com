@@ -280,21 +280,20 @@
       z-index: 1002;
     }
 
-    /* Bouton téléchargement en haut à gauche */
-    .download-btn {
+    /* Style pour les instructions de téléchargement */
+    .download-instruction {
       position: absolute;
-      top: 1rem;
-      left: 1rem;
-      background: none;
-      border: none;
-      z-index: 1001;
-      cursor: pointer;
-    }
-
-    .download-btn img {
-      width: 28px;
-      height: 28px;
-      filter: invert(1);
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255, 255, 255, 0.9);
+      color: #333;
+      padding: 1rem 2rem;
+      border-radius: 25px;
+      font-size: 0.9rem;
+      text-align: center;
+      max-width: 80%;
+      display: none;
     }
 
     /* Navigation dans la lightbox */
@@ -329,80 +328,7 @@
       display: none !important;
     }
 
-    /* Styles pour le menu de sélection photo/caméra */
-    .source-selection {
-      display: none;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: white;
-      border-top-left-radius: 20px;
-      border-top-right-radius: 20px;
-      padding: 1rem;
-      box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
-      z-index: 1100;
-      animation: slideUp 0.3s ease-out;
-    }
-
-    @keyframes slideUp {
-      from {
-        transform: translateY(100%);
-      }
-      to {
-        transform: translateY(0);
-      }
-    }
-
-    .source-selection-option {
-      display: flex;
-      align-items: center;
-      padding: 1rem;
-      border: none;
-      background: none;
-      width: 100%;
-      text-align: left;
-      cursor: pointer;
-      font-size: 1.1rem;
-      color: #333;
-      border-radius: 10px;
-      transition: background-color 0.2s;
-    }
-
-    .source-selection-option:hover,
-    .source-selection-option:active {
-      background-color: #f0f0f0;
-    }
-
-    .source-selection-option svg {
-      width: 24px;
-      height: 24px;
-      margin-right: 1rem;
-      fill: #818edb;
-    }
-
-    .source-selection-backdrop {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 1099;
-    }
-
-    .source-selection-cancel {
-      margin-top: 0.5rem;
-      padding: 1rem;
-      width: 100%;
-      border: none;
-      background: #f0f0f0;
-      border-radius: 10px;
-      font-size: 1rem;
-      cursor: pointer;
-      color: #666;
-    }
+    /* Styles pour le menu de sélection photo/caméra - supprimés car inutiles */
   </style>
 </head>
 <body>
@@ -424,27 +350,10 @@
 
   <button class="btn-fixed" onclick="openMediaSelector()">Partager mon souvenir</button>
   
-  <!-- Inputs pour différents cas -->
+  <!-- Input unique pour tous les appareils -->
   <input id="mediaInput" type="file" accept="image/*,video/*" onchange="handleFile(this.files[0])" />
-  <input id="cameraInput" type="file" accept="image/*,video/*" capture="environment" onchange="handleFile(this.files[0])" />
   
-  <!-- Menu de sélection pour Android uniquement -->
-  <div class="source-selection-backdrop" onclick="hideSourceSelection()"></div>
-  <div class="source-selection" id="sourceSelection">
-    <button class="source-selection-option" onclick="selectCamera()">
-      <svg viewBox="0 0 24 24">
-        <path d="M12 15.2c-1.8 0-3.2-1.4-3.2-3.2s1.4-3.2 3.2-3.2 3.2 1.4 3.2 3.2-1.4 3.2-3.2 3.2zm9-11.2h-3.2l-1.8-2h-8l-1.8 2h-3.2c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2v-12c0-1.1-.9-2-2-2zm-9 13c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5-2.2 5-5 5z"/>
-      </svg>
-      Caméra
-    </button>
-    <button class="source-selection-option" onclick="selectGallery()">
-      <svg viewBox="0 0 24 24">
-        <path d="M21 19v-14c0-1.1-.9-2-2-2h-14c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zm-12.5-5.5l2.5 3.01 3.5-4.51 4.5 6h-14l3.5-4.5z"/>
-      </svg>
-      Galerie
-    </button>
-    <button class="source-selection-cancel" onclick="hideSourceSelection()">Annuler</button>
-  </div>
+
 
   <div id="popup" class="modal">
     <div class="modal-content">
@@ -465,9 +374,9 @@
   <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
     <div id="lightbox-content"></div>
     <button class="close-btn" onclick="closeLightbox({target:document.getElementById('lightbox')});">&times;</button>
-    <button class="download-btn" id="downloadBtn" onclick="downloadMedia()">
-      <img src="telecharger-un-fichier.png" alt="Télécharger"/>
-    </button>
+    <div class="download-instruction" id="downloadInstruction">
+      📸 Maintenez appuyé pour enregistrer
+    </div>
     <button class="lightbox-nav prev" onclick="navigateGallery(-1)">‹</button>
     <button class="lightbox-nav next" onclick="navigateGallery(1)">›</button>
   </div>
@@ -523,53 +432,52 @@
       currentImageIndex = index;
       const content = document.getElementById("lightbox-content");
       const lightbox = document.getElementById("lightbox");
-      const btn = document.getElementById("downloadBtn");
+      const instruction = document.getElementById("downloadInstruction");
       const file = galleryFiles[index];
 
       content.innerHTML = "";
 
       if (type.includes("video")) {
-        // Pour les vidéos, essayer d'abord la balise video native
-        const video = document.createElement("video");
-        video.src = src;
-        video.controls = true;
-        video.autoplay = true;
-        video.style.maxWidth = "90vw";
-        video.style.maxHeight = "80vh";
+        // Pour les vidéos, utiliser directement l'iframe
+        const iframe = document.createElement("iframe");
+        iframe.src = `https://drive.google.com/file/d/${file.id}/preview`;
+        iframe.width = "640";
+        iframe.height = "480";
+        iframe.allow = "autoplay";
+        iframe.style.maxWidth = "90vw";
+        iframe.style.maxHeight = "80vh";
+        iframe.style.border = "none";
+        content.appendChild(iframe);
         
-        // Si la vidéo ne peut pas se charger, utiliser l'iframe
-        video.onerror = () => {
-          content.innerHTML = "";
-          const iframe = document.createElement("iframe");
-          iframe.src = `https://drive.google.com/file/d/${file.id}/preview`;
-          iframe.width = "640";
-          iframe.height = "480";
-          iframe.allow = "autoplay";
-          iframe.style.maxWidth = "90vw";
-          iframe.style.maxHeight = "80vh";
-          iframe.style.border = "none";
-          content.appendChild(iframe);
-        };
-        
-        content.appendChild(video);
+        instruction.style.display = 'none';
       } else {
         // Pour les images, utiliser l'URL haute résolution
         const img = document.createElement("img");
-        img.src = `https://drive.google.com/uc?export=view&id=${file.id}`;
+        const fullSizeUrl = `https://drive.google.com/uc?export=view&id=${file.id}`;
+        img.src = fullSizeUrl;
         img.alt = file.name;
+        
+        // Permettre le téléchargement par appui long sur mobile
+        if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+          img.style.webkitTouchCallout = 'default';
+          img.style.webkitUserSelect = 'auto';
+          img.style.userSelect = 'auto';
+          
+          instruction.style.display = 'block';
+          // Masquer l'instruction après 3 secondes
+          setTimeout(() => {
+            instruction.style.display = 'none';
+          }, 3000);
+        }
+        
         content.appendChild(img);
       }
 
-      btn.setAttribute("data-src", downloadLink);
-      btn.setAttribute("data-filename", file.name);
-      btn.setAttribute("data-fileid", file.id);
-      btn.setAttribute("data-mimetype", type);
       document.body.classList.add("lightbox-open");
       lightbox.style.display = "flex";
       
       updateNavigationButtons();
     }
-
     function navigateGallery(direction) {
       currentImageIndex += direction;
       
@@ -593,65 +501,6 @@
       nextBtn.style.display = galleryFiles.length > 1 ? 'block' : 'none';
     }
 
-    function downloadMedia() {
-      const fileId = document.getElementById("downloadBtn").getAttribute("data-fileid");
-      const fileName = document.getElementById("downloadBtn").getAttribute("data-filename");
-      const mimeType = document.getElementById("downloadBtn").getAttribute("data-mimetype");
-      
-      try {
-        // Pour mobile, afficher des instructions
-        if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-          // Créer une popup avec instructions
-          const instructionModal = document.createElement('div');
-          instructionModal.style.cssText = `
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            z-index: 2000;
-            max-width: 90%;
-            text-align: center;
-          `;
-          
-          instructionModal.innerHTML = `
-            <h3 style="margin-bottom: 1rem; color: #333;">Téléchargement</h3>
-            <p style="margin-bottom: 1.5rem; color: #666;">
-              ${mimeType.includes('video') ? 'La vidéo' : 'La photo'} va s'ouvrir dans un nouvel onglet.<br>
-              <strong>Maintenez votre doigt appuyé</strong> sur ${mimeType.includes('video') ? 'la vidéo' : "l'image"} pour la sauvegarder dans votre galerie.
-            </p>
-            <button onclick="this.parentElement.remove(); window.open('https://drive.google.com/uc?export=view&id=${fileId}', '_blank');" 
-                    style="background: #818edb; color: white; border: none; padding: 1rem 2rem; border-radius: 25px; font-size: 1rem; cursor: pointer;">
-              Continuer
-            </button>
-            <button onclick="this.parentElement.remove();" 
-                    style="background: #f0f0f0; color: #666; border: none; padding: 1rem 2rem; border-radius: 25px; font-size: 1rem; cursor: pointer; margin-left: 1rem;">
-              Annuler
-            </button>
-          `;
-          
-          document.body.appendChild(instructionModal);
-        } else {
-          // Pour desktop, téléchargement classique
-          const downloadUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
-          const a = document.createElement("a");
-          a.href = downloadUrl;
-          a.download = fileName;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-        }
-      } catch (error) {
-        console.error("Erreur lors du téléchargement:", error);
-        // Fallback
-        const downloadUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
-        window.location.href = downloadUrl;
-      }
-    }
-
     function closeLightbox(event) {
       if (event.target.id === "lightbox" || event.key === "Escape" || event.target.classList.contains('close-btn')) {
         document.getElementById("lightbox").style.display = "none";
@@ -661,42 +510,6 @@
 
     document.addEventListener("keydown", closeLightbox);
     window.addEventListener("DOMContentLoaded", loadGallery);
-
-    // Détection de l'OS et gestion adaptative
-    function isIOS() {
-      return /iPhone|iPad|iPod/i.test(navigator.userAgent) || 
-             (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-    }
-
-    function openMediaSelector() {
-      if (isIOS()) {
-        // Sur iOS, ouvrir directement l'input qui affichera le menu natif
-        document.getElementById('mediaInput').click();
-      } else {
-        // Sur Android et autres, afficher notre menu personnalisé
-        showSourceSelection();
-      }
-    }
-
-    function showSourceSelection() {
-      document.getElementById('sourceSelection').style.display = 'block';
-      document.querySelector('.source-selection-backdrop').style.display = 'block';
-    }
-
-    function hideSourceSelection() {
-      document.getElementById('sourceSelection').style.display = 'none';
-      document.querySelector('.source-selection-backdrop').style.display = 'none';
-    }
-
-    function selectCamera() {
-      hideSourceSelection();
-      document.getElementById('cameraInput').click();
-    }
-
-    function selectGallery() {
-      hideSourceSelection();
-      document.getElementById('mediaInput').click();
-    }
 
     // Fonction de partage du site
     async function shareSite() {
