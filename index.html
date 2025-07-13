@@ -189,7 +189,7 @@
       width: 100%;
       height: 0;
       padding-bottom: 100%;
-      background: #f0f0f0;
+      background: black;
       overflow: hidden;
     }
 
@@ -201,32 +201,6 @@
       height: 100%;
       object-fit: cover;
       cursor: pointer;
-    }
-
-    /* Indicateur vidéo */
-    .video-indicator {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 60px;
-      height: 60px;
-      background: rgba(0, 0, 0, 0.7);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      pointer-events: none;
-    }
-
-    .video-indicator::after {
-      content: '';
-      width: 0;
-      height: 0;
-      border-left: 20px solid white;
-      border-top: 12px solid transparent;
-      border-bottom: 12px solid transparent;
-      margin-left: 4px;
     }
 
     @media (min-width: 768px) {
@@ -287,7 +261,6 @@
       background: none;
       border: none;
       z-index: 1001;
-      cursor: pointer;
     }
 
     .download-btn img {
@@ -476,7 +449,6 @@
     const apiKey = "AIzaSyAKdgvWZ4dX7oS0btyCHtMSS-bgErTtnhY";
     let galleryFiles = [];
     let currentImageIndex = 0;
-    let currentMediaFile = null;
 
     async function loadGallery() {
       const endpoint = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+(mimeType+contains+'image/'+or+mimeType+contains+'video/')&key=${apiKey}&fields=files(id,name,mimeType,thumbnailLink,webContentLink)`;
@@ -488,100 +460,40 @@
       container.innerHTML = "";
       
       data.files.forEach((file, index) => {
+        const thumb = file.thumbnailLink?.replace("=s220", "=s600") || "";
+        const webLink = file.webContentLink;
+
         const wrapper = document.createElement("div");
-        
-        if (file.mimeType.includes("video")) {
-          // Pour les vidéos, utiliser la thumbnail et ajouter un indicateur de lecture
-          const thumb = file.thumbnailLink?.replace("=s220", "=s600") || "";
-          const img = document.createElement("img");
-          img.src = thumb;
-          img.alt = file.name;
-          img.onclick = () => openLightbox(file, index);
-          
-          const playIndicator = document.createElement("div");
-          playIndicator.className = "video-indicator";
-          
-          wrapper.appendChild(img);
-          wrapper.appendChild(playIndicator);
-        } else {
-          // Pour les images
-          const thumb = file.thumbnailLink?.replace("=s220", "=s600") || "";
-          const img = document.createElement("img");
-          img.src = thumb;
-          img.alt = file.name;
-          img.onclick = () => openLightbox(file, index);
-          
-          wrapper.appendChild(img);
-        }
-        
+        const element = file.mimeType.includes("video")
+          ? document.createElement("video")
+          : document.createElement("img");
+
+        element.src = file.mimeType.includes("video")
+          ? `https://drive.google.com/uc?export=download&id=${file.id}`
+          : thumb;
+        element.alt = file.name;
+        element.setAttribute("data-full", webLink);
+        element.onclick = () => openLightbox(file.mimeType, element.src, webLink, index);
+
+        wrapper.appendChild(element);
         container.appendChild(wrapper);
       });
     }
 
-    function openLightbox(file, index) {
+    function openLightbox(type, src, downloadLink, index) {
       currentImageIndex = index;
-      currentMediaFile = file;
       const content = document.getElementById("lightbox-content");
       const lightbox = document.getElementById("lightbox");
       const btn = document.getElementById("downloadBtn");
 
       content.innerHTML = "";
 
-      if (file.mimeType.includes("video")) {
-        // Pour les vidéos, utiliser une balise video native
-        const video = document.createElement("video");
-        video.src = `https://drive.google.com/uc?export=download&id=${file.id}`;
-        video.controls = true;
-        video.autoplay = true;
-        video.style.maxWidth = "90vw";
-        video.style.maxHeight = "80vh";
-        
-        // Ajouter un message de chargement
-        video.addEventListener('loadstart', () => {
-          const loader = document.createElement('div');
-          loader.className = 'loader';
-          loader.style.display = 'block';
-          loader.style.position = 'absolute';
-          loader.style.top = '50%';
-          loader.style.left = '50%';
-          loader.style.transform = 'translate(-50%, -50%)';
-          content.appendChild(loader);
-        });
-        
-        video.addEventListener('loadeddata', () => {
-          const loader = content.querySelector('.loader');
-          if (loader) loader.remove();
-        });
-        
-        // Gestion d'erreur avec fallback sur iframe
-        video.addEventListener('error', () => {
-          console.log("Erreur de chargement vidéo, utilisation de l'iframe");
-          content.innerHTML = "";
-          const iframe = document.createElement("iframe");
-          iframe.src = `https://drive.google.com/file/d/${file.id}/preview`;
-          iframe.width = "640";
-          iframe.height = "480";
-          iframe.allow = "autoplay";
-          iframe.style.maxWidth = "90vw";
-          iframe.style.maxHeight = "80vh";
-          iframe.style.border = "none";
-          content.appendChild(iframe);
-        });
-        
-        content.appendChild(video);
-      } else {
-        // Pour les images, utiliser l'URL directe
-        const img = document.createElement("img");
-        const fullSizeUrl = `https://drive.google.com/uc?export=view&id=${file.id}`;
-        img.src = fullSizeUrl;
-        img.alt = file.name;
-        content.appendChild(img);
-      }
+      const el = document.createElement(type.includes("video") ? "video" : "img");
+      el.src = src;
+      if (type.includes("video")) el.controls = true;
+      content.appendChild(el);
 
-      btn.setAttribute("data-src", file.webContentLink);
-      btn.setAttribute("data-filename", file.name);
-      btn.setAttribute("data-fileid", file.id);
-      btn.setAttribute("data-mimetype", file.mimeType);
+      btn.setAttribute("data-src", downloadLink);
       document.body.classList.add("lightbox-open");
       lightbox.style.display = "flex";
       
@@ -595,7 +507,12 @@
       if (currentImageIndex >= galleryFiles.length) currentImageIndex = 0;
       
       const file = galleryFiles[currentImageIndex];
-      openLightbox(file, currentImageIndex);
+      const thumb = file.thumbnailLink?.replace("=s220", "=s600") || "";
+      const src = file.mimeType.includes("video")
+        ? `https://drive.google.com/uc?export=download&id=${file.id}`
+        : thumb;
+      
+      openLightbox(file.mimeType, src, file.webContentLink, currentImageIndex);
     }
 
     function updateNavigationButtons() {
@@ -606,61 +523,14 @@
       nextBtn.style.display = galleryFiles.length > 1 ? 'block' : 'none';
     }
 
-    async function downloadMedia() {
-      const fileId = document.getElementById("downloadBtn").getAttribute("data-fileid");
-      const fileName = document.getElementById("downloadBtn").getAttribute("data-filename");
-      const mimeType = document.getElementById("downloadBtn").getAttribute("data-mimetype");
-      
-      try {
-        // Créer un message personnalisé pour mobile
-        if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-          // Créer une popup avec instructions
-          const instructionModal = document.createElement('div');
-          instructionModal.style.cssText = `
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            z-index: 2000;
-            max-width: 90%;
-            text-align: center;
-          `;
-          
-          instructionModal.innerHTML = `
-            <h3 style="margin-bottom: 1rem; color: #333;">Téléchargement</h3>
-            <p style="margin-bottom: 1.5rem; color: #666;">
-              ${mimeType.includes('video') ? 'La vidéo' : 'La photo'} va s'ouvrir dans un nouvel onglet.<br>
-              <strong>Maintenez votre doigt appuyé</strong> sur ${mimeType.includes('video') ? 'la vidéo' : "l'image"} pour la sauvegarder.
-            </p>
-            <button onclick="this.parentElement.remove(); window.open('https://drive.google.com/uc?export=view&id=${fileId}', '_blank');" 
-                    style="background: #818edb; color: white; border: none; padding: 1rem 2rem; border-radius: 25px; font-size: 1rem; cursor: pointer;">
-              Continuer
-            </button>
-            <button onclick="this.parentElement.remove();" 
-                    style="background: #f0f0f0; color: #666; border: none; padding: 1rem 2rem; border-radius: 25px; font-size: 1rem; cursor: pointer; margin-left: 1rem;">
-              Annuler
-            </button>
-          `;
-          
-          document.body.appendChild(instructionModal);
-        } else {
-          // Pour desktop, téléchargement classique
-          const downloadUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
-          const a = document.createElement("a");
-          a.href = downloadUrl;
-          a.download = fileName;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-        }
-      } catch (error) {
-        console.error("Erreur lors du téléchargement:", error);
-        alert("Erreur lors du téléchargement. Veuillez réessayer.");
-      }
+    function downloadMedia() {
+      const src = document.getElementById("downloadBtn").getAttribute("data-src");
+      const a = document.createElement("a");
+      a.href = src;
+      a.download = "";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
     }
 
     function closeLightbox(event) {
@@ -805,4 +675,30 @@
           
         } catch (error) {
           modalContent.innerHTML = `
-            <div style="padding: 2
+            <div style="padding: 2rem;">
+              <div style="font-size: 3rem; margin-bottom: 1rem;">❌</div>
+              <h3 style="color: #f44336; margin-bottom: 1rem;">Erreur</h3>
+              <p style="font-size: 1.1rem;">Une erreur est survenue. Veuillez réessayer.</p>
+            </div>
+          `;
+          
+          setTimeout(() => {
+            document.getElementById('popup').style.display = 'none';
+            // Réinitialiser le contenu
+            modalContent.innerHTML = `
+              <p style="font-size: 1.2rem; margin-bottom: 0.5rem;">Souhaitez-vous afficher ce média dans la galerie ?</p>
+              <div class="loader" id="loader"></div>
+              <div class="modal-buttons" id="modalButtons">
+                <button class="public-btn" onclick="sendMedia(true)">📢 Afficher en public</button>
+                <button class="private-btn" onclick="sendMedia(false)">🔒 Uniquement pour les mariés</button>
+              </div>
+            `;
+          }, 3000);
+        }
+      };
+      reader.readAsDataURL(selectedFile);
+    }
+  </script>
+
+</body>
+</html>
