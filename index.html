@@ -189,7 +189,7 @@
       width: 100%;
       height: 0;
       padding-bottom: 100%;
-      background: black;
+      background: #f0f0f0;
       overflow: hidden;
     }
 
@@ -201,6 +201,32 @@
       height: 100%;
       object-fit: cover;
       cursor: pointer;
+    }
+
+    /* Indicateur vidéo */
+    .video-indicator {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 60px;
+      height: 60px;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+
+    .video-indicator::after {
+      content: '';
+      width: 0;
+      height: 0;
+      border-left: 20px solid white;
+      border-top: 12px solid transparent;
+      border-bottom: 12px solid transparent;
+      margin-left: 4px;
     }
 
     @media (min-width: 768px) {
@@ -230,6 +256,7 @@
     .lightbox-content {
       max-width: 90%;
       max-height: 80vh;
+      position: relative;
     }
 
     .lightbox img,
@@ -261,6 +288,7 @@
       background: none;
       border: none;
       z-index: 1001;
+      cursor: pointer;
     }
 
     .download-btn img {
@@ -460,22 +488,33 @@
       container.innerHTML = "";
       
       data.files.forEach((file, index) => {
-        const thumb = file.thumbnailLink?.replace("=s220", "=s600") || "";
-        const webLink = file.webContentLink;
-
         const wrapper = document.createElement("div");
-        const element = file.mimeType.includes("video")
-          ? document.createElement("video")
-          : document.createElement("img");
-
-        element.src = file.mimeType.includes("video")
-          ? `https://drive.google.com/uc?export=download&id=${file.id}`
-          : thumb;
-        element.alt = file.name;
-        element.setAttribute("data-full", webLink);
-        element.onclick = () => openLightbox(file.mimeType, element.src, webLink, index);
-
-        wrapper.appendChild(element);
+        
+        if (file.mimeType.includes("video")) {
+          // Pour les vidéos, utiliser la thumbnail et ajouter un indicateur
+          const thumb = file.thumbnailLink?.replace("=s220", "=s600") || "";
+          const img = document.createElement("img");
+          img.src = thumb;
+          img.alt = file.name;
+          img.onclick = () => openLightbox(file.mimeType, `https://drive.google.com/uc?export=download&id=${file.id}`, file.webContentLink, index);
+          
+          const playIndicator = document.createElement("div");
+          playIndicator.className = "video-indicator";
+          
+          wrapper.appendChild(img);
+          wrapper.appendChild(playIndicator);
+        } else {
+          // Pour les images
+          const thumb = file.thumbnailLink?.replace("=s220", "=s600") || "";
+          const img = document.createElement("img");
+          img.src = thumb;
+          img.alt = file.name;
+          img.setAttribute("data-full", file.webContentLink);
+          img.onclick = () => openLightbox(file.mimeType, img.src, file.webContentLink, index);
+          
+          wrapper.appendChild(img);
+        }
+        
         container.appendChild(wrapper);
       });
     }
@@ -485,15 +524,46 @@
       const content = document.getElementById("lightbox-content");
       const lightbox = document.getElementById("lightbox");
       const btn = document.getElementById("downloadBtn");
+      const file = galleryFiles[index];
 
       content.innerHTML = "";
 
-      const el = document.createElement(type.includes("video") ? "video" : "img");
-      el.src = src;
-      if (type.includes("video")) el.controls = true;
-      content.appendChild(el);
+      if (type.includes("video")) {
+        // Pour les vidéos, essayer d'abord la balise video native
+        const video = document.createElement("video");
+        video.src = src;
+        video.controls = true;
+        video.autoplay = true;
+        video.style.maxWidth = "90vw";
+        video.style.maxHeight = "80vh";
+        
+        // Si la vidéo ne peut pas se charger, utiliser l'iframe
+        video.onerror = () => {
+          content.innerHTML = "";
+          const iframe = document.createElement("iframe");
+          iframe.src = `https://drive.google.com/file/d/${file.id}/preview`;
+          iframe.width = "640";
+          iframe.height = "480";
+          iframe.allow = "autoplay";
+          iframe.style.maxWidth = "90vw";
+          iframe.style.maxHeight = "80vh";
+          iframe.style.border = "none";
+          content.appendChild(iframe);
+        };
+        
+        content.appendChild(video);
+      } else {
+        // Pour les images, utiliser l'URL haute résolution
+        const img = document.createElement("img");
+        img.src = `https://drive.google.com/uc?export=view&id=${file.id}`;
+        img.alt = file.name;
+        content.appendChild(img);
+      }
 
       btn.setAttribute("data-src", downloadLink);
+      btn.setAttribute("data-filename", file.name);
+      btn.setAttribute("data-fileid", file.id);
+      btn.setAttribute("data-mimetype", type);
       document.body.classList.add("lightbox-open");
       lightbox.style.display = "flex";
       
@@ -524,13 +594,62 @@
     }
 
     function downloadMedia() {
-      const src = document.getElementById("downloadBtn").getAttribute("data-src");
-      const a = document.createElement("a");
-      a.href = src;
-      a.download = "";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
+      const fileId = document.getElementById("downloadBtn").getAttribute("data-fileid");
+      const fileName = document.getElementById("downloadBtn").getAttribute("data-filename");
+      const mimeType = document.getElementById("downloadBtn").getAttribute("data-mimetype");
+      
+      try {
+        // Pour mobile, afficher des instructions
+        if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+          // Créer une popup avec instructions
+          const instructionModal = document.createElement('div');
+          instructionModal.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            z-index: 2000;
+            max-width: 90%;
+            text-align: center;
+          `;
+          
+          instructionModal.innerHTML = `
+            <h3 style="margin-bottom: 1rem; color: #333;">Téléchargement</h3>
+            <p style="margin-bottom: 1.5rem; color: #666;">
+              ${mimeType.includes('video') ? 'La vidéo' : 'La photo'} va s'ouvrir dans un nouvel onglet.<br>
+              <strong>Maintenez votre doigt appuyé</strong> sur ${mimeType.includes('video') ? 'la vidéo' : "l'image"} pour la sauvegarder dans votre galerie.
+            </p>
+            <button onclick="this.parentElement.remove(); window.open('https://drive.google.com/uc?export=view&id=${fileId}', '_blank');" 
+                    style="background: #818edb; color: white; border: none; padding: 1rem 2rem; border-radius: 25px; font-size: 1rem; cursor: pointer;">
+              Continuer
+            </button>
+            <button onclick="this.parentElement.remove();" 
+                    style="background: #f0f0f0; color: #666; border: none; padding: 1rem 2rem; border-radius: 25px; font-size: 1rem; cursor: pointer; margin-left: 1rem;">
+              Annuler
+            </button>
+          `;
+          
+          document.body.appendChild(instructionModal);
+        } else {
+          // Pour desktop, téléchargement classique
+          const downloadUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
+          const a = document.createElement("a");
+          a.href = downloadUrl;
+          a.download = fileName;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+        }
+      } catch (error) {
+        console.error("Erreur lors du téléchargement:", error);
+        // Fallback
+        const downloadUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
+        window.location.href = downloadUrl;
+      }
     }
 
     function closeLightbox(event) {
