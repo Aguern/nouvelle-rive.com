@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Mariage Marine & Nicolas</title>
-  <script src="https://apis.google.com/js/api.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Karla:ital,wght@1,400&display=swap');
 
@@ -238,7 +237,7 @@
     .lightbox iframe {
       max-width: 100%;
       max-height: 80vh;
-      border-radius: 12px;
+      border-radius: 0;
     }
 
     /* Croix de fermeture */
@@ -352,9 +351,25 @@
     <button class="lightbox-nav next" onclick="navigateGallery(1)">›</button>
   </div>
 
+
+
+
   <script>
-    const folderId = "1J4fn2yvUhe0MEZY6KZtDb_2PJutP7FL7";
+    const GAS_URL   = "https://script.google.com/macros/s/AKfycbwQwjCUrGvbT5bOZRxnKMM8KyMH0OQPWV5FDYm5dl5qLB6fLn6PgLO_qMYiUnFMlk7H/exec";
+    const DRIVE_PUBLIC_FOLDER  = "1J4fn2yvUhe0MEZY6KZtDb_2PJutP7FL7";
+    const DRIVE_PRIVATE_FOLDER = "1zJEwPT2cFRyB7OzgAgvQSMNZCnWvRDf_"; 
+    const folderId = DRIVE_PUBLIC_FOLDER; // un seul endroit à maintenir
     const apiKey = "AIzaSyAKdgvWZ4dX7oS0btyCHtMSS-bgErTtnhY";
+
+    // Récupère un jeton OAuth Drive (validité ~1 h)
+    async function getDriveToken() {
+      const res = await fetch(`${GAS_URL}?action=token`);
+      if (!res.ok) throw new Error('Impossible de récupérer le jeton');
+      const { token } = await res.json();
+      return token;
+    }
+
+
     let galleryFiles = [];
     let currentImageIndex = 0;
 
@@ -409,34 +424,21 @@
       content.innerHTML = "";
 
       if (type.includes("video")) {
-        // CORRECTION: Utiliser un lecteur vidéo natif HTML5
+        // Utiliser une iframe pour les vidéos Google Drive
         const fileId = galleryFiles[index].id;
-        const video = document.createElement("video");
-        video.src = `https://drive.google.com/uc?export=download&id=${fileId}`;
+        const iframe = document.createElement("iframe");
+        iframe.src = `https://drive.google.com/file/d/${fileId}/preview`;
+        iframe.style.width = "100%";
+        iframe.style.height = "80vh";
+        iframe.style.border = "none";
+        iframe.setAttribute("allowfullscreen", "");
+        iframe.setAttribute("allow", "autoplay");
         
-        // Attributs pour optimiser la lecture vidéo
-        video.controls = true;
-        video.setAttribute("playsinline", "");
-        video.setAttribute("preload", "metadata");
-        video.style.width = "100%";
-        video.style.height = "auto";
-        video.style.maxWidth = "90vw";
-        video.style.maxHeight = "85vh";
-        video.style.borderRadius = "8px";
-        video.style.backgroundColor = "#000";
-        
-        // Gestion d'erreur avec fallback
-        video.onerror = function() {
-          console.error("Erreur de lecture vidéo, tentative avec URL alternative");
-          this.src = `https://drive.google.com/file/d/${fileId}/view`;
-        };
-        
-        content.appendChild(video);
-        
+        content.appendChild(iframe);
       } else {
         const el = document.createElement("img");
         const fileId = galleryFiles[index].id;
-        // Image haute qualité dans la lightbox
+        // CORRECTION 3: Image haute qualité dans la lightbox
         el.src = `https://drive.google.com/uc?export=view&id=${fileId}`;
         
         // Fallback en cas d'erreur
@@ -542,123 +544,30 @@
 
     let selectedFiles = [];
     
-    // Fonction pour gérer la sélection multiple avec aperçu (VERSION SIMPLIFIÉE QUI MARCHE)
+    // Fonction pour gérer la sélection multiple avec aperçu
     function handleFiles(files) {
       if (files && files.length > 0) {
         selectedFiles = Array.from(files);
         
-        // Vérification immédiate des tailles SANS compression
-        const errors = [];
-        let totalSizeMB = 0;
-        
-        files.forEach(file => {
-          const sizeMB = file.size / (1024 * 1024);
-          totalSizeMB += sizeMB;
-          
-          if (file.type.startsWith('video/') && sizeMB > 15) {
-            errors.push(`Vidéo ${file.name} trop volumineuse (${sizeMB.toFixed(1)}MB). Maximum 15MB.`);
-          }
-          if (file.type.startsWith('image/') && sizeMB > 8) {
-            errors.push(`Photo ${file.name} trop volumineuse (${sizeMB.toFixed(1)}MB). Maximum 8MB.`);
-          }
-        });
-        
-        if (totalSizeMB > 40) {
-          errors.push(`Sélection totale trop volumineuse (${totalSizeMB.toFixed(1)}MB). Maximum 40MB.`);
-        }
-        
-        if (errors.length > 0) {
-          showDiscretError(errors[0]); // Afficher la première erreur
-          return;
-        }
-        
-        // Si OK, afficher l'aperçu directement
+        // Afficher l'aperçu des fichiers sélectionnés
         showFilePreview(selectedFiles);
       }
     }
     
-    // SUPPRESSION de la compression (trop lente et instable)
-    // Les fonctions de compression sont supprimées
-    
-    // Fonction de compression intelligente pour images
-    async function compressImageIntelligently(file) {
-      return new Promise((resolve) => {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        const img = new Image();
-        
-        img.onload = function() {
-          // Compression intelligente basée sur la taille du fichier
-          const fileSizeMB = file.size / (1024 * 1024);
-          let shouldCompress = fileSizeMB > 2; // Compresser si > 2MB
-          
-          if (!shouldCompress) {
-            // Fichier déjà optimal, garder l'original
-            resolve(file);
-            return;
-          }
-          
-          // Calculer les nouvelles dimensions (max 1920px sur le côté le plus large)
-          const maxDimension = 1920;
-          let { width, height } = img;
-          
-          if (width > maxDimension || height > maxDimension) {
-            if (width > height) {
-              height = (height * maxDimension) / width;
-              width = maxDimension;
-            } else {
-              width = (width * maxDimension) / height;
-              height = maxDimension;
-            }
-          }
-          
-          // Redimensionner l'image
-          canvas.width = width;
-          canvas.height = height;
-          ctx.drawImage(img, 0, 0, width, height);
-          
-          // Déterminer la qualité selon la taille originale
-          let quality = 0.8; // 80% par défaut
-          if (fileSizeMB > 5) quality = 0.75; // 75% pour les très gros fichiers
-          if (fileSizeMB > 10) quality = 0.7; // 70% pour les énormes fichiers
-          
-          // Convertir en blob avec compression
-          canvas.toBlob((blob) => {
-            // Créer un nouveau fichier avec le même nom
-            const compressedFile = new File([blob], file.name, {
-              type: 'image/jpeg',
-              lastModified: Date.now()
-            });
-            
-            console.log(`📸 Compression: ${file.name} - ${Math.round(fileSizeMB)}MB → ${Math.round(compressedFile.size / 1024 / 1024)}MB`);
-            resolve(compressedFile);
-          }, 'image/jpeg', quality);
-        };
-        
-        img.onerror = () => {
-          // En cas d'erreur, garder le fichier original
-          console.warn(`Impossible de compresser ${file.name}, conservation de l'original`);
-          resolve(file);
-        };
-        
-        img.src = URL.createObjectURL(file);
-      });
-    }
-    
-    // Fonction pour afficher l'aperçu des fichiers sélectionnés (version simplifiée)
+    // Fonction pour afficher l'aperçu des fichiers sélectionnés
     function showFilePreview(files) {
       const modalContent = document.querySelector('.modal-content');
       const fileCount = files.length;
       
-      // Générer l'aperçu des fichiers (sans informations techniques)
+      // Générer l'aperçu des fichiers
       let filePreviewHtml = '';
       files.forEach((file, index) => {
         const fileType = file.type.includes('video') ? '🎥' : '📷';
-        const fileName = file.name.length > 18 ? file.name.substring(0, 18) + '...' : file.name;
+        const fileName = file.name.length > 20 ? file.name.substring(0, 20) + '...' : file.name;
         filePreviewHtml += `
-          <div style="display: flex; align-items: center; padding: 0.6rem; margin: 0.3rem 0; background: #f8f9fa; border-radius: 8px;">
-            <span style="font-size: 1.2rem; margin-right: 0.7rem;">${fileType}</span>
-            <span style="font-size: 0.95rem; color: #333;">${fileName}</span>
+          <div style="display: flex; align-items: center; padding: 0.5rem; margin: 0.25rem 0; background: #f8f9fa; border-radius: 8px;">
+            <span style="font-size: 1.2rem; margin-right: 0.5rem;">${fileType}</span>
+            <span style="font-size: 0.9rem; color: #666;">${fileName}</span>
           </div>
         `;
       });
@@ -680,7 +589,7 @@
       modalContent.innerHTML = `
         <div style="padding: 1.5rem;">
           <h3 style="margin-bottom: 1rem; color: #333;">Envoyer ${typeText} ?</h3>
-          <div style="max-height: 220px; overflow-y: auto; margin-bottom: 1.5rem;">
+          <div style="max-height: 200px; overflow-y: auto; margin-bottom: 1.5rem;">
             ${filePreviewHtml}
           </div>
           <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.5rem;">
@@ -708,22 +617,18 @@
       document.getElementById('popup').style.display = 'flex';
     }
     
-    // Fonction pour confirmer l'upload (SANS contraintes artificielles)
+    // Fonction pour confirmer l'upload
     function confirmUpload(isPublic) {
+      // CORRECTION: Vérifier la limite AVANT d'afficher le succès
+      if (selectedFiles.length > 10) {
+        showDiscretError('Maximum 10 fichiers à la fois. Sélectionnez moins de fichiers.');
+        return; // Arrêter ici, ne pas continuer
+      }
+      
       const modalContent = document.querySelector('.modal-content');
       const fileCount = selectedFiles.length;
       
-      // LOG: Afficher les tailles des fichiers pour debug
-      console.log('🔍 ANALYSE DES FICHIERS:');
-      selectedFiles.forEach((file, index) => {
-        const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
-        console.log(`📁 Fichier ${index + 1}: ${file.name} - ${sizeMB}MB - Type: ${file.type}`);
-      });
-      
-      const totalSizeMB = selectedFiles.reduce((total, file) => total + file.size, 0) / (1024 * 1024);
-      console.log(`📦 TAILLE TOTALE: ${totalSizeMB.toFixed(2)}MB`);
-      
-      // Feedback immédiat de succès (AUCUNE LIMITE ARTIFICIELLE)
+      // Feedback immédiat de succès (SEULEMENT si <= 10 fichiers)
       modalContent.innerHTML = `
         <div style="padding: 2rem;">
           <div style="font-size: 3rem; margin-bottom: 1rem;">🎉</div>
@@ -786,7 +691,7 @@
     let uploadQueue = [];
     let activeUploads = 0;
     const MAX_CONCURRENT_UPLOADS = 3; // Limitation pour éviter la surcharge
-    const MAX_RETRY_ATTEMPTS = 3;
+    const MAX_RETRY_ATTEMPTS = 5;
 
     // Fonction pour uploader plusieurs fichiers avec gestion de charge améliorée
     async function uploadMultipleFilesInBackground(files, isPublic) {
@@ -809,188 +714,39 @@
       processUploadQueue();
     }
     
-    // Fonction pour traiter la queue d'upload
-    async function processUploadQueue() {
-      while (uploadQueue.length > 0 && activeUploads < MAX_CONCURRENT_UPLOADS) {
-        const uploadTask = uploadQueue.shift();
-        if (uploadTask) {
-          activeUploads++;
-          uploadFileWithRetry(uploadTask).finally(() => {
-            activeUploads--;
-            // Continuer le traitement de la queue
-            if (uploadQueue.length > 0) {
-              setTimeout(() => processUploadQueue(), 200); // Petite pause entre uploads
-            } else if (activeUploads === 0) {
-              // Tous les uploads terminés
-              console.log('✅ Tous les uploads terminés');
-              setTimeout(() => loadGallery(), 1500); // Recharger la galerie
-            }
-          });
-        }
-      }
-    }
-    
-    // Fonction d'upload avec retry automatique
-    async function uploadFileWithRetry(uploadTask) {
-      const { file, isPublic, attempts, id } = uploadTask;
-      
-      try {
-        console.log(`📤 Upload ${file.name} (tentative ${attempts + 1}/${MAX_RETRY_ATTEMPTS})`);
-        await uploadSingleFileInBackground(file, isPublic);
-        console.log(`✅ Upload réussi: ${file.name}`);
-        
-      } catch (error) {
-        console.error(`❌ Échec upload ${file.name}:`, error);
-        
-        // Retry automatique si pas trop de tentatives
-        if (attempts < MAX_RETRY_ATTEMPTS - 1) {
-          console.log(`🔄 Retry ${file.name} dans 2 secondes...`);
-          uploadTask.attempts++;
-          
-          // Remettre en queue avec délai
-          setTimeout(() => {
-            uploadQueue.unshift(uploadTask); // Priorité aux retry
-            processUploadQueue();
-          }, 2000 + (attempts * 1000)); // Délai croissant
-          
-        } else {
-          // Échec définitif après tous les retry
-          showDiscretError(`Échec définitif: ${file.name}`);
-        }
-      }
-    }
-    
-    // Apps Script URL (votre nouveau déploiement)
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzdqbRE2_zf_SoyPV0zhST4gwkRZn9nB61r5Umm0xaXQ2kB_GH_hIlb-RVV9FaZ2rQv/exec';
 
-    // FONCTION: Upload resumable depuis Vercel
-    async function uploadSingleFileInBackground(file, isPublic) {
-      try {
-        const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
-        console.log(`🚀 Début upload resumable: ${file.name} (${fileSizeMB}MB)`);
-        
-        // 1. Obtenir le token OAuth via fetch
-        const tokenResponse = await fetch(`${APPS_SCRIPT_URL}?action=getToken`);
-        if (!tokenResponse.ok) {
-          throw new Error('Impossible d\'obtenir le token');
-        }
-        const tokenData = await tokenResponse.text();
-        const token = tokenData.replace(/"/g, ''); // Nettoyer les guillemets
-        console.log(`🔑 Token OAuth obtenu`);
-        
-        // 2. Obtenir l'ID du dossier via fetch
-        const folderResponse = await fetch(`${APPS_SCRIPT_URL}?action=getFolder&isPublic=${isPublic}`);
-        if (!folderResponse.ok) {
-          throw new Error('Impossible d\'obtenir le dossier');
-        }
-        const folderId = (await folderResponse.text()).replace(/"/g, '');
-        console.log(`📁 Dossier cible: ${folderId}`);
-        
-        // 3. Initier la session resumable upload
-        const metadata = {
-          name: file.name,
-          parents: [folderId],
-          mimeType: file.type
-        };
-        
-        const initResponse = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable', {
-          method: 'POST',
+    /** 
+     * Upload Drive résumable (chunk 8 MiB)
+     * @param {File} file     – fichier du navigateur
+     * @param {string} token  – ya29.… (Bearer)
+     * @param {boolean} pub   – true = dossier public, false = dossier privé
+     */
+    async function resumableUpload(file, token, pub) {
+      const CHUNK = 8 * 1024 * 1024; // 8 MiB
+      const metadata = {
+        name: file.name,
+        mimeType: file.type || 'application/octet-stream',
+        parents: [ pub ? DRIVE_PUBLIC_FOLDER : DRIVE_PRIVATE_FOLDER ]
+      };
+
+      /* 1️⃣  Crée la session */
+      const initRes = await fetch(
+        "https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable",
+        {
+          method: "POST",
           headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
+            "Authorization": "Bearer " + token,
+            "Content-Type": "application/json; charset=UTF-8",
+            "X-Upload-Content-Length": file.size,
+            "X-Upload-Content-Type": file.type
           },
           body: JSON.stringify(metadata)
-        });
-        
-        if (!initResponse.ok) {
-          throw new Error(`Erreur initialisation upload: ${initResponse.status}`);
         }
-        
-        const uploadUrl = initResponse.headers.get('location');
-        console.log(`📡 Session upload créée`);
-        
-        // 4. Upload par chunks de 8MB
-        const chunkSize = 8 * 1024 * 1024; // 8MB par chunk
-        const totalChunks = Math.ceil(file.size / chunkSize);
-        
-        for (let i = 0; i < totalChunks; i++) {
-          const start = i * chunkSize;
-          const end = Math.min(start + chunkSize, file.size);
-          const chunk = file.slice(start, end);
-          
-          console.log(`📦 Upload chunk ${i + 1}/${totalChunks} (${(start/1024/1024).toFixed(1)}-${(end/1024/1024).toFixed(1)}MB)`);
-          
-          const chunkResponse = await fetch(uploadUrl, {
-            method: 'PUT',
-            headers: {
-              'Content-Range': `bytes ${start}-${end-1}/${file.size}`,
-              'Content-Length': chunk.size.toString()
-            },
-            body: chunk
-          });
-          
-          // 308 = Continue, 200/201 = Fini
-          if (chunkResponse.status !== 308 && !chunkResponse.ok) {
-            throw new Error(`Erreur chunk ${i + 1}: ${chunkResponse.status}`);
-          }
-          
-          if (chunkResponse.ok && chunkResponse.status !== 308) {
-            console.log(`✅ Upload terminé: ${file.name}`);
-            break;
-          }
-        }
-        
-        console.log(`🎉 SUCCÈS: ${file.name} uploadé avec resumable upload`);
-        return true;
-        
-      } catch (error) {
-        console.error(`❌ Erreur upload resumable:`, error);
-        throw error;
-      }
-    }
+      );
+      if (!initRes.ok)
+        throw new Error("Init upload: " + (await initRes.text()));
+      const sessionURL = initRes.headers.get("Location");
 
-    // Fonction pour afficher une erreur discrète
-    function showDiscretError(message) {
-      const notification = document.createElement('div');
-      notification.style.cssText = `
-        position: fixed;
-        bottom: 80px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: #f44336;
-        color: white;
-        padding: 1rem 1.5rem;
-        border-radius: 25px;
-        font-size: 0.9rem;
-        z-index: 1001;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        opacity: 0;
-        transition: opacity 0.3s ease;
-      `;
-      notification.textContent = message;
-      
-      document.body.appendChild(notification);
-      
-      // Animation d'apparition
-      setTimeout(() => notification.style.opacity = '1', 100);
-      
-      // Supprimer après 4 secondes
-      setTimeout(() => {
-        notification.style.opacity = '0';
-        setTimeout(() => document.body.removeChild(notification), 300);
-      }, 4000);
-    }
-
-    async function sendMedia(isPublic) {
-      // Cette fonction n'est plus utilisée car le feedback est immédiat dans handleFiles()
-      console.log('sendMedia appelée, mais upload déjà fait en arrière-plan');
-    }
-
-    // Fonction de compatibilité pour l'upload simple
-    async function uploadFileInBackground(file, isPublic) {
-      return uploadSingleFileInBackground(file, isPublic);
-    }
-  </script>
-
-</body>
-</html>
+      /* 2️⃣  Envoie le fichier par morceaux */
+      let start = 0;
+      while (start < file.size
