@@ -451,55 +451,78 @@
     let currentImageIndex = 0;
 
     async function loadGallery() {
-      const endpoint = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+(mimeType+contains+'image/'+or+mimeType+contains+'video/')&key=${apiKey}&fields=files(id,name,mimeType,thumbnailLink,webContentLink)`;
-      const res = await fetch(endpoint);
-      const data = await res.json();
-      const container = document.getElementById("drive-gallery");
+  const endpoint = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+(mimeType+contains+'image/'+or+mimeType+contains+'video/')&key=${apiKey}&fields=files(id,name,mimeType,thumbnailLink,webContentLink)`;
+  const res = await fetch(endpoint);
+  const data = await res.json();
+  const container = document.getElementById("drive-gallery");
 
-      galleryFiles = data.files;
-      container.innerHTML = "";
-      
-      data.files.forEach((file, index) => {
-        const thumb = file.thumbnailLink?.replace("=s220", "=s600") || "";
-        const webLink = file.webContentLink;
+  galleryFiles = data.files;
+  container.innerHTML = "";
+  
+  data.files.forEach((file, index) => {
+    const thumb = file.thumbnailLink?.replace("=s220", "=s600") || "";
+    const webLink = file.webContentLink;
 
-        const wrapper = document.createElement("div");
-        const element = file.mimeType.includes("video")
-          ? document.createElement("video")
-          : document.createElement("img");
+    const wrapper = document.createElement("div");
+    const element = file.mimeType.includes("video")
+      ? document.createElement("video")
+      : document.createElement("img");
 
-        element.src = file.mimeType.includes("video")
-          ? `https://drive.google.com/uc?export=download&id=${file.id}`
-          : thumb;
-        element.alt = file.name;
-        element.setAttribute("data-full", webLink);
-        element.onclick = () => openLightbox(file.mimeType, element.src, webLink, index);
-
-        wrapper.appendChild(element);
-        container.appendChild(wrapper);
-      });
+    // Correction principale : nouvelle URL pour les vidéos + attributs mobiles
+    if (file.mimeType.includes("video")) {
+      element.src = `https://drive.google.com/uc?export=view&id=${file.id}`;
+      element.setAttribute("playsinline", "");
+      element.setAttribute("muted", "");
+      element.setAttribute("preload", "metadata");
+      element.setAttribute("poster", thumb); // Utilise le thumbnail comme poster
+    } else {
+      element.src = thumb;
     }
+    
+    element.alt = file.name;
+    element.setAttribute("data-full", webLink);
+    element.onclick = () => openLightbox(file.mimeType, element.src, webLink, index);
 
-    function openLightbox(type, src, downloadLink, index) {
-      currentImageIndex = index;
-      const content = document.getElementById("lightbox-content");
-      const lightbox = document.getElementById("lightbox");
-      const btn = document.getElementById("downloadBtn");
+    wrapper.appendChild(element);
+    container.appendChild(wrapper);
+  });
+}
 
-      content.innerHTML = "";
+function openLightbox(type, src, downloadLink, index) {
+  currentImageIndex = index;
+  const content = document.getElementById("lightbox-content");
+  const lightbox = document.getElementById("lightbox");
+  const btn = document.getElementById("downloadBtn");
 
-      const el = document.createElement(type.includes("video") ? "video" : "img");
-      el.src = src;
-      if (type.includes("video")) el.controls = true;
-      content.appendChild(el);
+  content.innerHTML = "";
 
-      btn.setAttribute("data-src", downloadLink);
-      document.body.classList.add("lightbox-open");
-      lightbox.style.display = "flex";
-      
-      updateNavigationButtons();
-    }
+  const el = document.createElement(type.includes("video") ? "video" : "img");
+  
+  // Correction pour la lightbox : URL et attributs optimisés pour mobile
+  if (type.includes("video")) {
+    const fileId = galleryFiles[index].id;
+    el.src = `https://drive.google.com/uc?export=view&id=${fileId}`;
+    el.controls = true;
+    el.setAttribute("playsinline", "");
+    el.setAttribute("preload", "metadata");
+    
+    // Fallback en cas d'erreur de chargement
+    el.onerror = function() {
+      console.log("Erreur de chargement vidéo, tentative avec URL alternative");
+      this.src = `https://drive.google.com/file/d/${fileId}/preview`;
+    };
+  } else {
+    el.src = src;
+  }
+  
+  content.appendChild(el);
 
+  btn.setAttribute("data-src", downloadLink);
+  document.body.classList.add("lightbox-open");
+  lightbox.style.display = "flex";
+  
+  updateNavigationButtons();
+}
     function navigateGallery(direction) {
       currentImageIndex += direction;
       
