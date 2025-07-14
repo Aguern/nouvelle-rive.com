@@ -236,19 +236,8 @@
     .lightbox video,
     .lightbox iframe {
       max-width: 100%;
-      max-height: 85vh;
-      border-radius: 8px;
-    }
-
-    /* Style spécifique pour les containers vidéo */
-    .lightbox .video-container {
-      width: 100%;
-      height: 85vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: #000;
-      border-radius: 8px;
+      max-height: 80vh;
+      border-radius: 0;
     }
 
     /* Croix de fermeture */
@@ -419,40 +408,21 @@
       content.innerHTML = "";
 
       if (type.includes("video")) {
-        // CORRECTION: Améliorer l'affichage des vidéos
+        // Utiliser une iframe pour les vidéos Google Drive
         const fileId = galleryFiles[index].id;
         const iframe = document.createElement("iframe");
         iframe.src = `https://drive.google.com/file/d/${fileId}/preview`;
-        
-        // Styles améliorés pour l'iframe vidéo
         iframe.style.width = "100%";
-        iframe.style.height = "85vh"; // Plus grand
-        iframe.style.maxWidth = "90vw";
-        iframe.style.maxHeight = "85vh";
+        iframe.style.height = "80vh";
         iframe.style.border = "none";
-        iframe.style.borderRadius = "8px";
         iframe.setAttribute("allowfullscreen", "");
         iframe.setAttribute("allow", "autoplay");
         
-        // Container pour centrer et optimiser l'iframe
-        const videoContainer = document.createElement("div");
-        videoContainer.style.cssText = `
-          width: 100%;
-          height: 85vh;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          background: #000;
-          border-radius: 8px;
-        `;
-        
-        videoContainer.appendChild(iframe);
-        content.appendChild(videoContainer);
-        
+        content.appendChild(iframe);
       } else {
         const el = document.createElement("img");
         const fileId = galleryFiles[index].id;
-        // Image haute qualité dans la lightbox
+        // CORRECTION 3: Image haute qualité dans la lightbox
         el.src = `https://drive.google.com/uc?export=view&id=${fileId}`;
         
         // Fallback en cas d'erreur
