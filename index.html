@@ -236,8 +236,19 @@
     .lightbox video,
     .lightbox iframe {
       max-width: 100%;
-      max-height: 80vh;
-      border-radius: 0;
+      max-height: 85vh;
+      border-radius: 8px;
+    }
+
+    /* Style spécifique pour les containers vidéo */
+    .lightbox .video-container {
+      width: 100%;
+      height: 85vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #000;
+      border-radius: 8px;
     }
 
     /* Croix de fermeture */
@@ -408,21 +419,34 @@
       content.innerHTML = "";
 
       if (type.includes("video")) {
-        // Utiliser une iframe pour les vidéos Google Drive
+        // CORRECTION: Utiliser un lecteur vidéo natif HTML5
         const fileId = galleryFiles[index].id;
-        const iframe = document.createElement("iframe");
-        iframe.src = `https://drive.google.com/file/d/${fileId}/preview`;
-        iframe.style.width = "100%";
-        iframe.style.height = "80vh";
-        iframe.style.border = "none";
-        iframe.setAttribute("allowfullscreen", "");
-        iframe.setAttribute("allow", "autoplay");
+        const video = document.createElement("video");
+        video.src = `https://drive.google.com/uc?export=download&id=${fileId}`;
         
-        content.appendChild(iframe);
+        // Attributs pour optimiser la lecture vidéo
+        video.controls = true;
+        video.setAttribute("playsinline", "");
+        video.setAttribute("preload", "metadata");
+        video.style.width = "100%";
+        video.style.height = "auto";
+        video.style.maxWidth = "90vw";
+        video.style.maxHeight = "85vh";
+        video.style.borderRadius = "8px";
+        video.style.backgroundColor = "#000";
+        
+        // Gestion d'erreur avec fallback
+        video.onerror = function() {
+          console.error("Erreur de lecture vidéo, tentative avec URL alternative");
+          this.src = `https://drive.google.com/file/d/${fileId}/view`;
+        };
+        
+        content.appendChild(video);
+        
       } else {
         const el = document.createElement("img");
         const fileId = galleryFiles[index].id;
-        // CORRECTION 3: Image haute qualité dans la lightbox
+        // Image haute qualité dans la lightbox
         el.src = `https://drive.google.com/uc?export=view&id=${fileId}`;
         
         // Fallback en cas d'erreur
