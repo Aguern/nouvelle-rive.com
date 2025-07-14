@@ -603,10 +603,16 @@
     
     // Fonction pour confirmer l'upload
     function confirmUpload(isPublic) {
+      // CORRECTION: Vérifier la limite AVANT d'afficher le succès
+      if (selectedFiles.length > 10) {
+        showDiscretError('Maximum 10 fichiers à la fois. Sélectionnez moins de fichiers.');
+        return; // Arrêter ici, ne pas continuer
+      }
+      
       const modalContent = document.querySelector('.modal-content');
       const fileCount = selectedFiles.length;
       
-      // Feedback immédiat de succès
+      // Feedback immédiat de succès (SEULEMENT si <= 10 fichiers)
       modalContent.innerHTML = `
         <div style="padding: 2rem;">
           <div style="font-size: 3rem; margin-bottom: 1rem;">🎉</div>
@@ -675,11 +681,8 @@
     async function uploadMultipleFilesInBackground(files, isPublic) {
       console.log(`🚀 Ajout de ${files.length} fichier(s) à la queue d'upload`);
       
-      // Limitation préventive : max 10 fichiers par batch
-      if (files.length > 10) {
-        showDiscretError(`Maximum 10 fichiers à la fois. Sélectionnez moins de fichiers.`);
-        return;
-      }
+      // CORRECTION: La vérification de limite est maintenant dans confirmUpload()
+      // Cette fonction ne reçoit que des fichiers validés
       
       // Ajouter les fichiers à la queue
       files.forEach(file => {
