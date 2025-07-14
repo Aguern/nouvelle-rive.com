@@ -521,84 +521,103 @@
     }
 
     async function sendMedia(isPublic) {
-      // Afficher le loader avec message de transfert
+      // SOLUTION 1 : Afficher immédiatement le succès à l'utilisateur
       const modalContent = document.querySelector('.modal-content');
       modalContent.innerHTML = `
         <div style="padding: 2rem;">
-          <p style="font-size: 1.2rem; margin-bottom: 1.5rem;">Transfert en cours...</p>
-          <div class="loader" style="display: block;"></div>
+          <div style="font-size: 3rem; margin-bottom: 1rem;">🎉</div>
+          <h3 style="color: #4CAF50; margin-bottom: 1rem;">Merci !</h3>
+          <p style="font-size: 1.1rem;">Votre ${selectedFile.type.includes('video') ? 'vidéo' : 'photo'} a été reçue et sera ${isPublic ? 'ajoutée à la galerie' : 'envoyée aux mariés'} dans quelques instants !</p>
         </div>
       `;
       
-      const reader = new FileReader();
-      reader.onloadend = async () => {
-        try {
-          const base64 = reader.result.split(',')[1];
-          const fd = new URLSearchParams();
-          fd.append('fileContent', encodeURIComponent(base64));
-          fd.append('fileType', selectedFile.type);
-          fd.append('fileName', selectedFile.name);
-          fd.append('public', isPublic ? 'true' : 'false');
-          
-          const res = await fetch(
-            'https://script.google.com/macros/s/AKfycbx1tKY8CNcb1snBapGEbN0lQOkJF5-QUG299dYwWSEyTIOIuoqTcqe-22a5Q-VByQo0/exec', 
-            { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: fd }
-          );
-          
-          const result = await res.text();
-          
-          // Afficher le message de succès avec style
-          modalContent.innerHTML = `
-            <div style="padding: 2rem;">
-              <div style="font-size: 3rem; margin-bottom: 1rem;">🎉</div>
-              <h3 style="color: #4CAF50; margin-bottom: 1rem;">Merci !</h3>
-              <p style="font-size: 1.1rem;">${result}</p>
-            </div>
-          `;
-          
-          // Fermer automatiquement après 3 secondes
-          setTimeout(() => {
-            document.getElementById('popup').style.display = 'none';
-            // Réinitialiser le contenu pour la prochaine fois
-            modalContent.innerHTML = `
-              <p style="font-size: 1.2rem; margin-bottom: 0.5rem;">Souhaitez-vous afficher ce média dans la galerie ?</p>
-              <div class="loader" id="loader"></div>
-              <div class="modal-buttons" id="modalButtons">
-                <button class="public-btn" onclick="sendMedia(true)">📢 Afficher en public</button>
-                <button class="private-btn" onclick="sendMedia(false)">🔒 Uniquement pour les mariés</button>
-              </div>
-            `;
+      // Fermer la modal après 2.5 secondes
+      setTimeout(() => {
+        document.getElementById('popup').style.display = 'none';
+        // Réinitialiser le contenu pour la prochaine fois
+        modalContent.innerHTML = `
+          <p style="font-size: 1.2rem; margin-bottom: 0.5rem;">Souhaitez-vous afficher ce média dans la galerie ?</p>
+          <div class="loader" id="loader"></div>
+          <div class="modal-buttons" id="modalButtons">
+            <button class="public-btn" onclick="sendMedia(true)">📢 Afficher en public</button>
+            <button class="private-btn" onclick="sendMedia(false)">🔒 Uniquement pour les mariés</button>
+          </div>
+        `;
+      }, 2500);
+      
+      // Upload en arrière-plan (APRÈS avoir affiché le succès)
+      uploadFileInBackground(selectedFile, isPublic);
+    }
+
+    // Fonction d'upload en arrière-plan
+    async function uploadFileInBackground(file, isPublic) {
+      try {
+        const reader = new FileReader();
+        reader.onloadend = async () => {
+          try {
+            const base64 = reader.result.split(',')[1];
+            const fd = new URLSearchParams();
+            fd.append('fileContent', encodeURIComponent(base64));
+            fd.append('fileType', file.type);
+            fd.append('fileName', file.name);
+            fd.append('public', isPublic ? 'true' : 'false');
             
-            // Recharger la galerie si le média était public
-            if (isPublic) {
-              loadGallery();
+            const res = await fetch(
+              'https://script.google.com/macros/s/AKfycbx1tKY8CNcb1snBapGEbN0lQOkJF5-QUG299dYwWSEyTIOIuoqTcqe-22a5Q-VByQo0/exec', 
+              { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: fd }
+            );
+            
+            if (res.ok) {
+              // Upload réussi - recharger la galerie si public
+              if (isPublic) {
+                setTimeout(() => loadGallery(), 1000); // Petit délai pour que le fichier soit bien traité côté serveur
+              }
+              console.log('✅ Upload terminé avec succès');
+            } else {
+              throw new Error('Erreur serveur');
             }
-          }, 3000);
-          
-        } catch (error) {
-          modalContent.innerHTML = `
-            <div style="padding: 2rem;">
-              <div style="font-size: 3rem; margin-bottom: 1rem;">❌</div>
-              <h3 style="color: #f44336; margin-bottom: 1rem;">Erreur</h3>
-              <p style="font-size: 1.1rem;">Une erreur est survenue. Veuillez réessayer.</p>
-            </div>
-          `;
-          
-          setTimeout(() => {
-            document.getElementById('popup').style.display = 'none';
-            // Réinitialiser le contenu
-            modalContent.innerHTML = `
-              <p style="font-size: 1.2rem; margin-bottom: 0.5rem;">Souhaitez-vous afficher ce média dans la galerie ?</p>
-              <div class="loader" id="loader"></div>
-              <div class="modal-buttons" id="modalButtons">
-                <button class="public-btn" onclick="sendMedia(true)">📢 Afficher en public</button>
-                <button class="private-btn" onclick="sendMedia(false)">🔒 Uniquement pour les mariés</button>
-              </div>
-            `;
-          }, 3000);
-        }
-      };
-      reader.readAsDataURL(selectedFile);
+            
+          } catch (error) {
+            console.error('❌ Erreur lors de l\'upload:', error);
+            // Afficher discrètement l'erreur (optionnel)
+            showDiscretError('Upload échoué, veuillez réessayer');
+          }
+        };
+        reader.readAsDataURL(file);
+        
+      } catch (error) {
+        console.error('❌ Erreur lors de la lecture du fichier:', error);
+        showDiscretError('Erreur de lecture du fichier');
+      }
+    }
+
+    // Fonction pour afficher une erreur discrète (si besoin)
+    function showDiscretError(message) {
+      // Créer une notification discrète en bas de l'écran
+      const notification = document.createElement('div');
+      notification.style.cssText = `
+        position: fixed;
+        bottom: 80px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #f44336;
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 25px;
+        font-size: 0.9rem;
+        z-index: 1001;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        animation: slideUp 0.3s ease-out;
+      `;
+      notification.textContent = message;
+      
+      document.body.appendChild(notification);
+      
+      // Supprimer après 4 secondes
+      setTimeout(() => {
+        notification.style.animation = 'slideUp 0.3s ease-out reverse';
+        setTimeout(() => document.body.removeChild(notification), 300);
+      }, 4000);
     }
   </script>
 
