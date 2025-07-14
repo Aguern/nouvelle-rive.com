@@ -571,7 +571,7 @@
         <div style="padding: 2rem;">
           <div style="font-size: 2rem; margin-bottom: 1rem;">📸</div>
           <h3 style="margin-bottom: 1rem;">Préparation des fichiers...</h3>
-          <p style="font-size: 0.9rem; color: #666;">Optimisation en cours pour un envoi rapide</p>
+          <p style="font-size: 0.9rem; color: #666;">Traitement en cours</p>
           <div class="loader" style="display: block; margin: 1rem auto;"></div>
         </div>
       `;
@@ -587,13 +587,22 @@
             // Compression intelligente pour les images
             const compressedFile = await compressImageIntelligently(file);
             processedFiles.push(compressedFile);
-          } else {
-            // Garder les vidéos telles quelles (mais vérifier la taille)
-            if (file.size > 50 * 1024 * 1024) { // 50MB max pour vidéos
-              throw new Error(`Vidéo trop volumineuse : ${file.name} (${Math.round(file.size / 1024 / 1024)}MB). Maximum 50MB.`);
+          } else if (file.type.startsWith('video/')) {
+            // Pour les vidéos, vérifier la taille APRÈS avoir essayé une compression basique
+            if (file.size > 100 * 1024 * 1024) { // 100MB max pour vidéos (limite plus souple)
+              throw new Error(`Vidéo trop volumineuse : ${file.name}. Essayez de raccourcir la vidéo ou de réduire sa qualité.`);
             }
             processedFiles.push(file);
+          } else {
+            // Autres fichiers
+            processedFiles.push(file);
           }
+        }
+        
+        // Vérifier la taille totale après compression
+        const totalSizeMB = processedFiles.reduce((total, file) => total + file.size, 0) / (1024 * 1024);
+        if (totalSizeMB > 80) { // Limite plus généreuse après compression
+          throw new Error(`Sélection trop volumineuse (${totalSizeMB.toFixed(1)}MB). Sélectionnez moins de fichiers.`);
         }
         
         // Remplacer les fichiers originaux par les fichiers traités
@@ -606,6 +615,7 @@
         console.error('Erreur lors de la compression:', error);
         showDiscretError(error.message || 'Erreur lors du traitement des fichiers');
         document.getElementById('popup').style.display = 'none';
+        resetModal();
       }
     }
     
@@ -674,27 +684,20 @@
       });
     }
     
-    // Fonction pour afficher l'aperçu des fichiers sélectionnés (version améliorée)
+    // Fonction pour afficher l'aperçu des fichiers sélectionnés (version simplifiée)
     function showFilePreview(files) {
       const modalContent = document.querySelector('.modal-content');
       const fileCount = files.length;
       
-      // Calculer la taille totale après compression
-      const totalSizeMB = files.reduce((total, file) => total + file.size, 0) / (1024 * 1024);
-      
-      // Générer l'aperçu des fichiers avec informations de taille
+      // Générer l'aperçu des fichiers (sans informations techniques)
       let filePreviewHtml = '';
       files.forEach((file, index) => {
         const fileType = file.type.includes('video') ? '🎥' : '📷';
-        const fileName = file.name.length > 15 ? file.name.substring(0, 15) + '...' : file.name;
-        const fileSizeMB = (file.size / (1024 * 1024)).toFixed(1);
+        const fileName = file.name.length > 18 ? file.name.substring(0, 18) + '...' : file.name;
         filePreviewHtml += `
-          <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.5rem; margin: 0.25rem 0; background: #f8f9fa; border-radius: 8px;">
-            <div style="display: flex; align-items: center;">
-              <span style="font-size: 1.2rem; margin-right: 0.5rem;">${fileType}</span>
-              <span style="font-size: 0.9rem; color: #333;">${fileName}</span>
-            </div>
-            <span style="font-size: 0.8rem; color: #666;">${fileSizeMB}MB</span>
+          <div style="display: flex; align-items: center; padding: 0.6rem; margin: 0.3rem 0; background: #f8f9fa; border-radius: 8px;">
+            <span style="font-size: 1.2rem; margin-right: 0.7rem;">${fileType}</span>
+            <span style="font-size: 0.95rem; color: #333;">${fileName}</span>
           </div>
         `;
       });
@@ -716,14 +719,8 @@
       modalContent.innerHTML = `
         <div style="padding: 1.5rem;">
           <h3 style="margin-bottom: 1rem; color: #333;">Envoyer ${typeText} ?</h3>
-          <div style="max-height: 200px; overflow-y: auto; margin-bottom: 1rem;">
+          <div style="max-height: 220px; overflow-y: auto; margin-bottom: 1.5rem;">
             ${filePreviewHtml}
-          </div>
-          <div style="background: #e8f5e8; padding: 0.8rem; border-radius: 8px; margin-bottom: 1.5rem;">
-            <p style="font-size: 0.9rem; color: #2d5a2d; margin: 0;">
-              📦 Taille totale optimisée : <strong>${totalSizeMB.toFixed(1)} MB</strong>
-              ${totalSizeMB > 2 ? '<br>🚀 Fichiers automatiquement compressés pour un envoi rapide' : ''}
-            </p>
           </div>
           <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.5rem;">
             ${fileCount === 1 ? 'Ce fichier sera' : 'Ces fichiers seront'} ajoutés à la galerie publique.
