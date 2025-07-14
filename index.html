@@ -557,25 +557,144 @@
       if (files && files.length > 0) {
         selectedFiles = Array.from(files);
         
-        // Afficher l'aperçu des fichiers sélectionnés
-        showFilePreview(selectedFiles);
+        // COMPRESSION INTELLIGENTE : Traiter les fichiers avant aperçu
+        processFilesWithCompression(selectedFiles);
       }
     }
     
-    // Fonction pour afficher l'aperçu des fichiers sélectionnés
+    // Fonction de compression intelligente
+    async function processFilesWithCompression(files) {
+      const modalContent = document.querySelector('.modal-content');
+      
+      // Afficher un message de traitement
+      modalContent.innerHTML = `
+        <div style="padding: 2rem;">
+          <div style="font-size: 2rem; margin-bottom: 1rem;">📸</div>
+          <h3 style="margin-bottom: 1rem;">Préparation des fichiers...</h3>
+          <p style="font-size: 0.9rem; color: #666;">Optimisation en cours pour un envoi rapide</p>
+          <div class="loader" style="display: block; margin: 1rem auto;"></div>
+        </div>
+      `;
+      document.getElementById('popup').style.display = 'flex';
+      
+      try {
+        const processedFiles = [];
+        
+        for (let i = 0; i < files.length; i++) {
+          const file = files[i];
+          
+          if (file.type.startsWith('image/')) {
+            // Compression intelligente pour les images
+            const compressedFile = await compressImageIntelligently(file);
+            processedFiles.push(compressedFile);
+          } else {
+            // Garder les vidéos telles quelles (mais vérifier la taille)
+            if (file.size > 50 * 1024 * 1024) { // 50MB max pour vidéos
+              throw new Error(`Vidéo trop volumineuse : ${file.name} (${Math.round(file.size / 1024 / 1024)}MB). Maximum 50MB.`);
+            }
+            processedFiles.push(file);
+          }
+        }
+        
+        // Remplacer les fichiers originaux par les fichiers traités
+        selectedFiles = processedFiles;
+        
+        // Afficher l'aperçu avec les fichiers optimisés
+        showFilePreview(selectedFiles);
+        
+      } catch (error) {
+        console.error('Erreur lors de la compression:', error);
+        showDiscretError(error.message || 'Erreur lors du traitement des fichiers');
+        document.getElementById('popup').style.display = 'none';
+      }
+    }
+    
+    // Fonction de compression intelligente pour images
+    async function compressImageIntelligently(file) {
+      return new Promise((resolve) => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const img = new Image();
+        
+        img.onload = function() {
+          // Compression intelligente basée sur la taille du fichier
+          const fileSizeMB = file.size / (1024 * 1024);
+          let shouldCompress = fileSizeMB > 2; // Compresser si > 2MB
+          
+          if (!shouldCompress) {
+            // Fichier déjà optimal, garder l'original
+            resolve(file);
+            return;
+          }
+          
+          // Calculer les nouvelles dimensions (max 1920px sur le côté le plus large)
+          const maxDimension = 1920;
+          let { width, height } = img;
+          
+          if (width > maxDimension || height > maxDimension) {
+            if (width > height) {
+              height = (height * maxDimension) / width;
+              width = maxDimension;
+            } else {
+              width = (width * maxDimension) / height;
+              height = maxDimension;
+            }
+          }
+          
+          // Redimensionner l'image
+          canvas.width = width;
+          canvas.height = height;
+          ctx.drawImage(img, 0, 0, width, height);
+          
+          // Déterminer la qualité selon la taille originale
+          let quality = 0.8; // 80% par défaut
+          if (fileSizeMB > 5) quality = 0.75; // 75% pour les très gros fichiers
+          if (fileSizeMB > 10) quality = 0.7; // 70% pour les énormes fichiers
+          
+          // Convertir en blob avec compression
+          canvas.toBlob((blob) => {
+            // Créer un nouveau fichier avec le même nom
+            const compressedFile = new File([blob], file.name, {
+              type: 'image/jpeg',
+              lastModified: Date.now()
+            });
+            
+            console.log(`📸 Compression: ${file.name} - ${Math.round(fileSizeMB)}MB → ${Math.round(compressedFile.size / 1024 / 1024)}MB`);
+            resolve(compressedFile);
+          }, 'image/jpeg', quality);
+        };
+        
+        img.onerror = () => {
+          // En cas d'erreur, garder le fichier original
+          console.warn(`Impossible de compresser ${file.name}, conservation de l'original`);
+          resolve(file);
+        };
+        
+        img.src = URL.createObjectURL(file);
+      });
+    }
+    
+    // Fonction pour afficher l'aperçu des fichiers sélectionnés (version améliorée)
     function showFilePreview(files) {
       const modalContent = document.querySelector('.modal-content');
       const fileCount = files.length;
       
-      // Générer l'aperçu des fichiers
+      // Calculer la taille totale après compression
+      const totalSizeMB = files.reduce((total, file) => total + file.size, 0) / (1024 * 1024);
+      
+      // Générer l'aperçu des fichiers avec informations de taille
       let filePreviewHtml = '';
       files.forEach((file, index) => {
         const fileType = file.type.includes('video') ? '🎥' : '📷';
-        const fileName = file.name.length > 20 ? file.name.substring(0, 20) + '...' : file.name;
+        const fileName = file.name.length > 15 ? file.name.substring(0, 15) + '...' : file.name;
+        const fileSizeMB = (file.size / (1024 * 1024)).toFixed(1);
         filePreviewHtml += `
-          <div style="display: flex; align-items: center; padding: 0.5rem; margin: 0.25rem 0; background: #f8f9fa; border-radius: 8px;">
-            <span style="font-size: 1.2rem; margin-right: 0.5rem;">${fileType}</span>
-            <span style="font-size: 0.9rem; color: #666;">${fileName}</span>
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.5rem; margin: 0.25rem 0; background: #f8f9fa; border-radius: 8px;">
+            <div style="display: flex; align-items: center;">
+              <span style="font-size: 1.2rem; margin-right: 0.5rem;">${fileType}</span>
+              <span style="font-size: 0.9rem; color: #333;">${fileName}</span>
+            </div>
+            <span style="font-size: 0.8rem; color: #666;">${fileSizeMB}MB</span>
           </div>
         `;
       });
@@ -597,8 +716,14 @@
       modalContent.innerHTML = `
         <div style="padding: 1.5rem;">
           <h3 style="margin-bottom: 1rem; color: #333;">Envoyer ${typeText} ?</h3>
-          <div style="max-height: 200px; overflow-y: auto; margin-bottom: 1.5rem;">
+          <div style="max-height: 200px; overflow-y: auto; margin-bottom: 1rem;">
             ${filePreviewHtml}
+          </div>
+          <div style="background: #e8f5e8; padding: 0.8rem; border-radius: 8px; margin-bottom: 1.5rem;">
+            <p style="font-size: 0.9rem; color: #2d5a2d; margin: 0;">
+              📦 Taille totale optimisée : <strong>${totalSizeMB.toFixed(1)} MB</strong>
+              ${totalSizeMB > 2 ? '<br>🚀 Fichiers automatiquement compressés pour un envoi rapide' : ''}
+            </p>
           </div>
           <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.5rem;">
             ${fileCount === 1 ? 'Ce fichier sera' : 'Ces fichiers seront'} ajoutés à la galerie publique.
