@@ -468,13 +468,13 @@
       ? document.createElement("video")
       : document.createElement("img");
 
-    // Correction principale : nouvelle URL pour les vidéos + attributs mobiles
     if (file.mimeType.includes("video")) {
-      element.src = `https://drive.google.com/uc?export=view&id=${file.id}`;
+      // Utiliser l'URL directe de téléchargement pour la galerie (thumbnail)
+      element.src = `https://drive.google.com/uc?export=download&id=${file.id}`;
       element.setAttribute("playsinline", "");
       element.setAttribute("muted", "");
       element.setAttribute("preload", "metadata");
-      element.setAttribute("poster", thumb); // Utilise le thumbnail comme poster
+      element.setAttribute("poster", thumb);
     } else {
       element.src = thumb;
     }
@@ -498,18 +498,29 @@ function openLightbox(type, src, downloadLink, index) {
 
   const el = document.createElement(type.includes("video") ? "video" : "img");
   
-  // Correction pour la lightbox : URL et attributs optimisés pour mobile
   if (type.includes("video")) {
     const fileId = galleryFiles[index].id;
-    el.src = `https://drive.google.com/uc?export=view&id=${fileId}`;
+    // URL directe pour la lecture dans la lightbox
+    el.src = `https://drive.google.com/uc?export=download&id=${fileId}`;
     el.controls = true;
     el.setAttribute("playsinline", "");
-    el.setAttribute("preload", "metadata");
+    el.setAttribute("autoplay", ""); // Ajout de l'autoplay
+    el.setAttribute("muted", ""); // Nécessaire pour l'autoplay
+    el.setAttribute("preload", "auto");
     
-    // Fallback en cas d'erreur de chargement
+    // Fallback et gestion d'erreurs
     el.onerror = function() {
       console.log("Erreur de chargement vidéo, tentative avec URL alternative");
-      this.src = `https://drive.google.com/file/d/${fileId}/preview`;
+      // Essayer sans autoplay en cas d'échec
+      this.removeAttribute("autoplay");
+      this.load();
+    };
+
+    // Forcer le démarrage après chargement
+    el.onloadeddata = function() {
+      this.play().catch(e => {
+        console.log("Autoplay bloqué, l'utilisateur devra cliquer sur play");
+      });
     };
   } else {
     el.src = src;
