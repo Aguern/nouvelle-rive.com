@@ -749,4 +749,115 @@
 
       /* 2️⃣  Envoie le fichier par morceaux */
       let start = 0;
-      while (start < file.size
+      while (start < file.size) {
+        const end   = Math.min(start + CHUNK, file.size);
+        const chunk = file.slice(start, end);
+
+        const uploadRes = await fetch(sessionURL, {
+          method: "PUT",
+          headers: {
+            "Content-Range": `bytes ${start}-${end - 1}/${file.size}`
+          },
+          body: chunk
+        });
+
+        if (![200, 201, 308].includes(uploadRes.status))
+          throw new Error("Chunk failed: " + (await uploadRes.text()));
+
+        start = end; // prochain morceau
+      }
+    }
+
+    // Fonction pour traiter la queue d'upload
+    async function processUploadQueue() {
+      while (uploadQueue.length > 0 && activeUploads < MAX_CONCURRENT_UPLOADS) {
+        const uploadTask = uploadQueue.shift();
+        if (uploadTask) {
+          activeUploads++;
+          uploadFileWithRetry(uploadTask).finally(() => {
+            activeUploads--;
+            // Continuer le traitement de la queue
+            if (uploadQueue.length > 0) {
+              setTimeout(() => processUploadQueue(), 200); // Petite pause entre uploads
+            } else if (activeUploads === 0) {
+              // Tous les uploads terminés
+              console.log('✅ Tous les uploads terminés');
+              setTimeout(() => loadGallery(), 1500); // Recharger la galerie
+            }
+          });
+        }
+      }
+    }
+    
+    // Fonction d'upload avec retry automatique
+    async function uploadFileWithRetry(uploadTask) {
+      const { file, isPublic, attempts, id } = uploadTask;
+      
+      try {
+        console.log(`📤 Upload ${file.name} (tentative ${attempts + 1}/${MAX_RETRY_ATTEMPTS})`);
+        const token = await getDriveToken();               
+        await resumableUpload(file, token, isPublic);
+        console.log(`✅ Upload réussi: ${file.name}`);
+        
+      } catch (error) {
+        console.error(`❌ Échec upload ${file.name}:`, error);
+        
+        // Retry automatique si pas trop de tentatives
+        if (attempts < MAX_RETRY_ATTEMPTS - 1) {
+          console.log(`🔄 Retry ${file.name} dans 2 secondes...`);
+          uploadTask.attempts++;
+          
+          // Remettre en queue avec délai
+          setTimeout(() => {
+            uploadQueue.unshift(uploadTask); // Priorité aux retry
+            processUploadQueue();
+          }, 2000 + (attempts * 1000)); // Délai croissant
+          
+        } else {
+          // Échec définitif après tous les retry
+          showDiscretError(`Échec définitif: ${file.name}`);
+        }
+      }
+    }
+
+    // Fonction pour afficher une erreur discrète
+    function showDiscretError(message) {
+      const notification = document.createElement('div');
+      notification.style.cssText = `
+        position: fixed;
+        bottom: 80px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #f44336;
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 25px;
+        font-size: 0.9rem;
+        z-index: 1001;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      `;
+      notification.textContent = message;
+      
+      document.body.appendChild(notification);
+      
+      // Animation d'apparition
+      setTimeout(() => notification.style.opacity = '1', 100);
+      
+      // Supprimer après 4 secondes
+      setTimeout(() => {
+        notification.style.opacity = '0';
+        setTimeout(() => document.body.removeChild(notification), 300);
+      }, 4000);
+    }
+
+    async function sendMedia(isPublic) {
+      // Cette fonction n'est plus utilisée car le feedback est immédiat dans handleFiles()
+      console.log('sendMedia appelée, mais upload déjà fait en arrière-plan');
+    }
+
+  </script>
+
+</body>
+</html>
