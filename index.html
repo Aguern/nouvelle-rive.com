@@ -236,19 +236,8 @@
     .lightbox video,
     .lightbox iframe {
       max-width: 100%;
-      max-height: 85vh;
-      border-radius: 8px;
-    }
-
-    /* Style spécifique pour les containers vidéo */
-    .lightbox .video-container {
-      width: 100%;
-      height: 85vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: #000;
-      border-radius: 8px;
+      max-height: 80vh;
+      border-radius: 12px;
     }
 
     /* Croix de fermeture */
@@ -588,11 +577,9 @@
             const compressedFile = await compressImageIntelligently(file);
             processedFiles.push(compressedFile);
           } else if (file.type.startsWith('video/')) {
-            // Pour les vidéos, vérifier la taille APRÈS avoir essayé une compression basique
-            if (file.size > 100 * 1024 * 1024) { // 100MB max pour vidéos (limite plus souple)
-              throw new Error(`Vidéo trop volumineuse : ${file.name}. Essayez de raccourcir la vidéo ou de réduire sa qualité.`);
-            }
-            processedFiles.push(file);
+            // NOUVELLE FONCTIONNALITÉ : Compression vidéo
+            const compressedVideo = await compressVideoIntelligently(file);
+            processedFiles.push(compressedVideo);
           } else {
             // Autres fichiers
             processedFiles.push(file);
@@ -601,7 +588,7 @@
         
         // Vérifier la taille totale après compression
         const totalSizeMB = processedFiles.reduce((total, file) => total + file.size, 0) / (1024 * 1024);
-        if (totalSizeMB > 80) { // Limite plus généreuse après compression
+        if (totalSizeMB > 80) { // Limite après compression
           throw new Error(`Sélection trop volumineuse (${totalSizeMB.toFixed(1)}MB). Sélectionnez moins de fichiers.`);
         }
         
@@ -617,6 +604,95 @@
         document.getElementById('popup').style.display = 'none';
         resetModal();
       }
+    }
+    
+    // NOUVELLE FONCTION : Compression vidéo intelligente
+    async function compressVideoIntelligently(file) {
+      return new Promise((resolve) => {
+        const fileSizeMB = file.size / (1024 * 1024);
+        
+        // Si la vidéo fait moins de 10MB, la garder telle quelle
+        if (fileSizeMB < 10) {
+          console.log(`📹 Vidéo ${file.name} conservée (${fileSizeMB.toFixed(1)}MB)`);
+          resolve(file);
+          return;
+        }
+        
+        const video = document.createElement('video');
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        video.onloadedmetadata = function() {
+          // Calculer nouvelles dimensions (max 720p)
+          let { videoWidth: width, videoHeight: height } = video;
+          const maxDimension = 720;
+          
+          if (width > maxDimension || height > maxDimension) {
+            if (width > height) {
+              height = (height * maxDimension) / width;
+              width = maxDimension;
+            } else {
+              width = (width * maxDimension) / height;
+              height = maxDimension;
+            }
+          }
+          
+          canvas.width = width;
+          canvas.height = height;
+          
+          // Créer un MediaRecorder pour recompresser
+          const stream = canvas.captureStream(15); // 15 FPS au lieu de 30
+          const recorder = new MediaRecorder(stream, {
+            mimeType: 'video/webm;codecs=vp8',
+            videoBitsPerSecond: 500000 // 500 kbps (compression agressive)
+          });
+          
+          const chunks = [];
+          recorder.ondataavailable = (e) => chunks.push(e.data);
+          recorder.onstop = () => {
+            const compressedBlob = new Blob(chunks, { type: 'video/webm' });
+            const compressedFile = new File([compressedBlob], 
+              file.name.replace(/\.[^/.]+$/, '.webm'), {
+              type: 'video/webm',
+              lastModified: Date.now()
+            });
+            
+            console.log(`📹 Compression vidéo: ${file.name} - ${fileSizeMB.toFixed(1)}MB → ${(compressedFile.size / 1024 / 1024).toFixed(1)}MB`);
+            resolve(compressedFile);
+          };
+          
+          // Démarrer l'enregistrement
+          recorder.start();
+          
+          // Dessiner les frames de la vidéo sur le canvas
+          const drawFrame = () => {
+            if (!video.paused && !video.ended) {
+              ctx.drawImage(video, 0, 0, width, height);
+              requestAnimationFrame(drawFrame);
+            }
+          };
+          
+          video.play();
+          drawFrame();
+          
+          // Arrêter l'enregistrement quand la vidéo est finie
+          video.onended = () => {
+            recorder.stop();
+          };
+        };
+        
+        video.onerror = () => {
+          // En cas d'erreur, garder la vidéo originale si elle fait moins de 25MB
+          if (fileSizeMB < 25) {
+            console.warn(`Impossible de compresser ${file.name}, conservation de l'original`);
+            resolve(file);
+          } else {
+            throw new Error(`Vidéo trop volumineuse : ${file.name} (${fileSizeMB.toFixed(1)}MB). Réduisez sa durée ou sa qualité.`);
+          }
+        };
+        
+        video.src = URL.createObjectURL(file);
+      });
     }
     
     // Fonction de compression intelligente pour images
