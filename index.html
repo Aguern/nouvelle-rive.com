@@ -514,59 +514,137 @@
 
     let selectedFiles = [];
     
-    // Nouvelle fonction pour gérer la sélection multiple
+    // Fonction pour gérer la sélection multiple avec aperçu
     function handleFiles(files) {
       if (files && files.length > 0) {
-        selectedFiles = Array.from(files); // Convertir FileList en Array
+        selectedFiles = Array.from(files);
         
-        // SOLUTION A : Feedback immédiat pour chaque fichier sélectionné
-        const modalContent = document.querySelector('.modal-content');
-        const fileCount = files.length;
-        const fileTypes = Array.from(files).map(f => f.type.includes('video') ? 'vidéo' : 'photo');
-        const hasVideos = fileTypes.includes('vidéo');
-        const hasPhotos = fileTypes.includes('photo');
-        
-        let typeText = '';
-        if (hasVideos && hasPhotos) {
-          typeText = `${fileCount} médias (photos et vidéos)`;
-        } else if (hasVideos) {
-          typeText = fileCount === 1 ? 'vidéo' : `${fileCount} vidéos`;
-        } else {
-          typeText = fileCount === 1 ? 'photo' : `${fileCount} photos`;
-        }
-        
-        modalContent.innerHTML = `
-          <div style="padding: 2rem;">
-            <div style="font-size: 3rem; margin-bottom: 1rem;">🎉</div>
-            <h3 style="color: #4CAF50; margin-bottom: 1rem;">Merci !</h3>
-            <p style="font-size: 1.1rem;">Vos ${typeText} ${fileCount === 1 ? 'a été reçue' : 'ont été reçues'} ! ${fileCount === 1 ? 'Elle' : 'Elles'} seront traitées dans quelques instants.</p>
-            <p style="font-size: 0.9rem; color: #666; margin-top: 1rem;">Vous pouvez continuer à utiliser le site normalement.</p>
-          </div>
-        `;
-        
-        // Afficher la modal de succès
-        document.getElementById('popup').style.display = 'flex';
-        
-        // Fermer automatiquement après 3 secondes
-        setTimeout(() => {
-          document.getElementById('popup').style.display = 'none';
-          // Réinitialiser le contenu pour la prochaine fois
-          modalContent.innerHTML = `
-            <p style="font-size: 1.2rem; margin-bottom: 0.5rem;">Souhaitez-vous afficher ce média dans la galerie ?</p>
-            <div class="loader" id="loader"></div>
-            <div class="modal-buttons" id="modalButtons">
-              <button class="public-btn" onclick="sendMedia(true)">📢 Afficher en public</button>
-              <button class="private-btn" onclick="sendMedia(false)">🔒 Uniquement pour les mariés</button>
-            </div>
-          `;
-        }, 3000);
-        
-        // Upload en arrière-plan de tous les fichiers (par défaut en public)
-        uploadMultipleFilesInBackground(Array.from(files), true);
+        // Afficher l'aperçu des fichiers sélectionnés
+        showFilePreview(selectedFiles);
       }
     }
     
-    // Fonction pour garder la compatibilité avec l'ancien code
+    // Fonction pour afficher l'aperçu des fichiers sélectionnés
+    function showFilePreview(files) {
+      const modalContent = document.querySelector('.modal-content');
+      const fileCount = files.length;
+      
+      // Générer l'aperçu des fichiers
+      let filePreviewHtml = '';
+      files.forEach((file, index) => {
+        const fileType = file.type.includes('video') ? '🎥' : '📷';
+        const fileName = file.name.length > 20 ? file.name.substring(0, 20) + '...' : file.name;
+        filePreviewHtml += `
+          <div style="display: flex; align-items: center; padding: 0.5rem; margin: 0.25rem 0; background: #f8f9fa; border-radius: 8px;">
+            <span style="font-size: 1.2rem; margin-right: 0.5rem;">${fileType}</span>
+            <span style="font-size: 0.9rem; color: #666;">${fileName}</span>
+          </div>
+        `;
+      });
+      
+      // Texte adapté au nombre de fichiers
+      const fileTypes = files.map(f => f.type.includes('video') ? 'vidéo' : 'photo');
+      const hasVideos = fileTypes.includes('vidéo');
+      const hasPhotos = fileTypes.includes('photo');
+      
+      let typeText = '';
+      if (hasVideos && hasPhotos) {
+        typeText = `${fileCount} médias`;
+      } else if (hasVideos) {
+        typeText = fileCount === 1 ? '1 vidéo' : `${fileCount} vidéos`;
+      } else {
+        typeText = fileCount === 1 ? '1 photo' : `${fileCount} photos`;
+      }
+      
+      modalContent.innerHTML = `
+        <div style="padding: 1.5rem;">
+          <h3 style="margin-bottom: 1rem; color: #333;">Envoyer ${typeText} ?</h3>
+          <div style="max-height: 200px; overflow-y: auto; margin-bottom: 1.5rem;">
+            ${filePreviewHtml}
+          </div>
+          <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.5rem;">
+            ${fileCount === 1 ? 'Ce fichier sera' : 'Ces fichiers seront'} ajoutés à la galerie publique.
+          </p>
+          <div style="display: flex; flex-direction: column; gap: 1rem;">
+            <button onclick="confirmUpload(true)" style="
+              background-color: #818edb; color: white; border: none; padding: 1rem 1.5rem; 
+              border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 1rem;
+              transition: all 0.2s;
+            " onmouseover="this.style.backgroundColor='#6f7ac7'" onmouseout="this.style.backgroundColor='#818edb'">
+              📢 Envoyer ${typeText}
+            </button>
+            <button onclick="cancelUpload()" style="
+              background-color: #f0f0f0; color: #666; border: none; padding: 0.8rem 1.5rem; 
+              border-radius: 12px; cursor: pointer; font-size: 0.9rem;
+            " onmouseover="this.style.backgroundColor='#e0e0e0'" onmouseout="this.style.backgroundColor='#f0f0f0'">
+              Annuler
+            </button>
+          </div>
+        </div>
+      `;
+      
+      // Afficher la modal
+      document.getElementById('popup').style.display = 'flex';
+    }
+    
+    // Fonction pour confirmer l'upload
+    function confirmUpload(isPublic) {
+      const modalContent = document.querySelector('.modal-content');
+      const fileCount = selectedFiles.length;
+      
+      // Feedback immédiat de succès
+      modalContent.innerHTML = `
+        <div style="padding: 2rem;">
+          <div style="font-size: 3rem; margin-bottom: 1rem;">🎉</div>
+          <h3 style="color: #4CAF50; margin-bottom: 1rem;">Merci !</h3>
+          <p style="font-size: 1.1rem;">
+            ${fileCount === 1 ? 'Votre fichier a été reçu' : `Vos ${fileCount} fichiers ont été reçus`} ! 
+            ${fileCount === 1 ? 'Il' : 'Ils'} seront traités dans quelques instants.
+          </p>
+          <p style="font-size: 0.9rem; color: #666; margin-top: 1rem;">
+            Vous pouvez continuer à utiliser le site normalement.
+          </p>
+        </div>
+      `;
+      
+      // Fermer automatiquement après 3 secondes
+      setTimeout(() => {
+        document.getElementById('popup').style.display = 'none';
+        resetModal();
+      }, 3000);
+      
+      // Upload en arrière-plan
+      uploadMultipleFilesInBackground(selectedFiles, isPublic);
+      
+      // Réinitialiser la sélection
+      selectedFiles = [];
+      document.getElementById('mediaInput').value = '';
+    }
+    
+    // Fonction pour annuler l'upload
+    function cancelUpload() {
+      document.getElementById('popup').style.display = 'none';
+      resetModal();
+      
+      // Réinitialiser la sélection
+      selectedFiles = [];
+      document.getElementById('mediaInput').value = '';
+    }
+    
+    // Fonction pour réinitialiser la modal
+    function resetModal() {
+      const modalContent = document.querySelector('.modal-content');
+      modalContent.innerHTML = `
+        <p style="font-size: 1.2rem; margin-bottom: 0.5rem;">Souhaitez-vous afficher ce média dans la galerie ?</p>
+        <div class="loader" id="loader"></div>
+        <div class="modal-buttons" id="modalButtons">
+          <button class="public-btn" onclick="sendMedia(true)">📢 Afficher en public</button>
+          <button class="private-btn" onclick="sendMedia(false)">🔒 Uniquement pour les mariés</button>
+        </div>
+      `;
+    }
+    
+    // Fonction de compatibilité pour l'upload simple
     function handleFile(file) {
       if (file) {
         handleFiles([file]);
