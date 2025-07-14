@@ -322,8 +322,8 @@
 
   <button class="btn-fixed" onclick="openMediaSelector()">Partager mon souvenir</button>
   
-  <!-- Input simplifié pour tous les appareils avec sélection multiple -->
-  <input id="mediaInput" type="file" accept="image/*,video/*" multiple onchange="handleFiles(this.files)" />
+  <!-- Input simplifié pour tous les appareils -->
+  <input id="mediaInput" type="file" accept="image/*,video/*" onchange="handleFile(this.files[0])" />
 
   <div id="popup" class="modal">
     <div class="modal-content">
@@ -367,7 +367,7 @@
       container.innerHTML = "";
       
       data.files.forEach((file, index) => {
-        const thumb = file.thumbnailLink?.replace("=s220", "=s2000") || ""; // CORRECTION 1: Qualité améliorée
+        const thumb = file.thumbnailLink?.replace("=s220", "=s600") || "";
         const webLink = file.webContentLink;
 
         const wrapper = document.createElement("div");
@@ -382,12 +382,7 @@
           element.setAttribute("preload", "metadata");
           element.setAttribute("poster", thumb);
         } else {
-          // CORRECTION 2: Utiliser l'image haute qualité pour l'affichage
-          element.src = `https://drive.google.com/uc?export=view&id=${file.id}`;
-          // Fallback sur thumbnail en cas d'erreur
-          element.onerror = function() {
-            this.src = thumb;
-          };
+          element.src = thumb;
         }
         
         element.alt = file.name;
@@ -421,16 +416,7 @@
         content.appendChild(iframe);
       } else {
         const el = document.createElement("img");
-        const fileId = galleryFiles[index].id;
-        // CORRECTION 3: Image haute qualité dans la lightbox
-        el.src = `https://drive.google.com/uc?export=view&id=${fileId}`;
-        
-        // Fallback en cas d'erreur
-        el.onerror = function() {
-          const thumb = galleryFiles[index].thumbnailLink?.replace("=s220", "=s2000") || "";
-          this.src = thumb;
-        };
-        
+        el.src = src;
         content.appendChild(el);
       }
 
@@ -526,320 +512,93 @@
       }
     }
 
-    let selectedFiles = [];
-    
-    // Fonction pour gérer la sélection multiple avec aperçu
-    function handleFiles(files) {
-      if (files && files.length > 0) {
-        selectedFiles = Array.from(files);
-        
-        // Afficher l'aperçu des fichiers sélectionnés
-        showFilePreview(selectedFiles);
-      }
-    }
-    
-    // Fonction pour afficher l'aperçu des fichiers sélectionnés
-    function showFilePreview(files) {
-      const modalContent = document.querySelector('.modal-content');
-      const fileCount = files.length;
-      
-      // Générer l'aperçu des fichiers
-      let filePreviewHtml = '';
-      files.forEach((file, index) => {
-        const fileType = file.type.includes('video') ? '🎥' : '📷';
-        const fileName = file.name.length > 20 ? file.name.substring(0, 20) + '...' : file.name;
-        filePreviewHtml += `
-          <div style="display: flex; align-items: center; padding: 0.5rem; margin: 0.25rem 0; background: #f8f9fa; border-radius: 8px;">
-            <span style="font-size: 1.2rem; margin-right: 0.5rem;">${fileType}</span>
-            <span style="font-size: 0.9rem; color: #666;">${fileName}</span>
-          </div>
-        `;
-      });
-      
-      // Texte adapté au nombre de fichiers
-      const fileTypes = files.map(f => f.type.includes('video') ? 'vidéo' : 'photo');
-      const hasVideos = fileTypes.includes('vidéo');
-      const hasPhotos = fileTypes.includes('photo');
-      
-      let typeText = '';
-      if (hasVideos && hasPhotos) {
-        typeText = `${fileCount} médias`;
-      } else if (hasVideos) {
-        typeText = fileCount === 1 ? '1 vidéo' : `${fileCount} vidéos`;
-      } else {
-        typeText = fileCount === 1 ? '1 photo' : `${fileCount} photos`;
-      }
-      
-      modalContent.innerHTML = `
-        <div style="padding: 1.5rem;">
-          <h3 style="margin-bottom: 1rem; color: #333;">Envoyer ${typeText} ?</h3>
-          <div style="max-height: 200px; overflow-y: auto; margin-bottom: 1.5rem;">
-            ${filePreviewHtml}
-          </div>
-          <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.5rem;">
-            ${fileCount === 1 ? 'Ce fichier sera' : 'Ces fichiers seront'} ajoutés à la galerie publique.
-          </p>
-          <div style="display: flex; flex-direction: column; gap: 1rem;">
-            <button onclick="confirmUpload(true)" style="
-              background-color: #818edb; color: white; border: none; padding: 1rem 1.5rem; 
-              border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 1rem;
-              transition: all 0.2s;
-            " onmouseover="this.style.backgroundColor='#6f7ac7'" onmouseout="this.style.backgroundColor='#818edb'">
-              📢 Envoyer ${typeText}
-            </button>
-            <button onclick="cancelUpload()" style="
-              background-color: #f0f0f0; color: #666; border: none; padding: 0.8rem 1.5rem; 
-              border-radius: 12px; cursor: pointer; font-size: 0.9rem;
-            " onmouseover="this.style.backgroundColor='#e0e0e0'" onmouseout="this.style.backgroundColor='#f0f0f0'">
-              Annuler
-            </button>
-          </div>
-        </div>
-      `;
-      
-      // Afficher la modal
-      document.getElementById('popup').style.display = 'flex';
-    }
-    
-    // Fonction pour confirmer l'upload
-    function confirmUpload(isPublic) {
-      // CORRECTION: Vérifier la limite AVANT d'afficher le succès
-      if (selectedFiles.length > 10) {
-        showDiscretError('Maximum 10 fichiers à la fois. Sélectionnez moins de fichiers.');
-        return; // Arrêter ici, ne pas continuer
-      }
-      
-      const modalContent = document.querySelector('.modal-content');
-      const fileCount = selectedFiles.length;
-      
-      // Feedback immédiat de succès (SEULEMENT si <= 10 fichiers)
-      modalContent.innerHTML = `
-        <div style="padding: 2rem;">
-          <div style="font-size: 3rem; margin-bottom: 1rem;">🎉</div>
-          <h3 style="color: #4CAF50; margin-bottom: 1rem;">Merci !</h3>
-          <p style="font-size: 1.1rem;">
-            ${fileCount === 1 ? 'Votre fichier a été reçu' : `Vos ${fileCount} fichiers ont été reçus`} ! 
-            ${fileCount === 1 ? 'Il' : 'Ils'} seront traités dans quelques instants.
-          </p>
-          <p style="font-size: 0.9rem; color: #666; margin-top: 1rem;">
-            Vous pouvez continuer à utiliser le site normalement.
-          </p>
-        </div>
-      `;
-      
-      // Fermer automatiquement après 3 secondes
-      setTimeout(() => {
-        document.getElementById('popup').style.display = 'none';
-        resetModal();
-      }, 3000);
-      
-      // Upload en arrière-plan
-      uploadMultipleFilesInBackground(selectedFiles, isPublic);
-      
-      // Réinitialiser la sélection
-      selectedFiles = [];
-      document.getElementById('mediaInput').value = '';
-    }
-    
-    // Fonction pour annuler l'upload
-    function cancelUpload() {
-      document.getElementById('popup').style.display = 'none';
-      resetModal();
-      
-      // Réinitialiser la sélection
-      selectedFiles = [];
-      document.getElementById('mediaInput').value = '';
-    }
-    
-    // Fonction pour réinitialiser la modal
-    function resetModal() {
-      const modalContent = document.querySelector('.modal-content');
-      modalContent.innerHTML = `
-        <p style="font-size: 1.2rem; margin-bottom: 0.5rem;">Souhaitez-vous afficher ce média dans la galerie ?</p>
-        <div class="loader" id="loader"></div>
-        <div class="modal-buttons" id="modalButtons">
-          <button class="public-btn" onclick="sendMedia(true)">📢 Afficher en public</button>
-          <button class="private-btn" onclick="sendMedia(false)">🔒 Uniquement pour les mariés</button>
-        </div>
-      `;
-    }
-    
-    // Fonction de compatibilité pour l'upload simple
+    let selectedFile = null;
     function handleFile(file) {
       if (file) {
-        handleFiles([file]);
+        selectedFile = file;
+        document.getElementById('popup').style.display = 'flex';
       }
-    }
-
-    // Variables pour la gestion de la charge
-    let uploadQueue = [];
-    let activeUploads = 0;
-    const MAX_CONCURRENT_UPLOADS = 3; // Limitation pour éviter la surcharge
-    const MAX_RETRY_ATTEMPTS = 3;
-
-    // Fonction pour uploader plusieurs fichiers avec gestion de charge améliorée
-    async function uploadMultipleFilesInBackground(files, isPublic) {
-      console.log(`🚀 Ajout de ${files.length} fichier(s) à la queue d'upload`);
-      
-      // CORRECTION: La vérification de limite est maintenant dans confirmUpload()
-      // Cette fonction ne reçoit que des fichiers validés
-      
-      // Ajouter les fichiers à la queue
-      files.forEach(file => {
-        uploadQueue.push({
-          file: file,
-          isPublic: isPublic,
-          attempts: 0,
-          id: Date.now() + Math.random() // ID unique
-        });
-      });
-      
-      // Démarrer le traitement de la queue
-      processUploadQueue();
-    }
-    
-    // Fonction pour traiter la queue d'upload
-    async function processUploadQueue() {
-      while (uploadQueue.length > 0 && activeUploads < MAX_CONCURRENT_UPLOADS) {
-        const uploadTask = uploadQueue.shift();
-        if (uploadTask) {
-          activeUploads++;
-          uploadFileWithRetry(uploadTask).finally(() => {
-            activeUploads--;
-            // Continuer le traitement de la queue
-            if (uploadQueue.length > 0) {
-              setTimeout(() => processUploadQueue(), 200); // Petite pause entre uploads
-            } else if (activeUploads === 0) {
-              // Tous les uploads terminés
-              console.log('✅ Tous les uploads terminés');
-              setTimeout(() => loadGallery(), 1500); // Recharger la galerie
-            }
-          });
-        }
-      }
-    }
-    
-    // Fonction d'upload avec retry automatique
-    async function uploadFileWithRetry(uploadTask) {
-      const { file, isPublic, attempts, id } = uploadTask;
-      
-      try {
-        console.log(`📤 Upload ${file.name} (tentative ${attempts + 1}/${MAX_RETRY_ATTEMPTS})`);
-        await uploadSingleFileInBackground(file, isPublic);
-        console.log(`✅ Upload réussi: ${file.name}`);
-        
-      } catch (error) {
-        console.error(`❌ Échec upload ${file.name}:`, error);
-        
-        // Retry automatique si pas trop de tentatives
-        if (attempts < MAX_RETRY_ATTEMPTS - 1) {
-          console.log(`🔄 Retry ${file.name} dans 2 secondes...`);
-          uploadTask.attempts++;
-          
-          // Remettre en queue avec délai
-          setTimeout(() => {
-            uploadQueue.unshift(uploadTask); // Priorité aux retry
-            processUploadQueue();
-          }, 2000 + (attempts * 1000)); // Délai croissant
-          
-        } else {
-          // Échec définitif après tous les retry
-          showDiscretError(`Échec définitif: ${file.name}`);
-        }
-      }
-    }
-    
-    // Fonction pour uploader un seul fichier (version robuste avec timeout)
-    async function uploadSingleFileInBackground(file, isPublic) {
-      return new Promise((resolve, reject) => {
-        // Timeout de sécurité (2 minutes max par fichier)
-        const timeoutId = setTimeout(() => {
-          reject(new Error(`Timeout upload: ${file.name}`));
-        }, 120000);
-        
-        const reader = new FileReader();
-        reader.onloadend = async () => {
-          try {
-            const base64 = reader.result.split(',')[1];
-            const fd = new URLSearchParams();
-            fd.append('fileContent', encodeURIComponent(base64));
-            fd.append('fileType', file.type);
-            fd.append('fileName', file.name);
-            fd.append('public', isPublic ? 'true' : 'false');
-            
-            const res = await fetch(
-              'https://script.google.com/macros/s/AKfycbx1tKY8CNcb1snBapGEbN0lQOkJF5-QUG299dYwWSEyTIOIuoqTcqe-22a5Q-VByQo0/exec', 
-              { 
-                method: 'POST', 
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, 
-                body: fd 
-              }
-            );
-            
-            clearTimeout(timeoutId);
-            
-            if (res.ok) {
-              resolve();
-            } else {
-              const errorText = await res.text().catch(() => 'Erreur serveur inconnue');
-              throw new Error(`Erreur ${res.status}: ${errorText}`);
-            }
-            
-          } catch (error) {
-            clearTimeout(timeoutId);
-            reject(error);
-          }
-        };
-        
-        reader.onerror = () => {
-          clearTimeout(timeoutId);
-          reject(new Error(`Erreur lecture ${file.name}`));
-        };
-        
-        reader.readAsDataURL(file);
-      });
-    }
-
-    // Fonction pour afficher une erreur discrète
-    function showDiscretError(message) {
-      const notification = document.createElement('div');
-      notification.style.cssText = `
-        position: fixed;
-        bottom: 80px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: #f44336;
-        color: white;
-        padding: 1rem 1.5rem;
-        border-radius: 25px;
-        font-size: 0.9rem;
-        z-index: 1001;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        opacity: 0;
-        transition: opacity 0.3s ease;
-      `;
-      notification.textContent = message;
-      
-      document.body.appendChild(notification);
-      
-      // Animation d'apparition
-      setTimeout(() => notification.style.opacity = '1', 100);
-      
-      // Supprimer après 4 secondes
-      setTimeout(() => {
-        notification.style.opacity = '0';
-        setTimeout(() => document.body.removeChild(notification), 300);
-      }, 4000);
     }
 
     async function sendMedia(isPublic) {
-      // Cette fonction n'est plus utilisée car le feedback est immédiat dans handleFiles()
-      console.log('sendMedia appelée, mais upload déjà fait en arrière-plan');
-    }
-
-    // Fonction de compatibilité pour l'upload simple
-    async function uploadFileInBackground(file, isPublic) {
-      return uploadSingleFileInBackground(file, isPublic);
+      // Afficher le loader avec message de transfert
+      const modalContent = document.querySelector('.modal-content');
+      modalContent.innerHTML = `
+        <div style="padding: 2rem;">
+          <p style="font-size: 1.2rem; margin-bottom: 1.5rem;">Transfert en cours...</p>
+          <div class="loader" style="display: block;"></div>
+        </div>
+      `;
+      
+      const reader = new FileReader();
+      reader.onloadend = async () => {
+        try {
+          const base64 = reader.result.split(',')[1];
+          const fd = new URLSearchParams();
+          fd.append('fileContent', encodeURIComponent(base64));
+          fd.append('fileType', selectedFile.type);
+          fd.append('fileName', selectedFile.name);
+          fd.append('public', isPublic ? 'true' : 'false');
+          
+          const res = await fetch(
+            'https://script.google.com/macros/s/AKfycbx1tKY8CNcb1snBapGEbN0lQOkJF5-QUG299dYwWSEyTIOIuoqTcqe-22a5Q-VByQo0/exec', 
+            { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: fd }
+          );
+          
+          const result = await res.text();
+          
+          // Afficher le message de succès avec style
+          modalContent.innerHTML = `
+            <div style="padding: 2rem;">
+              <div style="font-size: 3rem; margin-bottom: 1rem;">🎉</div>
+              <h3 style="color: #4CAF50; margin-bottom: 1rem;">Merci !</h3>
+              <p style="font-size: 1.1rem;">${result}</p>
+            </div>
+          `;
+          
+          // Fermer automatiquement après 3 secondes
+          setTimeout(() => {
+            document.getElementById('popup').style.display = 'none';
+            // Réinitialiser le contenu pour la prochaine fois
+            modalContent.innerHTML = `
+              <p style="font-size: 1.2rem; margin-bottom: 0.5rem;">Souhaitez-vous afficher ce média dans la galerie ?</p>
+              <div class="loader" id="loader"></div>
+              <div class="modal-buttons" id="modalButtons">
+                <button class="public-btn" onclick="sendMedia(true)">📢 Afficher en public</button>
+                <button class="private-btn" onclick="sendMedia(false)">🔒 Uniquement pour les mariés</button>
+              </div>
+            `;
+            
+            // Recharger la galerie si le média était public
+            if (isPublic) {
+              loadGallery();
+            }
+          }, 3000);
+          
+        } catch (error) {
+          modalContent.innerHTML = `
+            <div style="padding: 2rem;">
+              <div style="font-size: 3rem; margin-bottom: 1rem;">❌</div>
+              <h3 style="color: #f44336; margin-bottom: 1rem;">Erreur</h3>
+              <p style="font-size: 1.1rem;">Une erreur est survenue. Veuillez réessayer.</p>
+            </div>
+          `;
+          
+          setTimeout(() => {
+            document.getElementById('popup').style.display = 'none';
+            // Réinitialiser le contenu
+            modalContent.innerHTML = `
+              <p style="font-size: 1.2rem; margin-bottom: 0.5rem;">Souhaitez-vous afficher ce média dans la galerie ?</p>
+              <div class="loader" id="loader"></div>
+              <div class="modal-buttons" id="modalButtons">
+                <button class="public-btn" onclick="sendMedia(true)">📢 Afficher en public</button>
+                <button class="private-btn" onclick="sendMedia(false)">🔒 Uniquement pour les mariés</button>
+              </div>
+            `;
+          }, 3000);
+        }
+      };
+      reader.readAsDataURL(selectedFile);
     }
   </script>
 
