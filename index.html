@@ -860,28 +860,30 @@
       }
     }
     
-    // NOUVELLE FONCTION: Resumable Upload pour gros fichiers
+    // Apps Script URL (votre nouveau déploiement)
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzdqbRE2_zf_SoyPV0zhST4gwkRZn9nB61r5Umm0xaXQ2kB_GH_hIlb-RVV9FaZ2rQv/exec';
+
+    // FONCTION: Upload resumable depuis Vercel
     async function uploadSingleFileInBackground(file, isPublic) {
       try {
         const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
         console.log(`🚀 Début upload resumable: ${file.name} (${fileSizeMB}MB)`);
         
-        // 1. Obtenir le token OAuth depuis Apps Script
-        const token = await new Promise((resolve, reject) => {
-          google.script.run
-            .withSuccessHandler(resolve)
-            .withFailureHandler(reject)
-            .getOAuthToken();
-        });
+        // 1. Obtenir le token OAuth via fetch
+        const tokenResponse = await fetch(`${APPS_SCRIPT_URL}?action=getToken`);
+        if (!tokenResponse.ok) {
+          throw new Error('Impossible d\'obtenir le token');
+        }
+        const tokenData = await tokenResponse.text();
+        const token = tokenData.replace(/"/g, ''); // Nettoyer les guillemets
         console.log(`🔑 Token OAuth obtenu`);
         
-        // 2. Obtenir l'ID du dossier
-        const folderId = await new Promise((resolve, reject) => {
-          google.script.run
-            .withSuccessHandler(resolve)
-            .withFailureHandler(reject)
-            .getFolderInfo(isPublic);
-        });
+        // 2. Obtenir l'ID du dossier via fetch
+        const folderResponse = await fetch(`${APPS_SCRIPT_URL}?action=getFolder&isPublic=${isPublic}`);
+        if (!folderResponse.ok) {
+          throw new Error('Impossible d\'obtenir le dossier');
+        }
+        const folderId = (await folderResponse.text()).replace(/"/g, '');
         console.log(`📁 Dossier cible: ${folderId}`);
         
         // 3. Initier la session resumable upload
