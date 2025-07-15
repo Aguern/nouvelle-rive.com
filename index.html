@@ -352,47 +352,49 @@
   </div>
 
   <script>
-    const folderId = "1J4fn2yvUhe0MEZY6KZtDb_2PJutP7FL7";
-    const apiKey = "AIzaSyAKdgvWZ4dX7oS0btyCHtMSS-bgErTtnhY";
+    /* --- CONFIG CLOUDINARY --- */
+    const CLOUD_NAME      = 'dwnevq3ba';           
+    const PRESET_PUBLIC   = 'public_gallery';
+    const PRESET_PRIVATE  = 'private_uploads';
+    const CLOUDINARY_URL  = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/upload`;
+    /* ------------------------- */
+
     let galleryFiles = [];
     let currentImageIndex = 0;
 
     async function loadGallery() {
-      const endpoint = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+(mimeType+contains+'image/'+or+mimeType+contains+'video/')&key=${apiKey}&fields=files(id,name,mimeType,thumbnailLink,webContentLink)`;
-      const res = await fetch(endpoint);
-      const data = await res.json();
-      const container = document.getElementById("drive-gallery");
+      const imgList = await fetch(
+        `https://res.cloudinary.com/${CLOUD_NAME}/image/list/${PRESET_PUBLIC}.json`
+      ).then(r => r.ok ? r.json() : { resources: [] });
 
-      galleryFiles = data.files;
-      container.innerHTML = "";
-      
-      data.files.forEach((file, index) => {
-        const thumb = file.thumbnailLink?.replace("=s220", "=s2000") || ""; // CORRECTION 1: Qualité améliorée
-        const webLink = file.webContentLink;
+      const vidList = await fetch(
+        `https://res.cloudinary.com/${CLOUD_NAME}/video/list/${PRESET_PUBLIC}.json`
+      ).then(r => r.ok ? r.json() : { resources: [] });
 
-        const wrapper = document.createElement("div");
-        const element = file.mimeType.includes("video")
-          ? document.createElement("video")
-          : document.createElement("img");
+      const files = [...imgList.resources, ...vidList.resources]
+        .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
-        if (file.mimeType.includes("video")) {
-          element.src = `https://drive.google.com/uc?export=download&id=${file.id}`;
-          element.setAttribute("playsinline", "");
-          element.setAttribute("muted", "");
-          element.setAttribute("preload", "metadata");
-          element.setAttribute("poster", thumb);
-        } else {
-          // CORRECTION 2: Utiliser l'image haute qualité pour l'affichage
-          element.src = `https://drive.google.com/uc?export=view&id=${file.id}`;
-          // Fallback sur thumbnail en cas d'erreur
-          element.onerror = function() {
-            this.src = thumb;
-          };
+      const container = document.getElementById('drive-gallery');
+      galleryFiles = files; // pour la lightbox existante
+      container.innerHTML = '';
+
+      files.forEach((file, idx) => {
+        const wrapper = document.createElement('div');
+        const element = file.resource_type === 'video' 
+          ? document.createElement('video')
+          : document.createElement('img');
+
+        element.src = file.secure_url;
+
+        if (file.resource_type === 'video') {
+          element.setAttribute('playsinline', '');
+          element.setAttribute('muted', '');
+          element.setAttribute('preload', 'metadata');
+          element.setAttribute('poster', file.secure_url + '#t=0.1');
         }
-        
-        element.alt = file.name;
-        element.setAttribute("data-full", webLink);
-        element.onclick = () => openLightbox(file.mimeType, element.src, webLink, index);
+
+        element.alt = file.public_id.split('/').pop();
+        element.onclick = () => openLightbox(file.resource_type, file.secure_url, file.secure_url, idx);
 
         wrapper.appendChild(element);
         container.appendChild(wrapper);
@@ -407,31 +409,16 @@
 
       content.innerHTML = "";
 
-      if (type.includes("video")) {
-        // Utiliser une iframe pour les vidéos Google Drive
-        const fileId = galleryFiles[index].id;
-        const iframe = document.createElement("iframe");
-        iframe.src = `https://drive.google.com/file/d/${fileId}/preview`;
-        iframe.style.width = "100%";
-        iframe.style.height = "80vh";
-        iframe.style.border = "none";
-        iframe.setAttribute("allowfullscreen", "");
-        iframe.setAttribute("allow", "autoplay");
-        
-        content.appendChild(iframe);
+      if (type === 'video') {
+        const vid = document.createElement('video');
+        vid.src = src;
+        vid.controls = true;
+        vid.style.maxHeight = '80vh';
+        content.appendChild(vid);
       } else {
-        const el = document.createElement("img");
-        const fileId = galleryFiles[index].id;
-        // CORRECTION 3: Image haute qualité dans la lightbox
-        el.src = `https://drive.google.com/uc?export=view&id=${fileId}`;
-        
-        // Fallback en cas d'erreur
-        el.onerror = function() {
-          const thumb = galleryFiles[index].thumbnailLink?.replace("=s220", "=s2000") || "";
-          this.src = thumb;
-        };
-        
-        content.appendChild(el);
+        const img = document.createElement('img');
+        img.src = src;
+        content.appendChild(img);
       }
 
       btn.setAttribute("data-src", downloadLink);
@@ -448,12 +435,9 @@
       if (currentImageIndex >= galleryFiles.length) currentImageIndex = 0;
       
       const file = galleryFiles[currentImageIndex];
-      const thumb = file.thumbnailLink?.replace("=s220", "=s600") || "";
-      const src = file.mimeType.includes("video")
-        ? `https://drive.google.com/uc?export=download&id=${file.id}`
-        : thumb;
+      const src = file.secure_url;
       
-      openLightbox(file.mimeType, src, file.webContentLink, currentImageIndex);
+      openLightbox(file.resource_type, src, file.secure_url, currentImageIndex);
     }
 
     function updateNavigationButtons() {
@@ -470,7 +454,7 @@
       // Créer un lien de téléchargement et le déclencher
       const a = document.createElement("a");
       a.href = src;
-      a.download = galleryFiles[currentImageIndex].name || "media";
+      a.download = galleryFiles[currentImageIndex].public_id.split('/').pop() || "media";
       a.target = "_blank";
       
       // Ajouter temporairement le lien au DOM
@@ -749,55 +733,32 @@
       }
     }
     
-    // Fonction pour uploader un seul fichier (version robuste avec timeout)
+    // — VERSION CLOUDINARY —
     async function uploadSingleFileInBackground(file, isPublic) {
-      return new Promise((resolve, reject) => {
-        // Timeout de sécurité (2 minutes max par fichier)
-        const timeoutId = setTimeout(() => {
-          reject(new Error(`Timeout upload: ${file.name}`));
-        }, 120000);
-        
-        const reader = new FileReader();
-        reader.onloadend = async () => {
-          try {
-            const base64 = reader.result.split(',')[1];
-            const fd = new URLSearchParams();
-            fd.append('fileContent', encodeURIComponent(base64));
-            fd.append('fileType', file.type);
-            fd.append('fileName', file.name);
-            fd.append('public', isPublic ? 'true' : 'false');
-            
-            const res = await fetch(
-              'https://script.google.com/macros/s/AKfycbx1tKY8CNcb1snBapGEbN0lQOkJF5-QUG299dYwWSEyTIOIuoqTcqe-22a5Q-VByQo0/exec', 
-              { 
-                method: 'POST', 
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, 
-                body: fd 
-              }
-            );
-            
-            clearTimeout(timeoutId);
-            
-            if (res.ok) {
-              resolve();
-            } else {
-              const errorText = await res.text().catch(() => 'Erreur serveur inconnue');
-              throw new Error(`Erreur ${res.status}: ${errorText}`);
-            }
-            
-          } catch (error) {
-            clearTimeout(timeoutId);
-            reject(error);
-          }
-        };
-        
-        reader.onerror = () => {
-          clearTimeout(timeoutId);
-          reject(new Error(`Erreur lecture ${file.name}`));
-        };
-        
-        reader.readAsDataURL(file);
+      const data = new FormData();
+      data.append('file', file);
+      data.append('upload_preset', isPublic ? PRESET_PUBLIC : PRESET_PRIVATE);
+      if (isPublic) data.append('tags', PRESET_PUBLIC);
+      
+      
+      const ctrl = new AbortController();
+      // timeout 2 min
+      const timeout = setTimeout(() => ctrl.abort(), 120000);
+      
+      const res = await fetch(CLOUDINARY_URL, {
+        method: 'POST',
+        body: data,
+        signal: ctrl.signal
+      }).catch(err => {
+        throw new Error('Timeout / réseau');
       });
+      
+      clearTimeout(timeout);
+      
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error?.message || 'Upload échoué');
+      
+      return json; // secure_url, public_id…
     }
 
     // Fonction pour afficher une erreur discrète
