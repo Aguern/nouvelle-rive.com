@@ -330,7 +330,7 @@
       <p style="font-size: 1.2rem; margin-bottom: 0.5rem;">Souhaitez-vous afficher ce média dans la galerie ?</p>
       <div class="loader" id="loader"></div>
       <div class="modal-buttons" id="modalButtons">
-        <button class="public-btn"  onclick="confirmUpload(true)">📢 Afficher en public</button>
+        <button class="public-btn" onclick="confirmUpload(true)">📢 Afficher en public</button>
         <button class="private-btn" onclick="confirmUpload(false)">🔒 Uniquement pour les mariés</button>
       </div>
     </div>
@@ -551,12 +551,12 @@
       
       modalContent.innerHTML = `
         <div style="padding: 1.5rem;">
-          <h3 style="margin-bottom: 1rem; color: #333;">Envoyer ${typeText} ?</h3>
+          <h3 style="margin-bottom: 1rem; color: #333;">Partager ${typeText}</h3>
           <div style="max-height: 200px; overflow-y: auto; margin-bottom: 1.5rem;">
             ${filePreviewHtml}
           </div>
           <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.5rem;">
-            ${fileCount === 1 ? 'Ce fichier sera' : 'Ces fichiers seront'} ajoutés à la galerie publique.
+            Où souhaitez-vous partager ${fileCount === 1 ? 'ce fichier' : 'ces fichiers'} ?
           </p>
           <div style="display: flex; flex-direction: column; gap: 1rem;">
             <button onclick="confirmUpload(true)" style="
@@ -564,12 +564,19 @@
               border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 1rem;
               transition: all 0.2s;
             " onmouseover="this.style.backgroundColor='#6f7ac7'" onmouseout="this.style.backgroundColor='#818edb'">
-              📢 Envoyer ${typeText}
+              📢 Galerie publique
+            </button>
+            <button onclick="confirmUpload(false)" style="
+              background-color: #f0f0f0; color: #333; border: none; padding: 1rem 1.5rem; 
+              border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 1rem;
+              transition: all 0.2s;
+            " onmouseover="this.style.backgroundColor='#e0e0e0'" onmouseout="this.style.backgroundColor='#f0f0f0'">
+              🔒 Uniquement pour les mariés
             </button>
             <button onclick="cancelUpload()" style="
-              background-color: #f0f0f0; color: #666; border: none; padding: 0.8rem 1.5rem; 
+              background-color: transparent; color: #999; border: 1px solid #ddd; padding: 0.8rem 1.5rem; 
               border-radius: 12px; cursor: pointer; font-size: 0.9rem;
-            " onmouseover="this.style.backgroundColor='#e0e0e0'" onmouseout="this.style.backgroundColor='#f0f0f0'">
+            " onmouseover="this.style.borderColor='#bbb'" onmouseout="this.style.borderColor='#ddd'">
               Annuler
             </button>
           </div>
@@ -582,7 +589,7 @@
     
     // Fonction pour confirmer l'upload
     function confirmUpload(isPublic) {
-      // CORRECTION: Vérifier la limite AVANT d'afficher le succès
+      // Vérifier la limite AVANT d'afficher le succès
       if (selectedFiles.length > 10) {
         showDiscretError('Maximum 10 fichiers à la fois. Sélectionnez moins de fichiers.');
         return; // Arrêter ici, ne pas continuer
@@ -590,6 +597,7 @@
       
       const modalContent = document.querySelector('.modal-content');
       const fileCount = selectedFiles.length;
+      const destination = isPublic ? 'galerie publique' : 'dossier privé des mariés';
       
       // Feedback immédiat de succès (SEULEMENT si <= 10 fichiers)
       modalContent.innerHTML = `
@@ -597,11 +605,10 @@
           <div style="font-size: 3rem; margin-bottom: 1rem;">🎉</div>
           <h3 style="color: #4CAF50; margin-bottom: 1rem;">Merci !</h3>
           <p style="font-size: 1.1rem;">
-            ${fileCount === 1 ? 'Votre fichier a été reçu' : `Vos ${fileCount} fichiers ont été reçus`} ! 
-            ${fileCount === 1 ? 'Il' : 'Ils'} seront traités dans quelques instants.
+            ${fileCount === 1 ? 'Votre fichier a été envoyé' : `Vos ${fileCount} fichiers ont été envoyés`} vers ${destination} ! 
           </p>
           <p style="font-size: 0.9rem; color: #666; margin-top: 1rem;">
-            Vous pouvez continuer à utiliser le site normalement.
+            ${isPublic ? 'Il apparaîtra dans la galerie dans quelques instants.' : 'Les mariés le recevront directement.'}
           </p>
         </div>
       `;
@@ -637,7 +644,7 @@
         <p style="font-size: 1.2rem; margin-bottom: 0.5rem;">Souhaitez-vous afficher ce média dans la galerie ?</p>
         <div class="loader" id="loader"></div>
         <div class="modal-buttons" id="modalButtons">
-          <button class="public-btn"  onclick="confirmUpload(true)">📢 Afficher en public</button>
+          <button class="public-btn" onclick="confirmUpload(true)">📢 Afficher en public</button>
           <button class="private-btn" onclick="confirmUpload(false)">🔒 Uniquement pour les mariés</button>
         </div>
       `;
@@ -734,7 +741,6 @@
       data.append('file', file);
       data.append('upload_preset', isPublic ? PRESET_PUBLIC : PRESET_PRIVATE);
       if (isPublic) data.append('tags', PRESET_PUBLIC);
-      
       
       const ctrl = new AbortController();
       // timeout 2 min
