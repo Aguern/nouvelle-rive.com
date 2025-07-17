@@ -171,7 +171,7 @@
     }
 
     #gallery {
-      margin-top: 3rem;
+      margin-top: 1.5rem;
     }
 
     /* Galerie à marges fines et vignettes plein cadre */
@@ -298,7 +298,8 @@
       right: 1rem;
     }
 
-    body.lightbox-open .btn-fixed {
+    body.lightbox-open .btn-fixed,
+    body.modal-open .btn-fixed {
       display: none !important;
     }
   </style>
@@ -678,6 +679,7 @@
       
       // Afficher la modal
       document.getElementById('popup').style.display = 'flex';
+      document.body.classList.add('modal-open'); // Masquer le bouton fixe
     }
     
     // Fonction pour confirmer l'upload - VALIDATION PAR TAILLE TOTALE
@@ -712,6 +714,7 @@
       // Fermer automatiquement après 3 secondes
       setTimeout(() => {
         document.getElementById('popup').style.display = 'none';
+        document.body.classList.remove('modal-open'); // Réafficher le bouton fixe
         resetModal();
       }, 3000);
       
@@ -729,6 +732,7 @@
     // Fonction pour annuler l'upload
     function cancelUpload() {
       document.getElementById('popup').style.display = 'none';
+      document.body.classList.remove('modal-open'); // Réafficher le bouton fixe
       resetModal();
       
       // Réinitialiser la sélection
