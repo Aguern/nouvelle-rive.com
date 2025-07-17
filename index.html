@@ -977,16 +977,19 @@
       
       if (isUploading) {
         const remaining = uploadQueue.length + activeUploads;
-        btn.textContent = `📤 Upload en cours... (${remaining} restant${remaining > 1 ? 's' : ''})`;
+        // Texte plus compact pour éviter le retour à la ligne
+        btn.innerHTML = `📤 Upload en cours<br><small>(${remaining} restant${remaining > 1 ? 's' : ''})</small>`;
         btn.style.backgroundColor = '#ff9800'; // Orange pendant upload
+        btn.style.lineHeight = '1.2'; // Réduire l'espacement des lignes
         
         // Désactiver le bouton de sélection de fichiers
         btn.onclick = () => {
           showDiscretError('Upload en cours... Veuillez patienter avant d\'ajouter d\'autres fichiers.');
         };
       } else {
-        btn.textContent = 'Partager mon souvenir';
+        btn.innerHTML = 'Partager mon souvenir';
         btn.style.backgroundColor = '#818edb'; // Couleur normale
+        btn.style.lineHeight = ''; // Réinitialiser
         btn.onclick = openMediaSelector; // Réactiver
       }
     }
