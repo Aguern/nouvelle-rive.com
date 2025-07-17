@@ -507,13 +507,49 @@
 
     let selectedFiles = [];
     
-    // Fonction pour gérer la sélection multiple avec aperçu
+    // Fonction pour gérer la sélection multiple avec aperçu + VALIDATION TAILLE
     function handleFiles(files) {
       if (files && files.length > 0) {
-        selectedFiles = Array.from(files);
+        const validFiles = [];
+        const invalidFiles = [];
         
-        // Afficher l'aperçu des fichiers sélectionnés
-        showFilePreview(selectedFiles);
+        // Validation de chaque fichier
+        Array.from(files).forEach(file => {
+          const isVideo = file.type.includes('video');
+          const maxSize = isVideo ? MAX_VIDEO_SIZE_MB : MAX_FILE_SIZE_MB;
+          const fileSizeMB = file.size / (1024 * 1024);
+          
+          if (fileSizeMB > maxSize) {
+            invalidFiles.push({
+              name: file.name,
+              size: fileSizeMB.toFixed(1),
+              maxSize: maxSize,
+              type: isVideo ? 'vidéo' : 'photo'
+            });
+          } else {
+            validFiles.push(file);
+          }
+        });
+        
+        // Afficher les erreurs pour les fichiers trop volumineux
+        if (invalidFiles.length > 0) {
+          let errorMessage = 'Fichiers trop volumineux :\n\n';
+          invalidFiles.forEach(file => {
+            errorMessage += `• ${file.name} (${file.size}MB)\n  Maximum ${file.maxSize}MB pour une ${file.type}\n\n`;
+          });
+          errorMessage += `${validFiles.length} fichier(s) valide(s) seront traités.`;
+          
+          showDiscretError(errorMessage, 6000); // 6 secondes pour lire
+        }
+        
+        // Continuer avec les fichiers valides
+        if (validFiles.length > 0) {
+          selectedFiles = validFiles;
+          showFilePreview(selectedFiles);
+        } else if (invalidFiles.length > 0) {
+          // Tous les fichiers sont invalides
+          showDiscretError('Aucun fichier valide sélectionné. Veuillez choisir des fichiers plus petits.');
+        }
       }
     }
     
@@ -587,12 +623,12 @@
       document.getElementById('popup').style.display = 'flex';
     }
     
-    // Fonction pour confirmer l'upload
+    // Fonction pour confirmer l'upload - LIMITE GÉNÉREUSE
     function confirmUpload(isPublic) {
-      // Vérifier la limite AVANT d'afficher le succès
-      if (selectedFiles.length > 10) {
-        showDiscretError('Maximum 10 fichiers à la fois. Sélectionnez moins de fichiers.');
-        return; // Arrêter ici, ne pas continuer
+      // Vérifier la limite GÉNÉREUSE pour Cloudinary
+      if (selectedFiles.length > MAX_FILES_PER_BATCH) {
+        showDiscretError(`Maximum ${MAX_FILES_PER_BATCH} fichiers à la fois. Vous pouvez recommencer pour envoyer plus de fichiers !`);
+        return;
       }
       
       const modalContent = document.querySelector('.modal-content');
@@ -657,11 +693,14 @@
       }
     }
 
-    // Variables pour la gestion de la charge
+    // Variables pour la gestion de la charge - AUGMENTÉES POUR CLOUDINARY
     let uploadQueue = [];
     let activeUploads = 0;
-    const MAX_CONCURRENT_UPLOADS = 3; // Limitation pour éviter la surcharge
-    const MAX_RETRY_ATTEMPTS = 3;
+    const MAX_CONCURRENT_UPLOADS = 5; // 5 uploads simultanés pour gérer 30 invités
+    const MAX_RETRY_ATTEMPTS = 2; // 2 tentatives suffisent avec Cloudinary
+    const MAX_FILE_SIZE_MB = 25; // 25MB pour les photos (bien sous les 100MB de Cloudinary)
+    const MAX_VIDEO_SIZE_MB = 80; // 80MB pour les vidéos (sous la limite 100MB avec marge)
+    const MAX_FILES_PER_BATCH = 15; // 15 fichiers par batch (3x plus qu'avant !)
 
     // Fonction pour uploader plusieurs fichiers avec gestion de charge améliorée
     async function uploadMultipleFilesInBackground(files, isPublic) {
@@ -684,7 +723,7 @@
       processUploadQueue();
     }
     
-    // Fonction pour traiter la queue d'upload
+    // Fonction pour traiter la queue d'upload - OPTIMISÉE POUR 30 INVITÉS
     async function processUploadQueue() {
       while (uploadQueue.length > 0 && activeUploads < MAX_CONCURRENT_UPLOADS) {
         const uploadTask = uploadQueue.shift();
@@ -692,13 +731,13 @@
           activeUploads++;
           uploadFileWithRetry(uploadTask).finally(() => {
             activeUploads--;
-            // Continuer le traitement de la queue
+            // Continuer le traitement de la queue plus rapidement
             if (uploadQueue.length > 0) {
-              setTimeout(() => processUploadQueue(), 200); // Petite pause entre uploads
+              setTimeout(() => processUploadQueue(), 100); // Réduit à 100ms
             } else if (activeUploads === 0) {
               // Tous les uploads terminés
               console.log('✅ Tous les uploads terminés');
-              setTimeout(() => loadGallery(), 1500); // Recharger la galerie
+              setTimeout(() => loadGallery(), 1500);
             }
           });
         }
@@ -735,16 +774,23 @@
       }
     }
     
-    // — VERSION CLOUDINARY —
+    // — VERSION CLOUDINARY OPTIMISÉE POUR GROS VOLUMES —
     async function uploadSingleFileInBackground(file, isPublic) {
+      // Compression légère seulement pour les très gros fichiers
+      const processedFile = await compressFileIfNeeded(file);
+      
       const data = new FormData();
-      data.append('file', file);
+      data.append('file', processedFile);
       data.append('upload_preset', isPublic ? PRESET_PUBLIC : PRESET_PRIVATE);
       if (isPublic) data.append('tags', PRESET_PUBLIC);
       
+      // Optimisations Cloudinary pour performance, pas économie
+      data.append('quality', 'auto:best'); // Meilleure qualité
+      data.append('fetch_format', 'auto'); // Format optimal
+      
       const ctrl = new AbortController();
-      // timeout 2 min
-      const timeout = setTimeout(() => ctrl.abort(), 120000);
+      // timeout 5 min pour les très gros fichiers
+      const timeout = setTimeout(() => ctrl.abort(), 300000);
       
       const res = await fetch(CLOUDINARY_URL, {
         method: 'POST',
@@ -759,11 +805,50 @@
       const json = await res.json();
       if (!res.ok) throw new Error(json.error?.message || 'Upload échoué');
       
-      return json; // secure_url, public_id…
+      return json;
+    }
+    
+    // Compression très légère seulement pour les fichiers énormes
+    async function compressFileIfNeeded(file) {
+      // Seulement pour les images > 20MB, compression légère
+      if (file.type.includes('image') && file.size > 20 * 1024 * 1024) {
+        return new Promise((resolve) => {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          const img = new Image();
+          
+          img.onload = () => {
+            // Redimensionner seulement si > 4000px (très haute résolution)
+            const maxWidth = 4000;
+            const ratio = Math.min(maxWidth / img.width, maxWidth / img.height);
+            
+            if (ratio < 1) {
+              canvas.width = img.width * ratio;
+              canvas.height = img.height * ratio;
+              ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+              
+              canvas.toBlob((blob) => {
+                const compressedFile = new File([blob], file.name, {
+                  type: file.type,
+                  lastModified: file.lastModified
+                });
+                resolve(compressedFile);
+              }, file.type, 0.9); // 90% de qualité
+            } else {
+              resolve(file);
+            }
+          };
+          
+          img.onerror = () => resolve(file);
+          img.src = URL.createObjectURL(file);
+        });
+      }
+      
+      return file; // Pas de compression pour la plupart des fichiers
     }
 
-    // Fonction pour afficher une erreur discrète
-    function showDiscretError(message) {
+    // Fonction pour afficher une erreur discrète - AMÉLIORÉE
+    function showDiscretError(message, duration = 4000) {
       const notification = document.createElement('div');
       notification.style.cssText = `
         position: fixed;
@@ -779,6 +864,9 @@
         box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         opacity: 0;
         transition: opacity 0.3s ease;
+        max-width: 90%;
+        white-space: pre-line;
+        text-align: center;
       `;
       notification.textContent = message;
       
@@ -787,11 +875,15 @@
       // Animation d'apparition
       setTimeout(() => notification.style.opacity = '1', 100);
       
-      // Supprimer après 4 secondes
+      // Supprimer après durée spécifiée
       setTimeout(() => {
         notification.style.opacity = '0';
-        setTimeout(() => document.body.removeChild(notification), 300);
-      }, 4000);
+        setTimeout(() => {
+          if (notification.parentNode) {
+            document.body.removeChild(notification);
+          }
+        }, 300);
+      }, duration);
     }
 
     async function sendMedia(isPublic) {
