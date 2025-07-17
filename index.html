@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+// Variables pour la gestion de la charge - AUGMENTÉES POUR CLOUDINARY<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
@@ -507,13 +507,14 @@
 
     let selectedFiles = [];
     
-    // Fonction pour gérer la sélection multiple avec aperçu + VALIDATION TAILLE
+    // Fonction pour gérer la sélection multiple avec aperçu + VALIDATION PAR TAILLE TOTALE
     function handleFiles(files) {
       if (files && files.length > 0) {
         const validFiles = [];
         const invalidFiles = [];
+        let totalSizeMB = 0;
         
-        // Validation de chaque fichier
+        // Première passe : validation individuelle
         Array.from(files).forEach(file => {
           const isVideo = file.type.includes('video');
           const maxSize = isVideo ? MAX_VIDEO_SIZE_MB : MAX_FILE_SIZE_MB;
@@ -524,49 +525,101 @@
               name: file.name,
               size: fileSizeMB.toFixed(1),
               maxSize: maxSize,
-              type: isVideo ? 'vidéo' : 'photo'
+              type: isVideo ? 'vidéo' : 'photo',
+              reason: 'trop_gros'
             });
           } else {
             validFiles.push(file);
+            totalSizeMB += fileSizeMB;
           }
         });
         
-        // Afficher les erreurs pour les fichiers trop volumineux
-        if (invalidFiles.length > 0) {
-          let errorMessage = 'Fichiers trop volumineux :\n\n';
-          invalidFiles.forEach(file => {
-            errorMessage += `• ${file.name} (${file.size}MB)\n  Maximum ${file.maxSize}MB pour une ${file.type}\n\n`;
-          });
-          errorMessage += `${validFiles.length} fichier(s) valide(s) seront traités.`;
+        // Deuxième passe : vérification de la taille totale
+        if (totalSizeMB > MAX_TOTAL_SIZE_MB) {
+          // Trier par taille pour prendre les plus petits d'abord
+          validFiles.sort((a, b) => a.size - b.size);
           
-          showDiscretError(errorMessage, 6000); // 6 secondes pour lire
+          const acceptedFiles = [];
+          let runningTotal = 0;
+          
+          for (const file of validFiles) {
+            const fileSizeMB = file.size / (1024 * 1024);
+            if (runningTotal + fileSizeMB <= MAX_TOTAL_SIZE_MB) {
+              acceptedFiles.push(file);
+              runningTotal += fileSizeMB;
+            } else {
+              invalidFiles.push({
+                name: file.name,
+                size: fileSizeMB.toFixed(1),
+                maxSize: MAX_TOTAL_SIZE_MB,
+                type: file.type.includes('video') ? 'vidéo' : 'photo',
+                reason: 'quota_depassé'
+              });
+            }
+          }
+          
+          validFiles.length = 0;
+          validFiles.push(...acceptedFiles);
+          totalSizeMB = runningTotal;
+        }
+        
+        // Afficher les erreurs si nécessaire
+        if (invalidFiles.length > 0) {
+          let errorMessage = '';
+          const tooLargeFiles = invalidFiles.filter(f => f.reason === 'trop_gros');
+          const quotaFiles = invalidFiles.filter(f => f.reason === 'quota_depassé');
+          
+          if (tooLargeFiles.length > 0) {
+            errorMessage += 'Fichiers trop volumineux :\n';
+            tooLargeFiles.forEach(file => {
+              errorMessage += `• ${file.name} (${file.size}MB) - Max ${file.maxSize}MB\n`;
+            });
+            errorMessage += '\n';
+          }
+          
+          if (quotaFiles.length > 0) {
+            errorMessage += `Quota de ${MAX_TOTAL_SIZE_MB}MB dépassé, fichiers exclus :\n`;
+            quotaFiles.forEach(file => {
+              errorMessage += `• ${file.name} (${file.size}MB)\n`;
+            });
+            errorMessage += '\n';
+          }
+          
+          if (validFiles.length > 0) {
+            errorMessage += `${validFiles.length} fichier(s) sélectionné(s) (${totalSizeMB.toFixed(1)}MB au total)`;
+          } else {
+            errorMessage += 'Aucun fichier valide. Essayez avec des fichiers plus petits.';
+          }
+          
+          showDiscretError(errorMessage, 8000);
         }
         
         // Continuer avec les fichiers valides
         if (validFiles.length > 0) {
           selectedFiles = validFiles;
-          showFilePreview(selectedFiles);
-        } else if (invalidFiles.length > 0) {
-          // Tous les fichiers sont invalides
-          showDiscretError('Aucun fichier valide sélectionné. Veuillez choisir des fichiers plus petits.');
+          showFilePreview(selectedFiles, totalSizeMB);
         }
       }
     }
     
-    // Fonction pour afficher l'aperçu des fichiers sélectionnés
-    function showFilePreview(files) {
+    // Fonction pour afficher l'aperçu des fichiers sélectionnés + TAILLE TOTALE
+    function showFilePreview(files, totalSizeMB) {
       const modalContent = document.querySelector('.modal-content');
       const fileCount = files.length;
       
-      // Générer l'aperçu des fichiers
+      // Générer l'aperçu des fichiers avec tailles
       let filePreviewHtml = '';
       files.forEach((file, index) => {
         const fileType = file.type.includes('video') ? '🎥' : '📷';
         const fileName = file.name.length > 20 ? file.name.substring(0, 20) + '...' : file.name;
+        const fileSizeMB = (file.size / (1024 * 1024)).toFixed(1);
         filePreviewHtml += `
-          <div style="display: flex; align-items: center; padding: 0.5rem; margin: 0.25rem 0; background: #f8f9fa; border-radius: 8px;">
-            <span style="font-size: 1.2rem; margin-right: 0.5rem;">${fileType}</span>
-            <span style="font-size: 0.9rem; color: #666;">${fileName}</span>
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.5rem; margin: 0.25rem 0; background: #f8f9fa; border-radius: 8px;">
+            <div style="display: flex; align-items: center;">
+              <span style="font-size: 1.2rem; margin-right: 0.5rem;">${fileType}</span>
+              <span style="font-size: 0.9rem; color: #666;">${fileName}</span>
+            </div>
+            <span style="font-size: 0.8rem; color: #999; font-weight: bold;">${fileSizeMB}MB</span>
           </div>
         `;
       });
@@ -588,6 +641,10 @@
       modalContent.innerHTML = `
         <div style="padding: 1.5rem;">
           <h3 style="margin-bottom: 1rem; color: #333;">Partager ${typeText}</h3>
+          <div style="background: #e8f4fd; padding: 0.8rem; border-radius: 8px; margin-bottom: 1rem;">
+            <div style="font-weight: bold; color: #2196F3;">📊 Taille totale : ${totalSizeMB.toFixed(1)}MB / ${MAX_TOTAL_SIZE_MB}MB</div>
+            <div style="font-size: 0.8rem; color: #666; margin-top: 0.2rem;">${fileCount} fichier(s) sélectionné(s)</div>
+          </div>
           <div style="max-height: 200px; overflow-y: auto; margin-bottom: 1.5rem;">
             ${filePreviewHtml}
           </div>
@@ -623,17 +680,20 @@
       document.getElementById('popup').style.display = 'flex';
     }
     
-    // Fonction pour confirmer l'upload - LIMITE GÉNÉREUSE
+    // Fonction pour confirmer l'upload - VALIDATION PAR TAILLE TOTALE
     function confirmUpload(isPublic) {
-      // Vérifier la limite GÉNÉREUSE pour Cloudinary
-      if (selectedFiles.length > MAX_FILES_PER_BATCH) {
-        showDiscretError(`Maximum ${MAX_FILES_PER_BATCH} fichiers à la fois. Vous pouvez recommencer pour envoyer plus de fichiers !`);
+      // Plus de limite sur le nombre, juste vérification de la taille totale
+      const totalSize = selectedFiles.reduce((sum, file) => sum + file.size, 0);
+      const totalSizeMB = totalSize / (1024 * 1024);
+      
+      if (totalSizeMB > MAX_TOTAL_SIZE_MB) {
+        showDiscretError(`Taille totale trop importante : ${totalSizeMB.toFixed(1)}MB / ${MAX_TOTAL_SIZE_MB}MB max.`);
         return;
       }
       
       const modalContent = document.querySelector('.modal-content');
       const fileCount = selectedFiles.length;
-      const destination = isPublic ? 'galerie publique' : 'dossier privé des mariés';
+      const destination = isPublic ? 'galerie publique' : 'galerie privée';
       
       // Feedback immédiat de succès (SEULEMENT si <= 10 fichiers)
       modalContent.innerHTML = `
@@ -693,14 +753,14 @@
       }
     }
 
-    // Variables pour la gestion de la charge - AUGMENTÉES POUR CLOUDINARY
+    // Variables pour la gestion de la charge - BASÉES SUR LA TAILLE TOTALE
     let uploadQueue = [];
     let activeUploads = 0;
-    const MAX_CONCURRENT_UPLOADS = 5; // 5 uploads simultanés pour gérer 30 invités
-    const MAX_RETRY_ATTEMPTS = 2; // 2 tentatives suffisent avec Cloudinary
-    const MAX_FILE_SIZE_MB = 25; // 25MB pour les photos (bien sous les 100MB de Cloudinary)
-    const MAX_VIDEO_SIZE_MB = 80; // 80MB pour les vidéos (sous la limite 100MB avec marge)
-    const MAX_FILES_PER_BATCH = 15; // 15 fichiers par batch (3x plus qu'avant !)
+    const MAX_CONCURRENT_UPLOADS = 5; // 5 uploads simultanés
+    const MAX_RETRY_ATTEMPTS = 2;
+    const MAX_FILE_SIZE_MB = 25; // 25MB par fichier individuel
+    const MAX_VIDEO_SIZE_MB = 80; // 80MB par vidéo individuelle
+    const MAX_TOTAL_SIZE_MB = 150; // 150MB au total par batch (limite intelligente)
 
     // Fonction pour uploader plusieurs fichiers avec gestion de charge améliorée
     async function uploadMultipleFilesInBackground(files, isPublic) {
