@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+// Variables pour la gestion de la charge - AUGMENTÉES POUR CLOUDINARY<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
@@ -693,7 +693,7 @@
       
       const modalContent = document.querySelector('.modal-content');
       const fileCount = selectedFiles.length;
-      const destination = isPublic ? 'galerie publique' : 'galerie privée';
+      const destination = isPublic ? 'galerie publique' : 'dossier privé des mariés';
       
       // Feedback immédiat de succès (SEULEMENT si <= 10 fichiers)
       modalContent.innerHTML = `
@@ -717,6 +717,9 @@
       
       // Upload en arrière-plan
       uploadMultipleFilesInBackground(selectedFiles, isPublic);
+      
+      // Démarrer le suivi de progression
+      setTimeout(showUploadProgress, 2000);
       
       // Réinitialiser la sélection
       selectedFiles = [];
@@ -756,18 +759,20 @@
     // Variables pour la gestion de la charge - BASÉES SUR LA TAILLE TOTALE
     let uploadQueue = [];
     let activeUploads = 0;
+    let isUploading = false; // Flag pour tracker l'état d'upload
     const MAX_CONCURRENT_UPLOADS = 5; // 5 uploads simultanés
     const MAX_RETRY_ATTEMPTS = 2;
     const MAX_FILE_SIZE_MB = 25; // 25MB par fichier individuel
     const MAX_VIDEO_SIZE_MB = 80; // 80MB par vidéo individuelle
     const MAX_TOTAL_SIZE_MB = 150; // 150MB au total par batch (limite intelligente)
 
-    // Fonction pour uploader plusieurs fichiers avec gestion de charge améliorée
+    // Fonction pour uploader plusieurs fichiers avec gestion de charge améliorée + PROTECTION
     async function uploadMultipleFilesInBackground(files, isPublic) {
       console.log(`🚀 Ajout de ${files.length} fichier(s) à la queue d'upload`);
       
-      // CORRECTION: La vérification de limite est maintenant dans confirmUpload()
-      // Cette fonction ne reçoit que des fichiers validés
+      // Marquer le début de l'upload
+      isUploading = true;
+      updateUploadUI();
       
       // Ajouter les fichiers à la queue
       files.forEach(file => {
@@ -783,20 +788,26 @@
       processUploadQueue();
     }
     
-    // Fonction pour traiter la queue d'upload - OPTIMISÉE POUR 30 INVITÉS
+    // Fonction pour traiter la queue d'upload - OPTIMISÉE POUR 30 INVITÉS + PROTECTION
     async function processUploadQueue() {
       while (uploadQueue.length > 0 && activeUploads < MAX_CONCURRENT_UPLOADS) {
         const uploadTask = uploadQueue.shift();
         if (uploadTask) {
           activeUploads++;
+          updateUploadUI();
+          
           uploadFileWithRetry(uploadTask).finally(() => {
             activeUploads--;
+            updateUploadUI();
+            
             // Continuer le traitement de la queue plus rapidement
             if (uploadQueue.length > 0) {
               setTimeout(() => processUploadQueue(), 100); // Réduit à 100ms
             } else if (activeUploads === 0) {
               // Tous les uploads terminés
               console.log('✅ Tous les uploads terminés');
+              isUploading = false;
+              updateUploadUI();
               setTimeout(() => loadGallery(), 1500);
             }
           });
@@ -954,6 +965,54 @@
     // Fonction de compatibilité pour l'upload simple
     async function uploadFileInBackground(file, isPublic) {
       return uploadSingleFileInBackground(file, isPublic);
+    }
+    
+    // PROTECTION CONTRE LE RECHARGEMENT DE PAGE
+    function updateUploadUI() {
+      const btn = document.querySelector('.btn-fixed');
+      
+      if (isUploading) {
+        const remaining = uploadQueue.length + activeUploads;
+        btn.textContent = `📤 Upload en cours... (${remaining} restant${remaining > 1 ? 's' : ''})`;
+        btn.style.backgroundColor = '#ff9800'; // Orange pendant upload
+        
+        // Désactiver le bouton de sélection de fichiers
+        btn.onclick = () => {
+          showDiscretError('Upload en cours... Veuillez patienter avant d\'ajouter d\'autres fichiers.');
+        };
+      } else {
+        btn.textContent = 'Partager mon souvenir';
+        btn.style.backgroundColor = '#818edb'; // Couleur normale
+        btn.onclick = openMediaSelector; // Réactiver
+      }
+    }
+    
+    // Protection contre le rechargement de page
+    window.addEventListener('beforeunload', (event) => {
+      if (isUploading && (uploadQueue.length > 0 || activeUploads > 0)) {
+        const message = 'Upload en cours ! Si vous quittez maintenant, vos fichiers ne seront pas envoyés.';
+        event.preventDefault();
+        event.returnValue = message; // Chrome
+        return message; // Firefox
+      }
+    });
+    
+    // Protection contre la fermeture de l'onglet
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden && isUploading) {
+        console.warn('⚠️ Page masquée pendant l\'upload - les uploads peuvent être interrompus');
+      }
+    });
+    
+    // Notification persistante pendant l'upload
+    function showUploadProgress() {
+      if (!isUploading) return;
+      
+      const remaining = uploadQueue.length + activeUploads;
+      if (remaining > 0) {
+        console.log(`📤 Upload en cours: ${remaining} fichier(s) restant(s)`);
+        setTimeout(showUploadProgress, 5000); // Rappel toutes les 5 secondes
+      }
     }
   </script>
 
