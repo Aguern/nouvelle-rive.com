@@ -1,1023 +1,361 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mariage Marine & Nicolas</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Karla:ital,wght@1,400&display=swap');
-
-    body {
-      font-family: 'Karla', sans-serif;
-      background-color: #f7f7fc;
-      color: #333;
-      text-align: center;
-      margin: 0;
-      padding: 0;
-    }
-
-    .banner {
-      width: 100vw;
-      max-height: 300px;
-      aspect-ratio: 16 / 9;
-      object-fit: cover;
-      object-position: center;
-      display: block;
-      margin-bottom: 2rem;
-    }
-
-    h1 {
-      font-size: 2rem;
-      color: #333;
-    }
-
-    h2 {
-      font-size: 1.2rem;
-      color: #818edb;
-      margin-top: 0.5rem;
-    }
-
-    p {
-      margin: 1rem 0;
-    }
-
-    .btn-share-site {
-      background-color: transparent;
-      color: #818edb;
-      border: 1px solid #818edb;
-      padding: 0.8rem 1.5rem;
-      border-radius: 25px;
-      font-size: 0.9rem;
-      cursor: pointer;
-      margin: 1.5rem 0 2rem 0;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      transition: all 0.3s ease;
-    }
-
-    .btn-share-site:hover {
-      background-color: #818edb;
-      color: white;
-    }
-
-    .btn-share-site svg {
-      width: 16px;
-      height: 16px;
-    }
-
-    .btn-fixed {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: #818edb;
-      color: white;
-      padding: 1rem 2rem;
-      border-radius: 50px;
-      font-size: 1rem;
-      font-weight: bold;
-      border: none;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      z-index: 1000;
-    }
-
-    .btn-fixed:hover {
-      background-color: #6f7ac7;
-    }
-
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 100;
-      left: 0; top: 0;
-      width: 100%; height: 100%;
-      background-color: rgba(0,0,0,0.5);
-      justify-content: center;
-      align-items: center;
-    }
-
-    .modal-content {
-      background-color: white;
-      padding: 2rem;
-      border-radius: 20px;
-      text-align: center;
-      width: calc(90% - 2rem);
-      max-width: 400px;
-      margin: 1rem;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    }
-
-    .modal-buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      margin-top: 1.5rem;
-    }
-
-    .modal-buttons button {
-      margin: 0;
-      padding: 1.2rem 2rem;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      font-weight: bold;
-      font-size: 1.1rem;
-      transition: all 0.2s;
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-    }
-
-    .public-btn {
-      background-color: #818edb;
-      color: white;
-    }
-
-    .public-btn:hover {
-      background-color: #6f7ac7;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(129, 142, 219, 0.4);
-    }
-
-    .private-btn {
-      background-color: #f0f0f0;
-      color: #333;
-    }
-
-    .private-btn:hover {
-      background-color: #e0e0e0;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-
-    /* Loader */
-    .loader {
-      display: none;
-      border: 3px solid #f3f3f3;
-      border-top: 3px solid #818edb;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      animation: spin 1s linear infinite;
-      margin: 2rem auto;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    #gallery {
-      margin-top: 1.5rem;
-    }
-
-    /* Galerie à marges fines et vignettes plein cadre */
-    #drive-gallery {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2px;
-      padding: 1rem 0;
-      max-width: 900px;
-      margin: auto;
-    }
-
-    #drive-gallery > div {
-      position: relative;
-      width: 100%;
-      height: 0;
-      padding-bottom: 100%;
-      background: black;
-      overflow: hidden;
-    }
-
-    #drive-gallery img,
-    #drive-gallery video {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      cursor: pointer;
-    }
-
-    @media (min-width: 768px) {
-      #drive-gallery {
-        grid-template-columns: repeat(4, 1fr);
-      }
-    }
-
-    input[type='file'] {
-      display: none;
-    }
-
-    .lightbox {
-      display: none;
-      position: fixed;
-      z-index: 200;
-      left: 0;
-      top: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0,0,0,0.9);
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-    }
-
-    .lightbox-content {
-      max-width: 90%;
-      max-height: 80vh;
-    }
-
-    .lightbox img,
-    .lightbox video,
-    .lightbox iframe {
-      max-width: 100%;
-      max-height: 80vh;
-      border-radius: 0;
-    }
-
-    /* Croix de fermeture */
-    .lightbox .close-btn {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      background: none;
-      border: none;
-      font-size: 2rem;
-      color: white;
-      line-height: 1;
-      cursor: pointer;
-      z-index: 1002;
-    }
-
-    /* Bouton téléchargement en haut à gauche */
-    .download-btn {
-      position: absolute;
-      top: 1rem;
-      left: 1rem;
-      background: none;
-      border: none;
-      z-index: 1001;
-    }
-
-    .download-btn img {
-      width: 28px;
-      height: 28px;
-      filter: invert(1);
-    }
-
-    /* Navigation dans la lightbox */
-    .lightbox-nav {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(255, 255, 255, 0.2);
-      border: none;
-      color: white;
-      font-size: 2.5rem;
-      padding: 1rem 1.5rem;
-      cursor: pointer;
-      border-radius: 8px;
-      transition: background-color 0.2s;
-      z-index: 1001;
-    }
-
-    .lightbox-nav:hover {
-      background: rgba(255, 255, 255, 0.3);
-    }
-
-    .lightbox-nav.prev {
-      left: 1rem;
-    }
-
-    .lightbox-nav.next {
-      right: 1rem;
-    }
-
-    body.lightbox-open .btn-fixed,
-    body.modal-open .btn-fixed {
-      display: none !important;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="description" content="Nouvelle Rive - Redonner du temps à l'intelligence humaine. Nous transformons vos processus pour libérer votre potentiel créatif et stratégique.">
+    <meta name="theme-color" content="#00A8FF">
+    <title>Nouvelle Rive - Transformation & Innovation</title>
+    <link rel="stylesheet" href="css/base.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <!-- Calendly inline widget begin -->
+    <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
 </head>
 <body>
-
-  <header>
-    <img src="header.png" class="banner" alt="bannière"/>
-  </header>
-
-  <h1>Mariage Marine et Nicolas</h1>
-  <h2>19 juillet 2025</h2>
-  <p>N'hésitez pas à nous partager vos photos ou vidéos<br />afin de nous laisser un souvenir de cette journée si spéciale.</p>
-  
-  <button class="btn-share-site" onclick="shareSite()">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/>
-    </svg>
-    Partager ce site
-  </button>
-
-  <button class="btn-fixed" onclick="openMediaSelector()">Partager mon souvenir</button>
-  
-  <!-- Input simplifié pour tous les appareils avec sélection multiple -->
-  <input id="mediaInput" type="file" accept="image/*,video/*" multiple onchange="handleFiles(this.files)" />
-
-  <div id="popup" class="modal">
-    <div class="modal-content">
-      <p style="font-size: 1.2rem; margin-bottom: 0.5rem;">Souhaitez-vous afficher ce média dans la galerie ?</p>
-      <div class="loader" id="loader"></div>
-      <div class="modal-buttons" id="modalButtons">
-        <button class="public-btn" onclick="confirmUpload(true)">📢 Afficher en public</button>
-        <button class="private-btn" onclick="confirmUpload(false)">🔒 Uniquement pour les mariés</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="gallery">
-    <h2>Galerie des invités</h2>
-    <div id="drive-gallery"></div>
-  </div>
-
-  <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
-    <div id="lightbox-content"></div>
-    <button class="close-btn" onclick="closeLightbox({target:document.getElementById('lightbox')});">&times;</button>
-    <button class="download-btn" id="downloadBtn" onclick="downloadMedia()">
-      <img src="telecharger-un-fichier.png" alt="Télécharger"/>
-    </button>
-    <button class="lightbox-nav prev" onclick="navigateGallery(-1)">‹</button>
-    <button class="lightbox-nav next" onclick="navigateGallery(1)">›</button>
-  </div>
-
-  <script>
-    /* --- CONFIG CLOUDINARY --- */
-    const CLOUD_NAME      = 'dwnevq3ba';           
-    const PRESET_PUBLIC   = 'public_gallery';
-    const PRESET_PRIVATE  = 'private_uploads';
-    const CLOUDINARY_URL  = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/upload`;
-    /* ------------------------- */
-
-    let galleryFiles = [];
-    let currentImageIndex = 0;
-
-    async function loadGallery() {
-      // on appelle la function Vercel
-      const files = await fetch('/api/gallery').then(r => r.json());
-
-      // tri anté-chronologique (le plus récent d'abord)
-      files.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-
-      const container = document.getElementById('drive-gallery');
-      galleryFiles = files; // pour la lightbox existante
-      container.innerHTML = '';
-
-      files.forEach((file, idx) => {
-        const wrapper = document.createElement('div');
-        const element = file.resource_type === 'video' 
-          ? document.createElement('video')
-          : document.createElement('img');
-
-        element.src = file.secure_url;
-
-        if (file.resource_type === 'video') {
-          element.setAttribute('playsinline', '');
-          element.setAttribute('muted', '');
-          element.setAttribute('preload', 'metadata');
-          element.setAttribute('poster', file.secure_url + '#t=0.1');
-        }
-
-        element.alt = file.public_id.split('/').pop();
-        element.onclick = () => openLightbox(file.resource_type, file.secure_url, file.secure_url, idx);
-
-        wrapper.appendChild(element);
-        container.appendChild(wrapper);
-      });
-    }
-
-    function openLightbox(type, src, downloadLink, index) {
-      currentImageIndex = index;
-      const content = document.getElementById("lightbox-content");
-      const lightbox = document.getElementById("lightbox");
-      const btn = document.getElementById("downloadBtn");
-
-      content.innerHTML = "";
-
-      if (type === 'video') {
-        const vid = document.createElement('video');
-        vid.src = src;
-        vid.controls = true;
-        vid.style.maxHeight = '80vh';
-        content.appendChild(vid);
-      } else {
-        const img = document.createElement('img');
-        img.src = src;
-        content.appendChild(img);
-      }
-
-      btn.setAttribute("data-src", downloadLink);
-      document.body.classList.add("lightbox-open");
-      lightbox.style.display = "flex";
-      
-      updateNavigationButtons();
-    }
-
-    function navigateGallery(direction) {
-      currentImageIndex += direction;
-      
-      if (currentImageIndex < 0) currentImageIndex = galleryFiles.length - 1;
-      if (currentImageIndex >= galleryFiles.length) currentImageIndex = 0;
-      
-      const file = galleryFiles[currentImageIndex];
-      const src = file.secure_url;
-      
-      openLightbox(file.resource_type, src, file.secure_url, currentImageIndex);
-    }
-
-    function updateNavigationButtons() {
-      const prevBtn = document.querySelector('.lightbox-nav.prev');
-      const nextBtn = document.querySelector('.lightbox-nav.next');
-      
-      prevBtn.style.display = galleryFiles.length > 1 ? 'block' : 'none';
-      nextBtn.style.display = galleryFiles.length > 1 ? 'block' : 'none';
-    }
-
-    function downloadMedia() {
-      const src = document.getElementById("downloadBtn").getAttribute("data-src");
-      
-      // Créer un lien de téléchargement et le déclencher
-      const a = document.createElement("a");
-      a.href = src;
-      a.download = galleryFiles[currentImageIndex].public_id.split('/').pop() || "media";
-      a.target = "_blank";
-      
-      // Ajouter temporairement le lien au DOM
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    }
-
-    function closeLightbox(event) {
-      if (event.target.id === "lightbox" || event.key === "Escape" || event.target.classList.contains('close-btn')) {
-        document.getElementById("lightbox").style.display = "none";
-        document.body.classList.remove("lightbox-open");
-      }
-    }
-
-    document.addEventListener("keydown", closeLightbox);
-    window.addEventListener("DOMContentLoaded", loadGallery);
-
-    // Fonction simplifiée pour ouvrir le sélecteur de média
-    function openMediaSelector() {
-      // Ouvrir directement l'input sur tous les appareils
-      document.getElementById('mediaInput').click();
-    }
-
-    // Fonction de partage du site
-    async function shareSite() {
-      const shareData = {
-        title: 'Mariage Marine & Nicolas',
-        text: 'Venez partager vos souvenirs du mariage de Marine & Nicolas ! 📸💕',
-        url: window.location.href
-      };
-
-      try {
-        // Vérifier si l'API Web Share est supportée
-        if (navigator.share) {
-          await navigator.share(shareData);
-        } else {
-          // Fallback : copier le lien et afficher un message
-          await navigator.clipboard.writeText(window.location.href);
-          alert('Lien copié dans le presse-papiers !\n\nVous pouvez maintenant le partager via WhatsApp, SMS ou email.');
-        }
-      } catch (err) {
-        // En cas d'erreur ou d'annulation, proposer la copie du lien
-        if (err.name !== 'AbortError') {
-          try {
-            await navigator.clipboard.writeText(window.location.href);
-            alert('Lien copié dans le presse-papiers !');
-          } catch (clipboardErr) {
-            // Fallback ultime si même le clipboard ne fonctionne pas
-            prompt('Copiez ce lien pour le partager :', window.location.href);
-          }
-        }
-      }
-    }
-
-    let selectedFiles = [];
-    
-    // Fonction pour gérer la sélection multiple avec aperçu + VALIDATION PAR TAILLE TOTALE
-    function handleFiles(files) {
-      if (files && files.length > 0) {
-        const validFiles = [];
-        const invalidFiles = [];
-        let totalSizeMB = 0;
-        
-        // Première passe : validation individuelle
-        Array.from(files).forEach(file => {
-          const isVideo = file.type.includes('video');
-          const maxSize = isVideo ? MAX_VIDEO_SIZE_MB : MAX_FILE_SIZE_MB;
-          const fileSizeMB = file.size / (1024 * 1024);
-          
-          if (fileSizeMB > maxSize) {
-            invalidFiles.push({
-              name: file.name,
-              size: fileSizeMB.toFixed(1),
-              maxSize: maxSize,
-              type: isVideo ? 'vidéo' : 'photo',
-              reason: 'trop_gros'
-            });
-          } else {
-            validFiles.push(file);
-            totalSizeMB += fileSizeMB;
-          }
-        });
-        
-        // Deuxième passe : vérification de la taille totale
-        if (totalSizeMB > MAX_TOTAL_SIZE_MB) {
-          // Trier par taille pour prendre les plus petits d'abord
-          validFiles.sort((a, b) => a.size - b.size);
-          
-          const acceptedFiles = [];
-          let runningTotal = 0;
-          
-          for (const file of validFiles) {
-            const fileSizeMB = file.size / (1024 * 1024);
-            if (runningTotal + fileSizeMB <= MAX_TOTAL_SIZE_MB) {
-              acceptedFiles.push(file);
-              runningTotal += fileSizeMB;
-            } else {
-              invalidFiles.push({
-                name: file.name,
-                size: fileSizeMB.toFixed(1),
-                maxSize: MAX_TOTAL_SIZE_MB,
-                type: file.type.includes('video') ? 'vidéo' : 'photo',
-                reason: 'quota_depassé'
-              });
-            }
-          }
-          
-          validFiles.length = 0;
-          validFiles.push(...acceptedFiles);
-          totalSizeMB = runningTotal;
-        }
-        
-        // Afficher les erreurs si nécessaire
-        if (invalidFiles.length > 0) {
-          let errorMessage = '';
-          const tooLargeFiles = invalidFiles.filter(f => f.reason === 'trop_gros');
-          const quotaFiles = invalidFiles.filter(f => f.reason === 'quota_depassé');
-          
-          if (tooLargeFiles.length > 0) {
-            errorMessage += 'Fichiers trop volumineux :\n';
-            tooLargeFiles.forEach(file => {
-              errorMessage += `• ${file.name} (${file.size}MB) - Max ${file.maxSize}MB\n`;
-            });
-            errorMessage += '\n';
-          }
-          
-          if (quotaFiles.length > 0) {
-            errorMessage += `Quota de ${MAX_TOTAL_SIZE_MB}MB dépassé, fichiers exclus :\n`;
-            quotaFiles.forEach(file => {
-              errorMessage += `• ${file.name} (${file.size}MB)\n`;
-            });
-            errorMessage += '\n';
-          }
-          
-          if (validFiles.length > 0) {
-            errorMessage += `${validFiles.length} fichier(s) sélectionné(s) (${totalSizeMB.toFixed(1)}MB au total)`;
-          } else {
-            errorMessage += 'Aucun fichier valide. Essayez avec des fichiers plus petits.';
-          }
-          
-          showDiscretError(errorMessage, 8000);
-        }
-        
-        // Continuer avec les fichiers valides
-        if (validFiles.length > 0) {
-          selectedFiles = validFiles;
-          showFilePreview(selectedFiles, totalSizeMB);
-        }
-      }
-    }
-    
-    // Fonction pour afficher l'aperçu des fichiers sélectionnés + TAILLE TOTALE
-    function showFilePreview(files, totalSizeMB) {
-      const modalContent = document.querySelector('.modal-content');
-      const fileCount = files.length;
-      
-      // Générer l'aperçu des fichiers avec tailles
-      let filePreviewHtml = '';
-      files.forEach((file, index) => {
-        const fileType = file.type.includes('video') ? '🎥' : '📷';
-        const fileName = file.name.length > 20 ? file.name.substring(0, 20) + '...' : file.name;
-        const fileSizeMB = (file.size / (1024 * 1024)).toFixed(1);
-        filePreviewHtml += `
-          <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.5rem; margin: 0.25rem 0; background: #f8f9fa; border-radius: 8px;">
-            <div style="display: flex; align-items: center;">
-              <span style="font-size: 1.2rem; margin-right: 0.5rem;">${fileType}</span>
-              <span style="font-size: 0.9rem; color: #666;">${fileName}</span>
+    <header class="header" id="header">
+        <div class="header__container">
+            <!-- Logo -->
+            <div class="header__logo">
+                <a href="#hero" onclick="scrollToSection('hero')" class="logo">
+                    <span class="logo__text">Nouvelle Rive</span>
+                </a>
             </div>
-            <span style="font-size: 0.8rem; color: #999; font-weight: bold;">${fileSizeMB}MB</span>
-          </div>
-        `;
-      });
-      
-      // Texte adapté au nombre de fichiers
-      const fileTypes = files.map(f => f.type.includes('video') ? 'vidéo' : 'photo');
-      const hasVideos = fileTypes.includes('vidéo');
-      const hasPhotos = fileTypes.includes('photo');
-      
-      let typeText = '';
-      if (hasVideos && hasPhotos) {
-        typeText = `${fileCount} médias`;
-      } else if (hasVideos) {
-        typeText = fileCount === 1 ? '1 vidéo' : `${fileCount} vidéos`;
-      } else {
-        typeText = fileCount === 1 ? '1 photo' : `${fileCount} photos`;
-      }
-      
-      modalContent.innerHTML = `
-        <div style="padding: 1.5rem;">
-          <h3 style="margin-bottom: 1rem; color: #333;">Partager ${typeText}</h3>
-          <div style="max-height: 200px; overflow-y: auto; margin-bottom: 1.5rem;">
-            ${filePreviewHtml}
-          </div>
-          <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.5rem;">
-            Où souhaitez-vous partager ${fileCount === 1 ? 'ce fichier' : 'ces fichiers'} ?
-          </p>
-          <div style="display: flex; flex-direction: column; gap: 1rem;">
-            <button onclick="confirmUpload(true)" style="
-              background-color: #818edb; color: white; border: none; padding: 1rem 1.5rem; 
-              border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 1rem;
-              transition: all 0.2s;
-            " onmouseover="this.style.backgroundColor='#6f7ac7'" onmouseout="this.style.backgroundColor='#818edb'">
-              📢 Galerie publique
+
+            <!-- Navigation Desktop -->
+            <nav class="header__nav">
+                <a href="#defis" onclick="scrollToSection('defis')" class="nav__link">Vos Défis</a>
+                <a href="#approche" onclick="scrollToSection('approche')" class="nav__link">Notre Approche</a>
+                <a href="#possibles" onclick="scrollToSection('possibles')" class="nav__link">Capacités</a>
+                <a href="#contact" onclick="scrollToSection('contact')" class="nav__link">Contact</a>
+            </nav>
+
+            <!-- CTA Button -->
+            <div class="header__cta">
+                <a href="#contact" onclick="scrollToSection('contact')" class="btn btn--primary btn--header">
+                    Prendre RDV
+                </a>
+            </div>
+
+            <!-- Menu Mobile -->
+            <button class="header__menu-toggle" id="menuToggle" aria-label="Menu">
+                <span class="menu-toggle__line"></span>
+                <span class="menu-toggle__line"></span>
+                <span class="menu-toggle__line"></span>
             </button>
-            <button onclick="confirmUpload(false)" style="
-              background-color: #f0f0f0; color: #333; border: none; padding: 1rem 1.5rem; 
-              border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 1rem;
-              transition: all 0.2s;
-            " onmouseover="this.style.backgroundColor='#e0e0e0'" onmouseout="this.style.backgroundColor='#f0f0f0'">
-              🔒 Uniquement pour les mariés
-            </button>
-            <button onclick="cancelUpload()" style="
-              background-color: transparent; color: #999; border: 1px solid #ddd; padding: 0.8rem 1.5rem; 
-              border-radius: 12px; cursor: pointer; font-size: 0.9rem;
-            " onmouseover="this.style.borderColor='#bbb'" onmouseout="this.style.borderColor='#ddd'">
-              Annuler
-            </button>
-          </div>
         </div>
-      `;
-      
-      // Afficher la modal
-      document.getElementById('popup').style.display = 'flex';
-      document.body.classList.add('modal-open'); // Masquer le bouton fixe
-    }
-    
-    // Fonction pour confirmer l'upload - VALIDATION PAR TAILLE TOTALE
-    function confirmUpload(isPublic) {
-      // Plus de limite sur le nombre, juste vérification de la taille totale
-      const totalSize = selectedFiles.reduce((sum, file) => sum + file.size, 0);
-      const totalSizeMB = totalSize / (1024 * 1024);
-      
-      if (totalSizeMB > MAX_TOTAL_SIZE_MB) {
-        showDiscretError(`Taille totale trop importante : ${totalSizeMB.toFixed(1)}MB / ${MAX_TOTAL_SIZE_MB}MB max.`);
-        return;
-      }
-      
-      const modalContent = document.querySelector('.modal-content');
-      const fileCount = selectedFiles.length;
-      const destination = isPublic ? 'galerie publique' : 'galerie privée';
-      
-      // Feedback immédiat de succès (SEULEMENT si <= 10 fichiers)
-      modalContent.innerHTML = `
-        <div style="padding: 2rem;">
-          <div style="font-size: 3rem; margin-bottom: 1rem;">🎉</div>
-          <h3 style="color: #4CAF50; margin-bottom: 1rem;">Merci !</h3>
-          <p style="font-size: 1.1rem;">
-            ${fileCount === 1 ? 'Votre fichier a été envoyé' : `Vos ${fileCount} fichiers ont été envoyés`} vers ${destination} ! 
-          </p>
-          <p style="font-size: 0.9rem; color: #666; margin-top: 1rem;">
-            ${isPublic ? 'Il apparaîtra dans la galerie dans quelques instants.' : 'Les mariés le recevront directement.'}
-          </p>
+
+        <!-- Menu Mobile Overlay -->
+        <div class="header__mobile-menu" id="mobileMenu">
+            <nav class="mobile-menu__nav">
+                <a href="#defis" onclick="scrollToSection('defis'); closeMobileMenu()" class="mobile-nav__link">Vos Défis</a>
+                <a href="#approche" onclick="scrollToSection('approche'); closeMobileMenu()" class="mobile-nav__link">Notre Approche</a>
+                <a href="#possibles" onclick="scrollToSection('possibles'); closeMobileMenu()" class="mobile-nav__link">Capacités</a>
+                <a href="#contact" onclick="scrollToSection('contact'); closeMobileMenu()" class="mobile-nav__link">Contact</a>
+                <div class="mobile-menu__cta">
+                    <a href="#contact" onclick="scrollToSection('contact'); closeMobileMenu()" class="btn btn--primary">
+                        Prendre RDV
+                    </a>
+                </div>
+            </nav>
         </div>
-      `;
-      
-      // Fermer automatiquement après 3 secondes
-      setTimeout(() => {
-        document.getElementById('popup').style.display = 'none';
-        document.body.classList.remove('modal-open'); // Réafficher le bouton fixe
-        resetModal();
-      }, 3000);
-      
-      // Upload en arrière-plan
-      uploadMultipleFilesInBackground(selectedFiles, isPublic);
-      
-      // Démarrer le suivi de progression
-      setTimeout(showUploadProgress, 2000);
-      
-      // Réinitialiser la sélection
-      selectedFiles = [];
-      document.getElementById('mediaInput').value = '';
-    }
-    
-    // Fonction pour annuler l'upload
-    function cancelUpload() {
-      document.getElementById('popup').style.display = 'none';
-      document.body.classList.remove('modal-open'); // Réafficher le bouton fixe
-      resetModal();
-      
-      // Réinitialiser la sélection
-      selectedFiles = [];
-      document.getElementById('mediaInput').value = '';
-    }
-    
-    // Fonction pour réinitialiser la modal
-    function resetModal() {
-      const modalContent = document.querySelector('.modal-content');
-      modalContent.innerHTML = `
-        <p style="font-size: 1.2rem; margin-bottom: 0.5rem;">Souhaitez-vous afficher ce média dans la galerie ?</p>
-        <div class="loader" id="loader"></div>
-        <div class="modal-buttons" id="modalButtons">
-          <button class="public-btn" onclick="confirmUpload(true)">📢 Afficher en public</button>
-          <button class="private-btn" onclick="confirmUpload(false)">🔒 Uniquement pour les mariés</button>
+    </header>
+
+    <main>
+        <!-- Section 1: Héros (on garde, il est parfait) -->
+        <section id="hero" class="section hero">
+            <video class="hero__video" id="heroVideo" autoplay muted playsinline loop>
+                <source src="assets/hero1.mp4" type="video/mp4">
+                Votre navigateur ne supporte pas la vidéo HTML5.
+            </video>
+            <div class="hero__overlay"></div>
+            <div class="hero__content">
+                <h1 class="hero__title">Redonner du temps à l'intelligence humaine.</h1>
+                <p class="hero__subtitle">Nous transformons vos processus pour libérer votre potentiel créatif et stratégique.</p>
+            </div>
+        </section>
+
+        <!-- Section 2: "Vos Défis" (remplace "Problématique") -->
+        <section id="defis" class="section defis bg-craye">
+            <div class="container">
+                <h2 class="section-title fade-in">Vos Défis</h2>
+                <div class="defis__grid grid grid--3">
+                    <div class="challenge-card fade-in">
+                        <div class="challenge-card__icon">
+                            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <circle cx="32" cy="32" r="24" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                                <line x1="32" y1="10" x2="32" y2="14" stroke="currentColor" stroke-width="1.5"/>
+                                <line x1="32" y1="50" x2="32" y2="54" stroke="currentColor" stroke-width="1.5"/>
+                                <line x1="10" y1="32" x2="14" y2="32" stroke="currentColor" stroke-width="1.5"/>
+                                <line x1="50" y1="32" x2="54" y2="32" stroke="currentColor" stroke-width="1.5"/>
+                                <line x1="44.49" y1="14.51" x2="46.32" y2="16.34" stroke="currentColor" stroke-width="1" opacity="0.6"/>
+                                <line x1="19.51" y1="14.51" x2="17.68" y2="16.34" stroke="currentColor" stroke-width="1" opacity="0.6"/>
+                                <line x1="32" y1="32" x2="32" y2="20" stroke="currentColor" stroke-width="2"/>
+                                <line x1="32" y1="32" x2="42" y2="32" stroke="currentColor" stroke-width="1.5"/>
+                                <circle cx="32" cy="32" r="2" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <h3 class="challenge-card__title">Temps perdu</h3>
+                        <p class="challenge-card__description">
+                            Les processus manuels répétitifs consument un temps précieux qui pourrait être consacré à des tâches à plus forte valeur ajoutée.
+                        </p>
+                    </div>
+
+                    <div class="challenge-card fade-in">
+                        <div class="challenge-card__icon">
+                            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M32 12L50 44H14L32 12Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                                <line x1="32" y1="24" x2="32" y2="36" stroke="currentColor" stroke-width="2"/>
+                                <circle cx="32" cy="40" r="1.5" fill="currentColor"/>
+                                <path d="M18 18L16 16" stroke="currentColor" stroke-width="1" opacity="0.4"/>
+                                <path d="M46 18L48 16" stroke="currentColor" stroke-width="1" opacity="0.4"/>
+                                <path d="M12 48L10 46M10 48L12 46" stroke="currentColor" stroke-width="1" opacity="0.5"/>
+                                <path d="M54 48L52 46M52 48L54 46" stroke="currentColor" stroke-width="1" opacity="0.5"/>
+                            </svg>
+                        </div>
+                        <h3 class="challenge-card__title">Risque d'erreurs</h3>
+                        <p class="challenge-card__description">
+                            Les interventions humaines multiples augmentent les risques d'erreurs et les coûts de correction associés.
+                        </p>
+                    </div>
+
+                    <div class="challenge-card fade-in">
+                        <div class="challenge-card__icon">
+                            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M32 8L44 16L44 32L32 40L20 32L20 16Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                                <line x1="20" y1="16" x2="44" y2="32" stroke="currentColor" stroke-width="1" opacity="0.4"/>
+                                <line x1="44" y1="16" x2="20" y2="32" stroke="currentColor" stroke-width="1" opacity="0.4"/>
+                                <circle cx="32" cy="24" r="3" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                                <circle cx="32" cy="24" r="1" fill="currentColor"/>
+                                <path d="M8 24L12 24M10 22L12 24L10 26" stroke="currentColor" stroke-width="1" opacity="0.6"/>
+                                <path d="M52 24L56 24M54 22L56 24L54 26" stroke="currentColor" stroke-width="1" opacity="0.6"/>
+                            </svg>
+                        </div>
+                        <h3 class="challenge-card__title">Manque d'agilité</h3>
+                        <p class="challenge-card__description">
+                            Les systèmes rigides limitent la capacité d'adaptation rapide aux changements du marché et aux besoins clients.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: "Notre Approche" (Le Cœur Interactif) -->
+        <section id="approche" class="section approche">
+            <div class="container">
+                <h2 class="section-title fade-in">Notre Approche</h2>
+                <div class="approche__layout">
+                    <!-- Encart boussole à gauche -->
+                    <div class="approche__visual-integrated">
+                        <div class="progress-container">
+                            <!-- Barre de progression verticale -->
+                            <div class="progress-bar">
+                                <div class="progress-track"></div>
+                                <div class="progress-fill" id="progressFill"></div>
+                            </div>
+
+                            <!-- Boussole qui se déplace -->
+                            <div class="compass-container" id="compassContainer">
+                                <div class="compass" id="compass">
+                                    <svg viewBox="0 0 80 80" fill="none">
+                                        <!-- Cercle extérieur -->
+                                        <circle cx="40" cy="40" r="35" stroke="var(--glacier)" stroke-width="2" fill="none"/>
+                                        <!-- Centre -->
+                                        <circle cx="40" cy="40" r="3" fill="var(--glacier)"/>
+                                        <!-- Aiguille Nord (pointe rouge) -->
+                                        <polygon points="40,10 45,25 40,20 35,25" fill="#FF4757"/>
+                                        <!-- Aiguille Sud -->
+                                        <polygon points="40,70 45,55 40,60 35,55" fill="var(--glacier)"/>
+                                        <!-- Marqueurs cardinaux -->
+                                        <line x1="40" y1="8" x2="40" y2="15" stroke="var(--glacier)" stroke-width="2"/>
+                                        <line x1="40" y1="65" x2="40" y2="72" stroke="var(--glacier)" stroke-width="2"/>
+                                        <line x1="8" y1="40" x2="15" y2="40" stroke="var(--glacier)" stroke-width="2"/>
+                                        <line x1="65" y1="40" x2="72" y2="40" stroke="var(--glacier)" stroke-width="2"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contenu des étapes à droite -->
+                    <div class="approche__content">
+                        <div class="approche__steps">
+                            <div class="approche__step fade-in" data-step="diagnostic">
+                                <div class="step__number">01</div>
+                                <div class="step__content">
+                                    <div class="step__icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="12" cy="12" r="10"/>
+                                            <polygon points="16.24,7.76 14.12,14.12 7.76,16.24 9.88,9.88 16.24,7.76"/>
+                                        </svg>
+                                    </div>
+                                    <h3 class="step__title">Diagnostic</h3>
+                                    <p class="step__description">
+                                        Nous analysons en profondeur votre organisation pour identifier les opportunités d'optimisation et définir une stratégie sur mesure.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="approche__step fade-in" data-step="conception">
+                                <div class="step__number">02</div>
+                                <div class="step__content">
+                                    <div class="step__icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                                            <polyline points="3.29,7 12,12 20.71,7"/>
+                                            <line x1="12" y1="22" x2="12" y2="12"/>
+                                        </svg>
+                                    </div>
+                                    <h3 class="step__title">Conception</h3>
+                                    <p class="step__description">
+                                        Nous concevons et prototypons vos solutions sur notre plateforme Talaria, en collaboration étroite avec vos équipes.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="approche__step fade-in" data-step="deploiement">
+                                <div class="step__number">03</div>
+                                <div class="step__content">
+                                    <div class="step__icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M2 20h20"/>
+                                            <path d="M7 16v-4a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v4"/>
+                                            <path d="M12 16V9.5a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1"/>
+                                            <path d="M15 16v-2a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v2"/>
+                                        </svg>
+                                    </div>
+                                    <h3 class="step__title">Déploiement</h3>
+                                    <p class="step__description">
+                                        Nous accompagnons la mise en œuvre et assurons un suivi continu pour garantir l'efficacité et l'évolution de vos processus.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: "Le Champ des Possibles" (remplace "Capacités") -->
+        <section id="possibles" class="section possibles bg-craye">
+            <div class="container">
+                <h2 class="section-title fade-in">Le Champ des Possibles</h2>
+                <div class="possibles__grid grid grid--4">
+                    <div class="capability-card fade-in">
+                        <div class="capability-card__icon">
+                            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M8 20C8 18 10 16 12 16H30L32 18L34 16H52C54 16 56 18 56 20V44C56 46 54 48 52 48H34L32 50L30 48H12C10 48 8 46 8 44V20Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                                <line x1="32" y1="18" x2="32" y2="50" stroke="currentColor" stroke-width="1"/>
+                                <line x1="14" y1="24" x2="28" y2="24" stroke="currentColor" stroke-width="1" opacity="0.6"/>
+                                <line x1="14" y1="28" x2="26" y2="28" stroke="currentColor" stroke-width="1" opacity="0.6"/>
+                                <line x1="36" y1="24" x2="50" y2="24" stroke="currentColor" stroke-width="1" opacity="0.6"/>
+                                <line x1="38" y1="28" x2="50" y2="28" stroke="currentColor" stroke-width="1" opacity="0.6"/>
+                                <circle cx="20" cy="40" r="2" stroke="currentColor" stroke-width="1" fill="none" opacity="0.5"/>
+                                <circle cx="44" cy="40" r="3" stroke="currentColor" stroke-width="1" fill="none" opacity="0.5"/>
+                            </svg>
+                        </div>
+                        <h3 class="capability-card__title">Maîtriser la Connaissance Complexe</h3>
+                        <p class="capability-card__description">
+                            Transformer l'information en intelligence actionnable pour des décisions éclairées et stratégiques.
+                        </p>
+                    </div>
+
+                    <div class="capability-card fade-in">
+                        <div class="capability-card__icon">
+                            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M12 48L20 36L28 40L36 28L44 32L52 16" stroke="currentColor" stroke-width="2" fill="none"/>
+                                <circle cx="12" cy="48" r="2" fill="currentColor"/>
+                                <circle cx="20" cy="36" r="2" fill="currentColor"/>
+                                <circle cx="28" cy="40" r="2" fill="currentColor"/>
+                                <circle cx="36" cy="28" r="2" fill="currentColor"/>
+                                <circle cx="44" cy="32" r="2" fill="currentColor"/>
+                                <circle cx="52" cy="16" r="2" fill="currentColor"/>
+                                <line x1="8" y1="52" x2="56" y2="52" stroke="currentColor" stroke-width="1.5"/>
+                                <line x1="8" y1="52" x2="8" y2="12" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M48 16L52 16L52 20" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                            </svg>
+                        </div>
+                        <h3 class="capability-card__title">Optimiser la Performance</h3>
+                        <p class="capability-card__description">
+                            Améliorer l'efficacité opérationnelle et maximiser le retour sur investissement de vos ressources.
+                        </p>
+                    </div>
+
+                    <div class="capability-card fade-in">
+                        <div class="capability-card__icon">
+                            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M32 16C38.6274 16 44 21.3726 44 28C44 31.5 42.5 34.7 40 36.8V42C40 43.1 39.1 44 38 44H26C24.9 44 24 43.1 24 42V36.8C21.5 34.7 20 31.5 20 28C20 21.3726 25.3726 16 32 16Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                                <path d="M28 26C28 24 30 22 32 22C34 22 36 24 36 26C36 28 34 30 32 30C30 30 28 28 28 26Z" stroke="currentColor" stroke-width="1" fill="none" opacity="0.6"/>
+                                <line x1="26" y1="44" x2="38" y2="44" stroke="currentColor" stroke-width="1.5"/>
+                                <line x1="28" y1="46" x2="36" y2="46" stroke="currentColor" stroke-width="1.5"/>
+                                <line x1="32" y1="8" x2="32" y2="12" stroke="currentColor" stroke-width="1.5"/>
+                                <line x1="46" y1="18" x2="50" y2="14" stroke="currentColor" stroke-width="1.5"/>
+                                <line x1="18" y1="18" x2="14" y2="14" stroke="currentColor" stroke-width="1.5"/>
+                                <line x1="50" y1="28" x2="54" y2="28" stroke="currentColor" stroke-width="1.5"/>
+                            </svg>
+                        </div>
+                        <h3 class="capability-card__title">Accélérer l'Innovation</h3>
+                        <p class="capability-card__description">
+                            Créer un environnement propice à l'innovation continue et à l'adaptation rapide aux changements.
+                        </p>
+                    </div>
+
+                    <div class="capability-card fade-in">
+                        <div class="capability-card__icon">
+                            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M32 8C40 8 48 12 52 20C56 28 56 36 52 44C48 52 40 56 32 56C24 56 16 52 12 44C8 36 8 28 12 20C14 16 18 12 24 10" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                                <path d="M20 12L24 10L22 14" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                                <rect x="18" y="18" width="6" height="6" stroke="currentColor" stroke-width="1" fill="none" opacity="0.5"/>
+                                <rect x="40" y="18" width="6" height="6" stroke="currentColor" stroke-width="1" fill="none" opacity="0.5"/>
+                                <circle cx="21" cy="45" r="3" stroke="currentColor" stroke-width="1" fill="none"/>
+                                <circle cx="43" cy="45" r="3" stroke="currentColor" stroke-width="1" fill="none"/>
+                                <circle cx="32" cy="32" r="4" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                                <circle cx="32" cy="32" r="1.5" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <h3 class="capability-card__title">Orchestrer la Transformation</h3>
+                        <p class="capability-card__description">
+                            Accompagner le changement organisationnel avec méthode pour assurer une adoption réussie.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section Contact avec Calendly -->
+        <section id="contact" class="section contact bg-ardoise">
+            <div class="contact__container">
+                <div class="contact__card" id="contactCard">
+                    <!-- État initial -->
+                    <div class="contact__intro" id="contactIntro">
+                        <h2 class="contact__title fade-in">Votre projet commence par une conversation.</h2>
+                        <p class="contact__subtitle fade-in">
+                            Échangeons sur vos défis et explorons ensemble comment nous pouvons transformer votre organisation.
+                        </p>
+                        <button class="btn btn--primary contact__button" id="show-calendly">
+                            Planifier un échange de 30 minutes
+                        </button>
+                    </div>
+
+                    <!-- Conteneur Calendly (caché initialement) -->
+                    <div class="contact__calendly" id="calendlyContainer" style="display: none;">
+                        <div class="calendly-inline-widget"
+                             data-url="https://calendly.com/nouvelle-rive/consultation-30min"
+                             style="width:100%;height:700px;"
+                             id="calendlyWidget">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <!-- Contenu footer -->
         </div>
-      `;
-    }
-    
-    // Fonction de compatibilité pour l'upload simple
-    function handleFile(file) {
-      if (file) {
-        handleFiles([file]);
-      }
-    }
+    </footer>
 
-    // Variables pour la gestion de la charge - BASÉES SUR LA TAILLE TOTALE
-    let uploadQueue = [];
-    let activeUploads = 0;
-    let isUploading = false; // Flag pour tracker l'état d'upload
-    const MAX_CONCURRENT_UPLOADS = 5; // 5 uploads simultanés
-    const MAX_RETRY_ATTEMPTS = 2;
-    const MAX_FILE_SIZE_MB = 9; // 25MB par fichier individuel
-    const MAX_VIDEO_SIZE_MB = 90; // 80MB par vidéo individuelle
-    const MAX_TOTAL_SIZE_MB = 150; // 150MB au total par batch (limite intelligente)
-
-    // Fonction pour uploader plusieurs fichiers avec gestion de charge améliorée + PROTECTION
-    async function uploadMultipleFilesInBackground(files, isPublic) {
-      console.log(`🚀 Ajout de ${files.length} fichier(s) à la queue d'upload`);
-      
-      // Marquer le début de l'upload
-      isUploading = true;
-      updateUploadUI();
-      
-      // Ajouter les fichiers à la queue
-      files.forEach(file => {
-        uploadQueue.push({
-          file: file,
-          isPublic: isPublic,
-          attempts: 0,
-          id: Date.now() + Math.random() // ID unique
-        });
-      });
-      
-      // Démarrer le traitement de la queue
-      processUploadQueue();
-    }
-    
-    // Fonction pour traiter la queue d'upload - OPTIMISÉE POUR 30 INVITÉS + PROTECTION
-    async function processUploadQueue() {
-      while (uploadQueue.length > 0 && activeUploads < MAX_CONCURRENT_UPLOADS) {
-        const uploadTask = uploadQueue.shift();
-        if (uploadTask) {
-          activeUploads++;
-          updateUploadUI();
-          
-          uploadFileWithRetry(uploadTask).finally(() => {
-            activeUploads--;
-            updateUploadUI();
-            
-            // Continuer le traitement de la queue plus rapidement
-            if (uploadQueue.length > 0) {
-              setTimeout(() => processUploadQueue(), 100); // Réduit à 100ms
-            } else if (activeUploads === 0) {
-              // Tous les uploads terminés
-              console.log('✅ Tous les uploads terminés');
-              isUploading = false;
-              updateUploadUI();
-              setTimeout(() => loadGallery(), 1500);
-            }
-          });
-        }
-      }
-    }
-    
-    // Fonction d'upload avec retry automatique
-    async function uploadFileWithRetry(uploadTask) {
-      const { file, isPublic, attempts, id } = uploadTask;
-      
-      try {
-        console.log(`📤 Upload ${file.name} (tentative ${attempts + 1}/${MAX_RETRY_ATTEMPTS})`);
-        await uploadSingleFileInBackground(file, isPublic);
-        console.log(`✅ Upload réussi: ${file.name}`);
-        
-      } catch (error) {
-        console.error(`❌ Échec upload ${file.name}:`, error);
-        
-        // Retry automatique si pas trop de tentatives
-        if (attempts < MAX_RETRY_ATTEMPTS - 1) {
-          console.log(`🔄 Retry ${file.name} dans 2 secondes...`);
-          uploadTask.attempts++;
-          
-          // Remettre en queue avec délai
-          setTimeout(() => {
-            uploadQueue.unshift(uploadTask); // Priorité aux retry
-            processUploadQueue();
-          }, 2000 + (attempts * 1000)); // Délai croissant
-          
-        } else {
-          // Échec définitif après tous les retry
-          showDiscretError(`Échec définitif: ${file.name}`);
-        }
-      }
-    }
-    
-    // — VERSION CLOUDINARY OPTIMISÉE POUR GROS VOLUMES —
-    async function uploadSingleFileInBackground(file, isPublic) {
-      // Compression légère seulement pour les très gros fichiers
-      const processedFile = await compressFileIfNeeded(file);
-      
-      const data = new FormData();
-      data.append('file', processedFile);
-      data.append('upload_preset', isPublic ? PRESET_PUBLIC : PRESET_PRIVATE);
-      if (isPublic) data.append('tags', PRESET_PUBLIC);
-      
-      // Optimisations Cloudinary pour performance, pas économie
-      data.append('quality', 'auto:best'); // Meilleure qualité
-      data.append('fetch_format', 'auto'); // Format optimal
-      
-      const ctrl = new AbortController();
-      // timeout 5 min pour les très gros fichiers
-      const timeout = setTimeout(() => ctrl.abort(), 300000);
-      
-      const res = await fetch(CLOUDINARY_URL, {
-        method: 'POST',
-        body: data,
-        signal: ctrl.signal
-      }).catch(err => {
-        throw new Error('Timeout / réseau');
-      });
-      
-      clearTimeout(timeout);
-      
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.error?.message || 'Upload échoué');
-      
-      return json;
-    }
-    
-    // Compression très légère seulement pour les fichiers énormes
-    async function compressFileIfNeeded(file) {
-      // Seulement pour les images > 20MB, compression légère
-      if (file.type.includes('image') && file.size > 20 * 1024 * 1024) {
-        return new Promise((resolve) => {
-          const canvas = document.createElement('canvas');
-          const ctx = canvas.getContext('2d');
-          const img = new Image();
-          
-          img.onload = () => {
-            // Redimensionner seulement si > 4000px (très haute résolution)
-            const maxWidth = 4000;
-            const ratio = Math.min(maxWidth / img.width, maxWidth / img.height);
-            
-            if (ratio < 1) {
-              canvas.width = img.width * ratio;
-              canvas.height = img.height * ratio;
-              ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-              
-              canvas.toBlob((blob) => {
-                const compressedFile = new File([blob], file.name, {
-                  type: file.type,
-                  lastModified: file.lastModified
-                });
-                resolve(compressedFile);
-              }, file.type, 0.9); // 90% de qualité
-            } else {
-              resolve(file);
-            }
-          };
-          
-          img.onerror = () => resolve(file);
-          img.src = URL.createObjectURL(file);
-        });
-      }
-      
-      return file; // Pas de compression pour la plupart des fichiers
-    }
-
-    // Fonction pour afficher une erreur discrète - AMÉLIORÉE
-    function showDiscretError(message, duration = 4000) {
-      const notification = document.createElement('div');
-      notification.style.cssText = `
-        position: fixed;
-        bottom: 80px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: #f44336;
-        color: white;
-        padding: 1rem 1.5rem;
-        border-radius: 25px;
-        font-size: 0.9rem;
-        z-index: 1001;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        max-width: 90%;
-        white-space: pre-line;
-        text-align: center;
-      `;
-      notification.textContent = message;
-      
-      document.body.appendChild(notification);
-      
-      // Animation d'apparition
-      setTimeout(() => notification.style.opacity = '1', 100);
-      
-      // Supprimer après durée spécifiée
-      setTimeout(() => {
-        notification.style.opacity = '0';
-        setTimeout(() => {
-          if (notification.parentNode) {
-            document.body.removeChild(notification);
-          }
-        }, 300);
-      }, duration);
-    }
-
-    async function sendMedia(isPublic) {
-      // Cette fonction n'est plus utilisée car le feedback est immédiat dans handleFiles()
-      console.log('sendMedia appelée, mais upload déjà fait en arrière-plan');
-    }
-
-    // Fonction de compatibilité pour l'upload simple
-    async function uploadFileInBackground(file, isPublic) {
-      return uploadSingleFileInBackground(file, isPublic);
-    }
-    
-    // PROTECTION CONTRE LE RECHARGEMENT DE PAGE
-    function updateUploadUI() {
-      const btn = document.querySelector('.btn-fixed');
-      
-      if (isUploading) {
-        const remaining = uploadQueue.length + activeUploads;
-        // Texte plus compact pour éviter le retour à la ligne
-        btn.innerHTML = `📤 Upload en cours<br><small>(${remaining} restant${remaining > 1 ? 's' : ''})</small>`;
-        btn.style.backgroundColor = '#ff9800'; // Orange pendant upload
-        btn.style.lineHeight = '1.2'; // Réduire l'espacement des lignes
-        
-        // Désactiver le bouton de sélection de fichiers
-        btn.onclick = () => {
-          showDiscretError('Upload en cours... Veuillez patienter avant d\'ajouter d\'autres fichiers.');
-        };
-      } else {
-        btn.innerHTML = 'Partager mon souvenir';
-        btn.style.backgroundColor = '#818edb'; // Couleur normale
-        btn.style.lineHeight = ''; // Réinitialiser
-        btn.onclick = openMediaSelector; // Réactiver
-      }
-    }
-    
-    // Protection contre le rechargement de page
-    window.addEventListener('beforeunload', (event) => {
-      if (isUploading && (uploadQueue.length > 0 || activeUploads > 0)) {
-        const message = 'Upload en cours ! Si vous quittez maintenant, vos fichiers ne seront pas envoyés.';
-        event.preventDefault();
-        event.returnValue = message; // Chrome
-        return message; // Firefox
-      }
-    });
-    
-    // Protection contre la fermeture de l'onglet
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden && isUploading) {
-        console.warn('⚠️ Page masquée pendant l\'upload - les uploads peuvent être interrompus');
-      }
-    });
-    
-    // Notification persistante pendant l'upload
-    function showUploadProgress() {
-      if (!isUploading) return;
-      
-      const remaining = uploadQueue.length + activeUploads;
-      if (remaining > 0) {
-        console.log(`📤 Upload en cours: ${remaining} fichier(s) restant(s)`);
-        setTimeout(showUploadProgress, 5000); // Rappel toutes les 5 secondes
-      }
-    }
-  </script>
-
+    <script src="js/main.js"></script>
 </body>
 </html>
