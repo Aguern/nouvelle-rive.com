@@ -1,0 +1,122 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .root-system {
+        stroke: var(--cuivre);
+        fill: none;
+        stroke-width: var(--root-width, 3);
+        opacity: var(--scene-opacity, 0.8);
+        transition: opacity 1s ease, stroke-width 1s ease;
+      }
+      .soil {
+        fill: var(--ardoise);
+        opacity: var(--soil-opacity, 0.3);
+        transition: opacity 1s ease;
+      }
+      .underground {
+        fill: var(--ardoise);
+        opacity: 0.8;
+        transition: opacity 1s ease;
+      }
+      .root-growth {
+        opacity: var(--growth-opacity, 0);
+        animation: root-pulse 3s infinite ease-in-out;
+        transition: opacity 1s ease;
+      }
+      .nutrient {
+        fill: var(--glacier);
+        opacity: var(--nutrient-opacity, 0);
+        animation: nutrient-flow 4s infinite ease-in-out;
+        transition: opacity 1s ease;
+      }
+      @keyframes root-pulse {
+        0%, 100% { stroke-width: 2; opacity: 0.6; }
+        50% { stroke-width: 4; opacity: 1; }
+      }
+      @keyframes nutrient-flow {
+        0% { transform: translateY(0px); opacity: 0; }
+        25% { opacity: 0.8; }
+        50% { transform: translateY(-20px); opacity: 0.8; }
+        75% { opacity: 0.8; }
+        100% { transform: translateY(-40px); opacity: 0; }
+      }
+    </style>
+  </defs>
+
+  <!-- Surface du sol -->
+  <rect width="800" height="150" fill="var(--craye)"/>
+
+  <!-- Ligne de surface -->
+  <line x1="0" y1="150" x2="800" y2="150" stroke="var(--cuivre)" stroke-width="2" opacity="0.5"/>
+
+  <!-- Sol underground -->
+  <rect x="0" y="150" width="800" height="450" class="underground"/>
+
+  <!-- Couches de sol -->
+  <rect x="0" y="200" width="800" height="100" class="soil" style="--soil-opacity: 0.2"/>
+  <rect x="0" y="350" width="800" height="100" class="soil" style="--soil-opacity: 0.4"/>
+  <rect x="0" y="500" width="800" height="100" class="soil" style="--soil-opacity: 0.6"/>
+
+  <!-- Système racinaire principal -->
+  <g class="root-system" style="--scene-opacity: 1; --root-width: 5;">
+    <!-- Racine principale centrale -->
+    <path d="M400,150 Q400,200 380,250 Q350,300 330,350 Q310,400 300,450 Q290,500 285,550"/>
+    <path d="M400,150 Q400,200 420,250 Q450,300 470,350 Q490,400 500,450 Q510,500 515,550"/>
+
+    <!-- Racines secondaires gauche -->
+    <path d="M350,200 Q300,220 250,240 Q200,260 150,280 Q100,300 50,320"/>
+    <path d="M320,280 Q280,300 240,320 Q200,340 160,360 Q120,380 80,400"/>
+    <path d="M310,360 Q270,380 230,400 Q190,420 150,440 Q110,460 70,480"/>
+
+    <!-- Racines secondaires droite -->
+    <path d="M450,200 Q500,220 550,240 Q600,260 650,280 Q700,300 750,320"/>
+    <path d="M480,280 Q520,300 560,320 Q600,340 640,360 Q680,380 720,400"/>
+    <path d="M490,360 Q530,380 570,400 Q610,420 650,440 Q690,460 730,480"/>
+
+    <!-- Radicelles -->
+    <path d="M300,250 Q280,270 260,290 Q240,310 220,330"/>
+    <path d="M500,250 Q520,270 540,290 Q560,310 580,330"/>
+    <path d="M280,350 Q260,370 240,390 Q220,410 200,430"/>
+    <path d="M520,350 Q540,370 560,390 Q580,410 600,430"/>
+  </g>
+
+  <!-- Nouvelles pousses (animation) -->
+  <g class="root-growth" style="--growth-opacity: 0.6;">
+    <path d="M285,550 Q280,570 275,590" class="root-system" style="--root-width: 2;"/>
+    <path d="M515,550 Q520,570 525,590" class="root-system" style="--root-width: 2;"/>
+    <path d="M150,480 Q130,500 110,520" class="root-system" style="--root-width: 2;"/>
+    <path d="M650,480 Q670,500 690,520" class="root-system" style="--root-width: 2;"/>
+  </g>
+
+  <!-- Nutriments qui remontent -->
+  <g class="nutrient" style="--nutrient-opacity: 0.7;">
+    <circle cx="300" cy="500" r="3"/>
+    <circle cx="500" cy="480" r="2.5"/>
+    <circle cx="200" cy="420" r="2"/>
+    <circle cx="600" cy="440" r="2.5"/>
+    <circle cx="150" cy="380" r="2"/>
+    <circle cx="650" cy="400" r="2"/>
+    <circle cx="380" cy="300" r="3"/>
+    <circle cx="420" cy="320" r="2.5"/>
+  </g>
+
+  <!-- Micro-organismes dans le sol -->
+  <g opacity="0.4">
+    <circle cx="180" cy="220" r="1.5" fill="var(--glacier)"/>
+    <circle cx="320" cy="240" r="1" fill="var(--glacier)"/>
+    <circle cx="480" cy="260" r="1.5" fill="var(--glacier)"/>
+    <circle cx="620" cy="280" r="1" fill="var(--glacier)"/>
+    <circle cx="250" cy="380" r="1" fill="var(--glacier)"/>
+    <circle cx="550" cy="420" r="1.5" fill="var(--glacier)"/>
+    <circle cx="350" cy="480" r="1" fill="var(--glacier)"/>
+    <circle cx="450" cy="520" r="1.5" fill="var(--glacier)"/>
+  </g>
+
+  <!-- Minéraux dans les couches profondes -->
+  <g opacity="0.3">
+    <polygon points="100,380 110,390 100,400 90,390" fill="var(--cuivre)"/>
+    <polygon points="300,420 310,430 300,440 290,430" fill="var(--cuivre)"/>
+    <polygon points="500,460 510,470 500,480 490,470" fill="var(--cuivre)"/>
+    <polygon points="700,500 710,510 700,520 690,510" fill="var(--cuivre)"/>
+  </g>
+</svg>
