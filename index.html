@@ -2,233 +2,208 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <meta name="description" content="Nouvelle Rive - Redonner du temps à l'intelligence humaine. Nous transformons vos processus pour libérer votre potentiel créatif et stratégique.">
-    <meta name="theme-color" content="#00A8FF">
-    <title>Nouvelle Rive - Transformation & Innovation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nouvelle Rive - Redonner du temps à l'intelligence humaine</title>
+    <meta name="description" content="Nous transformons vos processus pour libérer votre potentiel créatif et stratégique. Solutions d'automatisation sur mesure.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- SVG Icons -->
+    <script>
+        fetch('assets/svg/icons.svg')
+            .then(response => response.text())
+            .then(data => {
+                const div = document.createElement('div');
+                div.innerHTML = data;
+                document.body.insertBefore(div.firstElementChild, document.body.firstChild);
+            });
+    </script>
+
+    <!-- Styles -->
     <link rel="stylesheet" href="css/base.css">
+
+    <!-- GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <!-- Calendly inline widget begin -->
-    <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+
+    <!-- Calendly -->
+    <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js"></script>
 </head>
 <body>
-    <header class="header" id="header">
-        <div class="header__container">
-            <!-- Logo -->
-            <div class="header__logo">
-                <a href="#hero" onclick="scrollToSection('hero')" class="logo">
-                    <span class="logo__text">Nouvelle Rive</span>
-                </a>
-            </div>
-
-            <!-- Navigation Desktop -->
-            <nav class="header__nav">
-                <a href="#defis" onclick="scrollToSection('defis')" class="nav__link">Vos Défis</a>
-                <a href="#approche" onclick="scrollToSection('approche')" class="nav__link">Notre Approche</a>
-                <a href="#possibles" onclick="scrollToSection('possibles')" class="nav__link">Capacités</a>
-                <a href="#contact" onclick="scrollToSection('contact')" class="nav__link">Contact</a>
-            </nav>
-
-            <!-- CTA Button -->
-            <div class="header__cta">
-                <a href="#contact" onclick="scrollToSection('contact')" class="btn btn--primary btn--header">
-                    Prendre RDV
-                </a>
-            </div>
-
-            <!-- Menu Mobile -->
-            <button class="header__menu-toggle" id="menuToggle" aria-label="Menu">
-                <span class="menu-toggle__line"></span>
-                <span class="menu-toggle__line"></span>
-                <span class="menu-toggle__line"></span>
-            </button>
-        </div>
-
-        <!-- Menu Mobile Overlay -->
-        <div class="header__mobile-menu" id="mobileMenu">
-            <nav class="mobile-menu__nav">
-                <a href="#defis" onclick="scrollToSection('defis'); closeMobileMenu()" class="mobile-nav__link">Vos Défis</a>
-                <a href="#approche" onclick="scrollToSection('approche'); closeMobileMenu()" class="mobile-nav__link">Notre Approche</a>
-                <a href="#possibles" onclick="scrollToSection('possibles'); closeMobileMenu()" class="mobile-nav__link">Capacités</a>
-                <a href="#contact" onclick="scrollToSection('contact'); closeMobileMenu()" class="mobile-nav__link">Contact</a>
-                <div class="mobile-menu__cta">
-                    <a href="#contact" onclick="scrollToSection('contact'); closeMobileMenu()" class="btn btn--primary">
-                        Prendre RDV
-                    </a>
+    <!-- Header -->
+    <header id="header" class="header">
+        <div class="container">
+            <nav class="nav">
+                <div class="nav__brand">
+                    <a href="/" class="brand">Nouvelle Rive</a>
                 </div>
+
+                <div class="nav__menu" id="navMenu">
+                    <a href="approche/" class="nav__link">Approche</a>
+                    <a href="cas-usage/" class="nav__link">Nos Explorations</a>
+                    <a href="contact/" class="nav__link nav__link--cta">Contact</a>
+                </div>
+
+                <button class="nav__toggle" id="navToggle" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
             </nav>
         </div>
     </header>
 
     <main>
-        <!-- Section 1: Héros (on garde, il est parfait) -->
-        <section id="hero" class="section hero">
-            <video class="hero__video" id="heroVideo" autoplay muted playsinline>
+        <!-- Hero Section -->
+        <section id="hero" class="hero">
+            <video class="hero__video" autoplay muted loop playsinline>
                 <source src="assets/hero2.mp4" type="video/mp4">
                 Votre navigateur ne supporte pas la vidéo HTML5.
             </video>
+
             <div class="hero__overlay"></div>
+
             <div class="hero__content">
-                <h1 class="hero__title">Redonner du temps à l'intelligence humaine.</h1>
-                <p class="hero__subtitle">Nous transformons vos processus pour libérer votre potentiel créatif et stratégique.</p>
-            </div>
-        </section>
-
-        <!-- Section 2: "Vos Défis" (remplace "Problématique") -->
-        <section id="defis" class="section defis bg-craye">
-            <div class="container">
-                <h2 class="section-title fade-in">Vos Défis</h2>
-                <div class="defis__grid grid grid--3">
-                    <div class="challenge-card fade-in">
-                        <div class="challenge-card__icon">
-                            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
-                                <circle cx="32" cy="32" r="24" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                                <line x1="32" y1="10" x2="32" y2="14" stroke="currentColor" stroke-width="1.5"/>
-                                <line x1="32" y1="50" x2="32" y2="54" stroke="currentColor" stroke-width="1.5"/>
-                                <line x1="10" y1="32" x2="14" y2="32" stroke="currentColor" stroke-width="1.5"/>
-                                <line x1="50" y1="32" x2="54" y2="32" stroke="currentColor" stroke-width="1.5"/>
-                                <line x1="44.49" y1="14.51" x2="46.32" y2="16.34" stroke="currentColor" stroke-width="1" opacity="0.6"/>
-                                <line x1="19.51" y1="14.51" x2="17.68" y2="16.34" stroke="currentColor" stroke-width="1" opacity="0.6"/>
-                                <line x1="32" y1="32" x2="32" y2="20" stroke="currentColor" stroke-width="2"/>
-                                <line x1="32" y1="32" x2="42" y2="32" stroke="currentColor" stroke-width="1.5"/>
-                                <circle cx="32" cy="32" r="2" fill="currentColor"/>
-                            </svg>
-                        </div>
-                        <h3 class="challenge-card__title">Temps perdu</h3>
-                        <p class="challenge-card__description">
-                            Les processus manuels répétitifs consument un temps précieux qui pourrait être consacré à des tâches à plus forte valeur ajoutée.
-                        </p>
-                    </div>
-
-                    <div class="challenge-card fade-in">
-                        <div class="challenge-card__icon">
-                            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
-                                <path d="M32 12L50 44H14L32 12Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                                <line x1="32" y1="24" x2="32" y2="36" stroke="currentColor" stroke-width="2"/>
-                                <circle cx="32" cy="40" r="1.5" fill="currentColor"/>
-                                <path d="M18 18L16 16" stroke="currentColor" stroke-width="1" opacity="0.4"/>
-                                <path d="M46 18L48 16" stroke="currentColor" stroke-width="1" opacity="0.4"/>
-                                <path d="M12 48L10 46M10 48L12 46" stroke="currentColor" stroke-width="1" opacity="0.5"/>
-                                <path d="M54 48L52 46M52 48L54 46" stroke="currentColor" stroke-width="1" opacity="0.5"/>
-                            </svg>
-                        </div>
-                        <h3 class="challenge-card__title">Risque d'erreurs</h3>
-                        <p class="challenge-card__description">
-                            Les interventions humaines multiples augmentent les risques d'erreurs et les coûts de correction associés.
-                        </p>
-                    </div>
-
-                    <div class="challenge-card fade-in">
-                        <div class="challenge-card__icon">
-                            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
-                                <path d="M32 8L44 16L44 32L32 40L20 32L20 16Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                                <line x1="20" y1="16" x2="44" y2="32" stroke="currentColor" stroke-width="1" opacity="0.4"/>
-                                <line x1="44" y1="16" x2="20" y2="32" stroke="currentColor" stroke-width="1" opacity="0.4"/>
-                                <circle cx="32" cy="24" r="3" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                                <circle cx="32" cy="24" r="1" fill="currentColor"/>
-                                <path d="M8 24L12 24M10 22L12 24L10 26" stroke="currentColor" stroke-width="1" opacity="0.6"/>
-                                <path d="M52 24L56 24M54 22L56 24L54 26" stroke="currentColor" stroke-width="1" opacity="0.6"/>
-                            </svg>
-                        </div>
-                        <h3 class="challenge-card__title">Manque d'agilité</h3>
-                        <p class="challenge-card__description">
-                            Les systèmes rigides limitent la capacité d'adaptation rapide aux changements du marché et aux besoins clients.
-                        </p>
-                    </div>
+                <div class="container">
+                    <h1 class="hero__title">Redonner du temps à l'intelligence humaine.</h1>
+                    <p class="hero__subtitle">Nous concevons des copilotes IA sur-mesure qui libèrent vos experts des tâches complexes et répétitives, pour qu'ils puissent se concentrer sur la stratégie et la décision.</p>
+                    <a href="contact/" class="btn btn--primary hero__cta">Explorons vos possibilités</a>
                 </div>
             </div>
         </section>
 
-        <!-- Section 3: "Notre Approche" (Le Cœur Interactif) -->
-        <section id="approche" class="section approche">
+        <!-- Vos Défis Section -->
+        <section id="defis" class="section section--alt">
             <div class="container">
-                <h2 class="section-title fade-in">Notre Approche</h2>
-                <div class="approche__layout">
-                    <!-- Encart boussole à gauche -->
-                    <div class="approche__visual-integrated">
-                        <div class="progress-container">
-                            <!-- Barre de progression verticale -->
-                            <div class="progress-bar">
-                                <div class="progress-track"></div>
-                                <div class="progress-fill" id="progressFill"></div>
-                            </div>
+                <header class="section__header">
+                    <h2 class="section__title">Vos Défis</h2>
+                </header>
 
-                            <!-- Boussole qui se déplace -->
-                            <div class="compass-container" id="compassContainer">
-                                <div class="compass" id="compass">
-                                    <svg viewBox="0 0 80 80" fill="none">
-                                        <!-- Cercle extérieur -->
-                                        <circle cx="40" cy="40" r="35" stroke="var(--glacier)" stroke-width="2" fill="none"/>
-                                        <!-- Centre -->
-                                        <circle cx="40" cy="40" r="3" fill="var(--glacier)"/>
-                                        <!-- Aiguille Nord (pointe rouge) -->
-                                        <polygon points="40,10 45,25 40,20 35,25" fill="#FF4757"/>
-                                        <!-- Aiguille Sud -->
-                                        <polygon points="40,70 45,55 40,60 35,55" fill="var(--glacier)"/>
-                                        <!-- Marqueurs cardinaux -->
-                                        <line x1="40" y1="8" x2="40" y2="15" stroke="var(--glacier)" stroke-width="2"/>
-                                        <line x1="40" y1="65" x2="40" y2="72" stroke="var(--glacier)" stroke-width="2"/>
-                                        <line x1="8" y1="40" x2="15" y2="40" stroke="var(--glacier)" stroke-width="2"/>
-                                        <line x1="65" y1="40" x2="72" y2="40" stroke="var(--glacier)" stroke-width="2"/>
-                                    </svg>
+                <div class="challenges">
+                    <article class="challenge-card">
+                        <div class="challenge-card__icon">
+                            <svg class="icon icon--challenge">
+                                <use href="#icon-time-fragmented"></use>
+                            </svg>
+                        </div>
+                        <h3 class="challenge-card__title">Temps fragmenté.</h3>
+                        <p class="challenge-card__description">
+                            Des heures perdues chaque semaine sur des tâches à faible valeur ajoutée mais à haute exigence de rigueur, qui pourraient être automatisées.
+                        </p>
+                    </article>
+
+                    <article class="challenge-card">
+                        <div class="challenge-card__icon">
+                            <svg class="icon icon--challenge">
+                                <use href="#icon-data-dispersed"></use>
+                            </svg>
+                        </div>
+                        <h3 class="challenge-card__title">Données dispersées.</h3>
+                        <p class="challenge-card__description">
+                            Vos informations critiques sont éparpillées entre plusieurs systèmes et documents, rendant la prise de décision lente et risquée.
+                        </p>
+                    </article>
+
+                    <article class="challenge-card">
+                        <div class="challenge-card__icon">
+                            <svg class="icon icon--challenge">
+                                <use href="#icon-opportunities-hidden"></use>
+                            </svg>
+                        </div>
+                        <h3 class="challenge-card__title">Opportunités invisibles.</h3>
+                        <p class="challenge-card__description">
+                            Faute d'outils capables de synthétiser et d'analyser en profondeur, des opportunités stratégiques restent cachées dans la masse d'informations.
+                        </p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Notre Approche Section -->
+        <section id="approche" class="section section--dark">
+            <div class="container">
+                <header class="section__header">
+                    <h2 class="section__title">Notre Approche</h2>
+                </header>
+
+                <div class="approach">
+                    <div class="approach__timeline">
+                        <div class="timeline">
+                            <div class="timeline__line"></div>
+
+                            <article class="timeline__step" data-step="1">
+                                <div class="timeline__marker">
+                                    <span class="timeline__number">01</span>
                                 </div>
-                            </div>
+                                <div class="timeline__content">
+                                    <h3 class="timeline__title">Diagnostic & Cadrage</h3>
+                                    <p class="timeline__description">
+                                        Nous cartographions vos processus et identifions les leviers d'amélioration.
+                                    </p>
+                                </div>
+                            </article>
+
+                            <article class="timeline__step" data-step="2">
+                                <div class="timeline__marker">
+                                    <span class="timeline__number">02</span>
+                                </div>
+                                <div class="timeline__content">
+                                    <h3 class="timeline__title">Conception</h3>
+                                    <p class="timeline__description">
+                                        Co-création d'une solution sur mesure que vous validez avant tout engagement.
+                                    </p>
+                                </div>
+                            </article>
+
+                            <article class="timeline__step" data-step="3">
+                                <div class="timeline__marker">
+                                    <span class="timeline__number">03</span>
+                                </div>
+                                <div class="timeline__content">
+                                    <h3 class="timeline__title">Déploiement & Suivi</h3>
+                                    <p class="timeline__description">
+                                        Mise en œuvre progressive et suivi du bon fonctionnement de vos nouveaux outils.
+                                    </p>
+                                </div>
+                            </article>
                         </div>
                     </div>
 
-                    <!-- Contenu des étapes à droite -->
-                    <div class="approche__content">
-                        <div class="approche__steps">
-                            <div class="approche__step fade-in" data-step="diagnostic">
-                                <div class="step__number">01</div>
-                                <div class="step__content">
-                                    <div class="step__icon">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <circle cx="12" cy="12" r="10"/>
-                                            <polygon points="16.24,7.76 14.12,14.12 7.76,16.24 9.88,9.88 16.24,7.76"/>
-                                        </svg>
-                                    </div>
-                                    <h3 class="step__title">Diagnostic</h3>
-                                    <p class="step__description">
-                                        Nous analysons en profondeur votre organisation pour identifier les opportunités d'optimisation et définir une stratégie sur mesure.
-                                    </p>
-                                </div>
+                    <div class="approach__visual">
+                        <div class="visual-container">
+                            <div class="visual__illustration" data-step="1">
+                                <svg class="illustration" viewBox="0 0 400 300">
+                                    <!-- Illustration Diagnostic -->
+                                    <circle cx="200" cy="150" r="80" fill="none" stroke="currentColor" stroke-width="2" opacity="0.3"/>
+                                    <circle cx="200" cy="150" r="20" fill="currentColor" opacity="0.8"/>
+                                    <path d="M200 130 L200 110 M200 190 L200 170 M180 150 L160 150 M220 150 L240 150" stroke="currentColor" stroke-width="3" opacity="0.6"/>
+                                </svg>
                             </div>
 
-                            <div class="approche__step fade-in" data-step="conception">
-                                <div class="step__number">02</div>
-                                <div class="step__content">
-                                    <div class="step__icon">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
-                                            <polyline points="3.29,7 12,12 20.71,7"/>
-                                            <line x1="12" y1="22" x2="12" y2="12"/>
-                                        </svg>
-                                    </div>
-                                    <h3 class="step__title">Conception</h3>
-                                    <p class="step__description">
-                                        Nous concevons et prototypons vos solutions sur notre plateforme Talaria, en collaboration étroite avec vos équipes.
-                                    </p>
-                                </div>
+                            <div class="visual__illustration" data-step="2">
+                                <svg class="illustration" viewBox="0 0 400 300">
+                                    <!-- Illustration Conception -->
+                                    <rect x="150" y="100" width="100" height="100" rx="10" fill="none" stroke="currentColor" stroke-width="2" opacity="0.4"/>
+                                    <circle cx="175" cy="125" r="8" fill="currentColor" opacity="0.8"/>
+                                    <circle cx="225" cy="125" r="8" fill="currentColor" opacity="0.8"/>
+                                    <circle cx="175" cy="175" r="8" fill="currentColor" opacity="0.8"/>
+                                    <circle cx="225" cy="175" r="8" fill="currentColor" opacity="0.8"/>
+                                    <path d="M175 125 L225 125 M225 125 L225 175 M225 175 L175 175 M175 175 L175 125" stroke="currentColor" stroke-width="1" opacity="0.6"/>
+                                </svg>
                             </div>
 
-                            <div class="approche__step fade-in" data-step="deploiement">
-                                <div class="step__number">03</div>
-                                <div class="step__content">
-                                    <div class="step__icon">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M2 20h20"/>
-                                            <path d="M7 16v-4a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v4"/>
-                                            <path d="M12 16V9.5a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1"/>
-                                            <path d="M15 16v-2a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v2"/>
-                                        </svg>
-                                    </div>
-                                    <h3 class="step__title">Déploiement</h3>
-                                    <p class="step__description">
-                                        Nous accompagnons la mise en œuvre et assurons un suivi continu pour garantir l'efficacité et l'évolution de vos processus.
-                                    </p>
-                                </div>
+                            <div class="visual__illustration" data-step="3">
+                                <svg class="illustration" viewBox="0 0 400 300">
+                                    <!-- Illustration Déploiement -->
+                                    <polygon points="200,100 190,120 210,120" fill="currentColor" opacity="0.8"/>
+                                    <rect x="185" y="120" width="30" height="60" fill="currentColor" opacity="0.6"/>
+                                    <circle cx="200" cy="200" r="15" fill="none" stroke="currentColor" stroke-width="3" opacity="0.4"/>
+                                    <circle cx="200" cy="200" r="25" fill="none" stroke="currentColor" stroke-width="2" opacity="0.3"/>
+                                    <circle cx="200" cy="200" r="35" fill="none" stroke="currentColor" stroke-width="1" opacity="0.2"/>
+                                </svg>
                             </div>
                         </div>
                     </div>
@@ -236,113 +211,107 @@
             </div>
         </section>
 
-        <!-- Section 4: "Le Champ des Possibles" (remplace "Capacités") -->
-        <section id="possibles" class="section possibles bg-craye">
+        <!-- Nos Solutions Section -->
+        <section id="solutions" class="section section--accent">
             <div class="container">
-                <h2 class="section-title fade-in">Le Champ des Possibles</h2>
-                <div class="possibles__grid grid grid--4">
-                    <div class="capability-card fade-in">
-                        <div class="capability-card__icon">
-                            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
-                                <path d="M8 20C8 18 10 16 12 16H30L32 18L34 16H52C54 16 56 18 56 20V44C56 46 54 48 52 48H34L32 50L30 48H12C10 48 8 46 8 44V20Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                                <line x1="32" y1="18" x2="32" y2="50" stroke="currentColor" stroke-width="1"/>
-                                <line x1="14" y1="24" x2="28" y2="24" stroke="currentColor" stroke-width="1" opacity="0.6"/>
-                                <line x1="14" y1="28" x2="26" y2="28" stroke="currentColor" stroke-width="1" opacity="0.6"/>
-                                <line x1="36" y1="24" x2="50" y2="24" stroke="currentColor" stroke-width="1" opacity="0.6"/>
-                                <line x1="38" y1="28" x2="50" y2="28" stroke="currentColor" stroke-width="1" opacity="0.6"/>
-                                <circle cx="20" cy="40" r="2" stroke="currentColor" stroke-width="1" fill="none" opacity="0.5"/>
-                                <circle cx="44" cy="40" r="3" stroke="currentColor" stroke-width="1" fill="none" opacity="0.5"/>
-                            </svg>
-                        </div>
-                        <h3 class="capability-card__title">Maîtriser la Connaissance Complexe</h3>
-                        <p class="capability-card__description">
-                            Transformer l'information en intelligence actionnable pour des décisions éclairées et stratégiques.
-                        </p>
-                    </div>
+                <header class="section__header">
+                    <h2 class="section__title">Le Potentiel de l'IA Augmentée</h2>
+                </header>
 
-                    <div class="capability-card fade-in">
-                        <div class="capability-card__icon">
-                            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
-                                <path d="M12 48L20 36L28 40L36 28L44 32L52 16" stroke="currentColor" stroke-width="2" fill="none"/>
-                                <circle cx="12" cy="48" r="2" fill="currentColor"/>
-                                <circle cx="20" cy="36" r="2" fill="currentColor"/>
-                                <circle cx="28" cy="40" r="2" fill="currentColor"/>
-                                <circle cx="36" cy="28" r="2" fill="currentColor"/>
-                                <circle cx="44" cy="32" r="2" fill="currentColor"/>
-                                <circle cx="52" cy="16" r="2" fill="currentColor"/>
-                                <line x1="8" y1="52" x2="56" y2="52" stroke="currentColor" stroke-width="1.5"/>
-                                <line x1="8" y1="52" x2="8" y2="12" stroke="currentColor" stroke-width="1.5"/>
-                                <path d="M48 16L52 16L52 20" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                            </svg>
+                <div class="solutions">
+                    <article class="solution-card">
+                        <div class="solution-card__header">
+                            <h3 class="solution-card__title">Pour les cabinets d'avocats fiscalistes</h3>
                         </div>
-                        <h3 class="capability-card__title">Optimiser la Performance</h3>
-                        <p class="capability-card__description">
-                            Améliorer l'efficacité opérationnelle et maximiser le retour sur investissement de vos ressources.
-                        </p>
-                    </div>
+                        <div class="solution-card__content">
+                            <p class="solution-card__description">
+                                Agents autonomes qui pré-remplissent les déclarations en analysant vos documents comptables
+                            </p>
+                        </div>
+                    </article>
 
-                    <div class="capability-card fade-in">
-                        <div class="capability-card__icon">
-                            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
-                                <path d="M32 16C38.6274 16 44 21.3726 44 28C44 31.5 42.5 34.7 40 36.8V42C40 43.1 39.1 44 38 44H26C24.9 44 24 43.1 24 42V36.8C21.5 34.7 20 31.5 20 28C20 21.3726 25.3726 16 32 16Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                                <path d="M28 26C28 24 30 22 32 22C34 22 36 24 36 26C36 28 34 30 32 30C30 30 28 28 28 26Z" stroke="currentColor" stroke-width="1" fill="none" opacity="0.6"/>
-                                <line x1="26" y1="44" x2="38" y2="44" stroke="currentColor" stroke-width="1.5"/>
-                                <line x1="28" y1="46" x2="36" y2="46" stroke="currentColor" stroke-width="1.5"/>
-                                <line x1="32" y1="8" x2="32" y2="12" stroke="currentColor" stroke-width="1.5"/>
-                                <line x1="46" y1="18" x2="50" y2="14" stroke="currentColor" stroke-width="1.5"/>
-                                <line x1="18" y1="18" x2="14" y2="14" stroke="currentColor" stroke-width="1.5"/>
-                                <line x1="50" y1="28" x2="54" y2="28" stroke="currentColor" stroke-width="1.5"/>
-                            </svg>
+                    <article class="solution-card">
+                        <div class="solution-card__header">
+                            <h3 class="solution-card__title">Pour le secteur du tourisme</h3>
                         </div>
-                        <h3 class="capability-card__title">Accélérer l'Innovation</h3>
-                        <p class="capability-card__description">
-                            Créer un environnement propice à l'innovation continue et à l'adaptation rapide aux changements.
-                        </p>
-                    </div>
+                        <div class="solution-card__content">
+                            <p class="solution-card__description">
+                                Systèmes de recommandation personnalisée qui s'adaptent aux préférences de vos clients
+                            </p>
+                        </div>
+                    </article>
 
-                    <div class="capability-card fade-in">
-                        <div class="capability-card__icon">
-                            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
-                                <path d="M32 8C40 8 48 12 52 20C56 28 56 36 52 44C48 52 40 56 32 56C24 56 16 52 12 44C8 36 8 28 12 20C14 16 18 12 24 10" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                                <path d="M20 12L24 10L22 14" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                                <rect x="18" y="18" width="6" height="6" stroke="currentColor" stroke-width="1" fill="none" opacity="0.5"/>
-                                <rect x="40" y="18" width="6" height="6" stroke="currentColor" stroke-width="1" fill="none" opacity="0.5"/>
-                                <circle cx="21" cy="45" r="3" stroke="currentColor" stroke-width="1" fill="none"/>
-                                <circle cx="43" cy="45" r="3" stroke="currentColor" stroke-width="1" fill="none"/>
-                                <circle cx="32" cy="32" r="4" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                                <circle cx="32" cy="32" r="1.5" fill="currentColor"/>
-                            </svg>
+                    <article class="solution-card">
+                        <div class="solution-card__header">
+                            <h3 class="solution-card__title">Pour les entreprises</h3>
                         </div>
-                        <h3 class="capability-card__title">Orchestrer la Transformation</h3>
-                        <p class="capability-card__description">
-                            Accompagner le changement organisationnel avec méthode pour assurer une adoption réussie.
-                        </p>
-                    </div>
+                        <div class="solution-card__content">
+                            <p class="solution-card__description">
+                                Outils d'analyse prédictive qui anticipent vos besoins en ressources et optimisent vos opérations
+                            </p>
+                        </div>
+                    </article>
                 </div>
             </div>
         </section>
 
-        <!-- Section Contact avec Calendly -->
-        <section id="contact" class="section contact bg-ardoise">
-            <div class="contact__container">
-                <div class="contact__card" id="contactCard">
-                    <!-- État initial -->
-                    <div class="contact__intro" id="contactIntro">
-                        <h2 class="contact__title fade-in">Votre projet commence par une conversation.</h2>
-                        <p class="contact__subtitle fade-in">
-                            Échangeons sur vos défis et explorons ensemble comment nous pouvons transformer votre organisation.
-                        </p>
-                        <button class="btn btn--primary contact__button" id="show-calendly">
-                            Planifier un échange de 30 minutes
-                        </button>
-                    </div>
+        <!-- Pourquoi Nouvelle-Rive Section -->
+        <section id="pourquoi" class="section section--accent">
+            <div class="container">
+                <header class="section__header">
+                    <h2 class="section__title">Pourquoi nous faire confiance ?</h2>
+                </header>
 
-                    <!-- Conteneur Calendly (caché initialement) -->
-                    <div class="contact__calendly" id="calendlyContainer" style="display: none;">
-                        <div class="calendly-inline-widget"
-                             data-url="https://calendly.com/nouvelle-rive/consultation-30min"
-                             style="width:100%;height:700px;"
-                             id="calendlyWidget">
+                <div class="values">
+                    <article class="value-card value-card--featured">
+                        <div class="floating-shapes"></div>
+                        <h3 class="value-card__title">Votre Contexte est Notre Point de Départ</h3>
+                        <p class="value-card__description">
+                            Nous ne venons pas avec une solution pré-conçue. Nous commençons par une feuille blanche et des questions. C'est en cartographiant votre réalité que nous co-créons une solution qui a du sens pour vous.
+                        </p>
+                    </article>
+
+                    <article class="value-card">
+                        <h3 class="value-card__title">La Clarté avant Tout</h3>
+                        <p class="value-card__description">
+                            L'IA peut sembler être une boîte noire. Notre méthode vise à la rendre transparente. Vous comprenez la logique de l'outil que nous construisons ensemble et vous en gardez la maîtrise intellectuelle et opérationnelle.
+                        </p>
+                    </article>
+
+                    <article class="value-card">
+                        <h3 class="value-card__title">Prototype avant Engagement</h3>
+                        <p class="value-card__description">
+                            Notre objectif est de livrer rapidement un prototype fonctionnel qui résout une petite partie de votre problème. Vous pouvez ainsi tester la valeur et valider notre approche avant de vous engager plus loin.
+                        </p>
+                    </article>
+
+                    <article class="value-card">
+                        <h3 class="value-card__title">L'Humain au Centre de l'Équation</h3>
+                        <p class="value-card__description">
+                            Notre travail ne prend son sens que s'il augmente et valorise vos équipes. Nous concevons des outils pour assister l'intelligence humaine, pas pour la remplacer. La décision finale et stratégique vous appartient toujours.
+                        </p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="section section--dark">
+            <div class="container">
+                <div class="contact">
+                    <div class="contact__card" id="contactCard">
+                        <div class="contact__intro" id="contactIntro">
+                            <h2 class="contact__title">Explorons ensemble vos possibilités.</h2>
+                            <p class="contact__subtitle">
+                                Un diagnostic gratuit pour identifier concrètement vos opportunités d'automatisation.
+                            </p>
+                            <button class="btn btn--primary contact__button" id="showCalendly">
+                                Réserver un diagnostic gratuit
+                            </button>
+                        </div>
+
+                        <div class="contact__calendly" id="calendlyContainer">
+                            <div id="calendlyWidget"></div>
                         </div>
                     </div>
                 </div>
@@ -350,12 +319,30 @@
         </section>
     </main>
 
-    <footer>
+    <!-- Footer -->
+    <footer class="footer">
         <div class="container">
-            <!-- Contenu footer -->
+            <div class="footer__content">
+                <div class="footer__brand">
+                    <span class="brand">Nouvelle Rive</span>
+                    <p class="footer__tagline">Redonner du temps à l'intelligence humaine</p>
+                </div>
+
+                <div class="footer__nav">
+                    <a href="/" class="footer__link">Accueil</a>
+                    <a href="approche/" class="footer__link">Approche</a>
+                    <a href="cas-usage/" class="footer__link">Nos Explorations</a>
+                    <a href="contact/" class="footer__link">Contact</a>
+                </div>
+            </div>
+
+            <div class="footer__bottom">
+                <p class="footer__copyright">© 2024 Nouvelle Rive. Tous droits réservés.</p>
+            </div>
         </div>
     </footer>
 
+    <!-- Scripts -->
     <script src="js/main.js"></script>
 </body>
 </html>
