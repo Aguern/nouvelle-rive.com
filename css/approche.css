@@ -1,0 +1,474 @@
+/* ==================================================
+   PAGE APPROCHE - Styles spécialisés
+   Extension du design system pour une expérience premium
+   ================================================== */
+
+/* Fix pour le bouton Contact actif dans le header */
+.nav__link--cta.nav__link--active {
+    color: white !important;
+}
+
+/* 1. HERO PAGE SECTION */
+.hero-page {
+    padding: calc(var(--space-4xl) + 80px) 0 var(--space-4xl) 0;
+    background: linear-gradient(135deg, var(--color-background), color-mix(in srgb, var(--color-primary) 3%, var(--color-background)));
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-page::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+        radial-gradient(circle at 20% 20%, rgba(56, 152, 255, 0.04) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(138, 120, 242, 0.03) 0%, transparent 50%);
+    z-index: 0;
+}
+
+.hero-page .container {
+    position: relative;
+    z-index: 1;
+}
+
+.hero-page__title {
+    font-size: var(--text-4xl);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    color: var(--color-text);
+    text-align: center;
+    margin-bottom: var(--space-lg);
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.1;
+}
+
+.hero-page__subtitle {
+    font-size: var(--text-lg);
+    color: var(--color-text-light);
+    text-align: center;
+    line-height: 1.7;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* 2. TEXT CONTAINER */
+.text-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* 3. EYEBROW TEXT */
+.eyebrow-text {
+    display: block;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-primary);
+    margin-bottom: var(--space-md);
+}
+
+/* 4. INTRO PARAGRAPH */
+.intro-paragraph {
+    font-size: var(--text-lg);
+    color: var(--color-text-light);
+    text-align: center;
+    line-height: 1.7;
+    margin-bottom: var(--space-3xl);
+}
+
+/* 5. PHILOSOPHY SECTION */
+.philosophy-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2xl);
+    margin: var(--space-3xl) 0;
+}
+
+.philosophy-card {
+    background: var(--color-surface);
+    padding: var(--space-2xl);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.philosophy-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent, rgba(0, 168, 255, 0.02), transparent);
+    transform: translateX(-100%) skewX(-15deg);
+    transition: transform 0.6s;
+    z-index: 1;
+}
+
+.philosophy-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow:
+        var(--shadow-xl),
+        0 25px 50px rgba(0, 168, 255, 0.1);
+}
+
+.philosophy-card:hover::before {
+    transform: translateX(100%) skewX(-15deg);
+}
+
+.philosophy-card h4 {
+    color: var(--color-primary);
+    margin-bottom: var(--space-md);
+    font-size: var(--text-xl);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    position: relative;
+    z-index: 2;
+}
+
+.philosophy-card p {
+    color: var(--color-text-light);
+    line-height: 1.7;
+    position: relative;
+    z-index: 2;
+    margin: 0;
+}
+
+/* 6. CONCLUSION PARAGRAPH */
+.conclusion-paragraph {
+    font-size: var(--text-lg);
+    text-align: center;
+    line-height: 1.7;
+    color: var(--color-text);
+    margin-top: var(--space-3xl);
+}
+
+.conclusion-paragraph strong {
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+/* 7. APPROACH STEPS */
+.approach-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: var(--space-2xl);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.step-card {
+    background: var(--color-surface);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: var(--radius-xl);
+    padding: var(--space-2xl);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+}
+
+.step-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent, rgba(138, 120, 242, 0.02), transparent);
+    transform: translateX(-100%) skewX(-15deg);
+    transition: transform 0.6s;
+    z-index: 1;
+}
+
+.step-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow:
+        var(--shadow-xl),
+        0 25px 50px rgba(138, 120, 242, 0.1);
+}
+
+.step-card:hover::before {
+    transform: translateX(100%) skewX(-15deg);
+}
+
+.step-card__number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    background: var(--gradient-aurore);
+    color: white;
+    border-radius: var(--radius-full);
+    box-shadow: var(--shadow-aurore);
+    font-size: var(--text-xl);
+    font-weight: 700;
+    font-family: var(--font-heading);
+    margin-bottom: var(--space-lg);
+    position: relative;
+    z-index: 2;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.step-card:hover .step-card__number {
+    transform: rotateY(360deg) scale(1.1);
+    box-shadow: var(--shadow-aurore), 0 0 20px rgba(138, 120, 242, 0.4);
+}
+
+.step-card__title {
+    color: var(--color-text);
+    margin-bottom: var(--space-md);
+    font-size: var(--text-xl);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    position: relative;
+    z-index: 2;
+}
+
+.step-card__description {
+    color: var(--color-text-light);
+    line-height: 1.7;
+    margin-bottom: var(--space-lg);
+    position: relative;
+    z-index: 2;
+}
+
+.step-card__icon {
+    position: absolute;
+    bottom: var(--space-lg);
+    right: var(--space-lg);
+    width: 48px;
+    height: 48px;
+    color: rgba(138, 120, 242, 0.3);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 2;
+}
+
+.step-card:hover .step-card__icon {
+    color: rgba(138, 120, 242, 0.6);
+    transform: rotate(10deg) scale(1.1);
+}
+
+.step-card__icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+/* 8. PARTNERSHIP SECTION */
+.partnership-text {
+    font-size: var(--text-lg);
+    line-height: 1.7;
+    color: var(--color-text);
+    margin-bottom: var(--space-lg);
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.partnership-text strong {
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+/* 9. NAVIGATION ACTIVE STATE */
+.nav__link--active {
+    color: var(--color-primary);
+    font-weight: 600;
+    position: relative;
+}
+
+.nav__link--active::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--color-primary);
+}
+
+/* 10. ANIMATIONS */
+.animate-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-on-scroll.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Staggered animations */
+.philosophy-card:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.philosophy-card:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.step-card:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.step-card:nth-child(2) {
+    animation-delay: 0.3s;
+}
+
+.step-card:nth-child(3) {
+    animation-delay: 0.5s;
+}
+
+/* 11. RESPONSIVE DESIGN */
+@media (max-width: 1024px) {
+    .approach-steps {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: var(--space-xl);
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-page {
+        padding: calc(var(--space-3xl) + 80px) 0 var(--space-3xl) 0;
+    }
+
+    .hero-page__title {
+        font-size: var(--text-3xl);
+    }
+
+    .hero-page__subtitle {
+        font-size: var(--text-base);
+    }
+
+    .philosophy-split {
+        grid-template-columns: 1fr;
+        gap: var(--space-xl);
+    }
+
+    .approach-steps {
+        grid-template-columns: 1fr;
+    }
+
+    .step-card {
+        padding: var(--space-xl);
+    }
+
+    .philosophy-card {
+        padding: var(--space-xl);
+    }
+
+    .step-card:hover,
+    .philosophy-card:hover {
+        transform: translateY(-4px) scale(1.01);
+    }
+
+    .text-container {
+        padding: 0 var(--space-md);
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-page__title {
+        font-size: var(--text-2xl);
+    }
+
+    .step-card__number {
+        width: 50px;
+        height: 50px;
+        font-size: var(--text-lg);
+    }
+
+    .partnership-text,
+    .intro-paragraph,
+    .conclusion-paragraph {
+        font-size: var(--text-base);
+    }
+
+    .eyebrow-text {
+        font-size: var(--text-xs);
+    }
+}
+
+/* 12. HIGH CONTRAST MODE */
+@media (prefers-contrast: high) {
+    .philosophy-card,
+    .step-card {
+        border: 2px solid var(--color-primary);
+    }
+
+    .step-card__number {
+        border: 2px solid white;
+    }
+}
+
+/* 13. REDUCED MOTION */
+@media (prefers-reduced-motion: reduce) {
+    .philosophy-card,
+    .step-card {
+        transition: none;
+    }
+
+    .step-card:hover,
+    .philosophy-card:hover {
+        transform: none;
+    }
+
+    .step-card__number,
+    .step-card__icon {
+        transition: none;
+    }
+
+    .step-card:hover .step-card__number,
+    .step-card:hover .step-card__icon {
+        transform: none;
+    }
+}
+
+/* 14. FOCUS STATES */
+.philosophy-card:focus,
+.step-card:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 4px;
+}
+
+/* 15. PRINT STYLES */
+@media print {
+    .hero-page::before,
+    .step-card::before,
+    .philosophy-card::before {
+        display: none;
+    }
+
+    .hero-page,
+    .section--dark {
+        background: white;
+        color: var(--color-text);
+    }
+
+    .step-card,
+    .philosophy-card {
+        background: white;
+        border: 1px solid #ccc;
+        box-shadow: none;
+        break-inside: avoid;
+        margin-bottom: var(--space-lg);
+    }
+
+    .step-card__title,
+    .step-card__description {
+        color: var(--color-text);
+    }
+}
