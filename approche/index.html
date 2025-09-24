@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notre Approche - Nouvelle Rive</title>
+    <meta name="description" content="Notre approche artisanale pour transformer vos processus avec l'IA. Une méthode claire en 3 étapes pour libérer le potentiel de vos équipes.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- SVG Icons -->
+    <script>
+        fetch('../assets/svg/icons.svg')
+            .then(response => response.text())
+            .then(data => {
+                const div = document.createElement('div');
+                div.innerHTML = data;
+                document.body.insertBefore(div.firstElementChild, document.body.firstChild);
+            });
+    </script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/approche.css">
+
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header id="header" class="header">
+        <div class="container">
+            <nav class="nav">
+                <div class="nav__brand">
+                    <a href="../" class="brand">Nouvelle Rive</a>
+                </div>
+
+                <div class="nav__menu" id="navMenu">
+                    <a href="./" class="nav__link nav__link--active">Approche</a>
+                    <a href="../cas-usage/" class="nav__link">Nos Explorations</a>
+                    <a href="../contact/" class="nav__link nav__link--cta">Contact</a>
+                </div>
+
+                <button class="nav__toggle" id="navToggle" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero-page">
+            <div class="container">
+                <h1 class="hero-page__title">Un chemin clair dans la complexité de l'IA.</h1>
+                <p class="hero-page__subtitle">L'IA est pleine de promesses, mais comment passer de l'idée à un outil concret et utile ? Notre approche est un parcours de co-création, conçu pour démystifier la technologie et construire, pas à pas, une solution qui a un impact réel sur votre quotidien.</p>
+            </div>
+        </section>
+
+        <section id="philosophie" class="section section--alt">
+            <div class="container text-container">
+                <header class="section__header">
+                    <span class="eyebrow-text">Notre Philosophie</span>
+                    <h2 class="section__title">Augmenter, ne pas remplacer.</h2>
+                </header>
+                <p class="intro-paragraph">Nous faisons une distinction fondamentale entre le travail que les machines peuvent faire et celui que l'intelligence humaine doit conserver.</p>
+                <div class="philosophy-split">
+                    <div class="philosophy-card">
+                        <h4>Ce que l'IA fait de mieux :</h4>
+                        <p>Le traitement de l'information à grande échelle. Lire des milliers de documents, extraire des données précises, classifier des informations, détecter des schémas répétitifs... C'est un assistant infatigable et rigoureux pour les tâches préparatoires.</p>
+                    </div>
+                    <div class="philosophy-card">
+                        <h4>Ce que l'Humain fait de mieux :</h4>
+                        <p>Le jugement, la stratégie et la nuance. Comprendre un contexte complexe, gérer une relation client, prendre une décision stratégique, faire preuve de créativité... C'est le cœur de la valeur de vos experts.</p>
+                    </div>
+                </div>
+                <p class="conclusion-paragraph">Notre but est de construire un <strong>pont</strong> entre ces deux mondes : un outil IA qui effectue le travail de fond pour présenter à l'expert une synthèse claire et fiable, lui permettant de prendre de meilleures décisions, plus rapidement.</p>
+            </div>
+        </section>
+
+        <section id="methode" class="section section--alt">
+            <div class="container">
+                <header class="section__header">
+                    <span class="eyebrow-text">Notre Méthode</span>
+                    <h2 class="section__title">Une Exploration Guidée en 3 Étapes</h2>
+                </header>
+                <div class="approach-steps">
+                    <div class="step-card">
+                        <div class="step-card__number">01</div>
+                        <h3 class="step-card__title">Diagnostic & Cadrage</h3>
+                        <p class="step-card__description">Nous commençons par des ateliers pour cartographier ensemble un de vos processus. L'objectif : identifier un périmètre précis, à fort potentiel, où un premier prototype pourrait apporter une valeur tangible et mesurable. C'est la fondation de notre projet commun.</p>
+                        <div class="step-card__icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 11H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2z"/>
+                                <path d="M21 11h-4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2z"/>
+                                <path d="M7 21V8a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v13"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-card__number">02</div>
+                        <h3 class="step-card__title">Co-Construction du Prototype</h3>
+                        <p class="step-card__description">Nous développons de manière itérative un premier outil fonctionnel (Proof of Concept). Vous êtes impliqué à chaque étape pour valider les choix et vous assurer que l'outil correspond parfaitement à la réalité de votre métier. Vous voyez le résultat se construire sous vos yeux.</p>
+                        <div class="step-card__icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                                <path d="M2 17l10 5 10-5"/>
+                                <path d="M2 12l10 5 10-5"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-card__number">03</div>
+                        <h3 class="step-card__title">Déploiement & Mesure d'Impact</h3>
+                        <p class="step-card__description">Le prototype est déployé en conditions réelles pour un groupe d'utilisateurs. Nous mesurons ensemble son impact : gain de temps, réduction des erreurs, satisfaction des équipes. C'est sur la base de ces résultats concrets que nous décidons de la suite.</p>
+                        <div class="step-card__icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="partenariat" class="section section--accent">
+            <div class="container text-container" style="text-align:center;">
+                <header class="section__header">
+                    <h2 class="section__title">Un Cadre de Collaboration Simple et Clair</h2>
+                </header>
+                <p class="partnership-text">Nous ne vous vendons pas une licence logicielle ou un abonnement. Nous vous proposons une <strong>mission de service</strong> pour la phase de diagnostic et de prototypage. C'est un projet avec un début, une fin, et un livrable concret : un outil fonctionnel qui vous appartient et qui résout un problème réel.</p>
+                <p class="partnership-text">Cette première collaboration est le moyen le plus pragmatique et le moins risqué pour vous de tester le potentiel de l'IA sur mesure, et pour nous de démontrer la valeur de notre approche.</p>
+                <a href="../contact/" class="btn btn--primary" style="margin-top: 2rem;">Discutons de votre premier projet</a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__content">
+                <div class="footer__brand">
+                    <span class="brand">Nouvelle Rive</span>
+                    <p class="footer__tagline">Redonner du temps à l'intelligence humaine</p>
+                </div>
+
+                <div class="footer__nav">
+                    <a href="../" class="footer__link">Accueil</a>
+                    <a href="./" class="footer__link">Approche</a>
+                    <a href="../cas-usage/" class="footer__link">Nos Explorations</a>
+                    <a href="../contact/" class="footer__link">Contact</a>
+                </div>
+            </div>
+
+            <div class="footer__bottom">
+                <p class="footer__copyright">© 2024 Nouvelle Rive. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../js/main.js"></script>
+    <script src="../js/approche.js"></script>
+</body>
+</html>
