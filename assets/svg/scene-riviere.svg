@@ -1,0 +1,87 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .river-flow {
+        fill: var(--glacier);
+        opacity: var(--scene-opacity, 0.8);
+        transition: opacity 1s ease;
+      }
+      .current {
+        fill: none;
+        stroke: rgba(255, 255, 255, 0.6);
+        stroke-width: 3;
+        stroke-dasharray: 10,5;
+        opacity: var(--current-opacity, 0);
+        animation: flow-animation 4s infinite linear;
+        transition: opacity 1s ease;
+      }
+      .rock {
+        fill: var(--ardoise);
+        opacity: var(--rock-opacity, 0.9);
+        transition: opacity 1s ease;
+      }
+      .bank {
+        fill: var(--cuivre);
+        opacity: 0.6;
+        transition: opacity 1s ease;
+      }
+      @keyframes flow-animation {
+        0% { stroke-dashoffset: 0; }
+        100% { stroke-dashoffset: 60; }
+      }
+    </style>
+  </defs>
+
+  <!-- Ciel -->
+  <rect width="800" height="200" fill="var(--craye)"/>
+
+  <!-- Berges -->
+  <path d="M0,200 Q100,180 200,200 Q300,220 400,200 Q500,180 600,200 Q700,220 800,200 L800,350 Q700,330 600,350 Q500,370 400,350 Q300,330 200,350 Q100,370 0,350 Z" class="bank"/>
+
+  <path d="M0,450 Q100,430 200,450 Q300,470 400,450 Q500,430 600,450 Q700,470 800,450 L800,600 L0,600 Z" class="bank"/>
+
+  <!-- Rivière principale -->
+  <path d="M0,350 Q100,370 200,350 Q300,330 400,350 Q500,370 600,350 Q700,330 800,350 L800,450 Q700,470 600,450 Q500,430 400,450 Q300,470 200,450 Q100,430 0,450 Z" class="river-flow"/>
+
+  <!-- Courants -->
+  <g class="current" style="--current-opacity: 0.7;">
+    <path d="M50,380 Q150,360 250,380 Q350,400 450,380 Q550,360 650,380 Q750,400 800,380"/>
+    <path d="M0,400 Q100,420 200,400 Q300,380 400,400 Q500,420 600,400 Q700,380 800,400"/>
+    <path d="M50,420 Q150,440 250,420 Q350,400 450,420 Q550,440 650,420 Q750,400 800,420"/>
+  </g>
+
+  <!-- Rochers dans la rivière -->
+  <ellipse cx="200" cy="380" rx="15" ry="25" class="rock"/>
+  <ellipse cx="400" cy="420" rx="20" ry="30" class="rock"/>
+  <ellipse cx="600" cy="390" rx="18" ry="28" class="rock"/>
+
+  <!-- Petites îles -->
+  <ellipse cx="300" cy="400" rx="8" ry="12" class="bank"/>
+  <ellipse cx="500" cy="370" rx="6" ry="10" class="bank"/>
+
+  <!-- Végétation sur les berges -->
+  <g opacity="0.8">
+    <!-- Berge haute -->
+    <circle cx="100" cy="190" r="8" fill="var(--ardoise)" opacity="0.6"/>
+    <circle cx="120" cy="185" r="6" fill="var(--ardoise)" opacity="0.6"/>
+    <circle cx="300" cy="195" r="10" fill="var(--ardoise)" opacity="0.6"/>
+    <circle cx="500" cy="188" r="7" fill="var(--ardoise)" opacity="0.6"/>
+    <circle cx="700" cy="192" r="9" fill="var(--ardoise)" opacity="0.6"/>
+
+    <!-- Berge basse -->
+    <circle cx="150" cy="470" r="8" fill="var(--ardoise)" opacity="0.6"/>
+    <circle cx="350" cy="465" r="6" fill="var(--ardoise)" opacity="0.6"/>
+    <circle cx="550" cy="472" r="10" fill="var(--ardoise)" opacity="0.6"/>
+    <circle cx="750" cy="468" r="7" fill="var(--ardoise)" opacity="0.6"/>
+  </g>
+
+  <!-- Éclaboussures autour des rochers -->
+  <g opacity="0.4">
+    <circle cx="195" cy="375" r="2" fill="white"/>
+    <circle cx="205" cy="385" r="1.5" fill="white"/>
+    <circle cx="395" cy="415" r="2.5" fill="white"/>
+    <circle cx="405" cy="425" r="1" fill="white"/>
+    <circle cx="595" cy="385" r="2" fill="white"/>
+    <circle cx="605" cy="395" r="1.5" fill="white"/>
+  </g>
+</svg>

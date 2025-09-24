@@ -1,0 +1,15 @@
+<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Flow arrow with dynamic curves -->
+  <path d="M8 32 Q20 20, 32 32 T56 32" stroke="currentColor" stroke-width="1.5" fill="none"/>
+  <!-- Arrow head -->
+  <path d="M52 28 L56 32 L52 36" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Flow indicators -->
+  <circle cx="16" cy="28" r="1" fill="currentColor" opacity="0.6"/>
+  <circle cx="24" cy="26" r="1" fill="currentColor" opacity="0.7"/>
+  <circle cx="32" cy="32" r="1" fill="currentColor" opacity="0.8"/>
+  <circle cx="40" cy="32" r="1" fill="currentColor" opacity="0.9"/>
+  <circle cx="48" cy="32" r="1" fill="currentColor"/>
+  <!-- Secondary flow lines -->
+  <path d="M12 38 Q24 34, 36 38" stroke="currentColor" stroke-width="0.8" opacity="0.5" fill="none"/>
+  <path d="M20 26 Q32 22, 44 26" stroke="currentColor" stroke-width="0.8" opacity="0.5" fill="none"/>
+</svg>

@@ -1,0 +1,38 @@
+<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Ampoule principale -->
+  <path d="M32 16C38.6274 16 44 21.3726 44 28C44 31.5 42.5 34.7 40 36.8V42C40 43.1 39.1 44 38 44H26C24.9 44 24 43.1 24 42V36.8C21.5 34.7 20 31.5 20 28C20 21.3726 25.3726 16 32 16Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+
+  <!-- Filament créatif -->
+  <path d="M28 26C28 24 30 22 32 22C34 22 36 24 36 26C36 28 34 30 32 30C30 30 28 28 28 26Z" stroke="currentColor" stroke-width="1" fill="none" opacity="0.6"/>
+  <path d="M30 28L34 24" stroke="currentColor" stroke-width="1" opacity="0.5"/>
+  <path d="M30 24L34 28" stroke="currentColor" stroke-width="1" opacity="0.5"/>
+
+  <!-- Base de l'ampoule -->
+  <line x1="26" y1="44" x2="38" y2="44" stroke="currentColor" stroke-width="1.5"/>
+  <line x1="28" y1="46" x2="36" y2="46" stroke="currentColor" stroke-width="1.5"/>
+  <line x1="28" y1="48" x2="36" y2="48" stroke="currentColor" stroke-width="1.5"/>
+
+  <!-- Rayons d'innovation -->
+  <line x1="32" y1="8" x2="32" y2="12" stroke="currentColor" stroke-width="1.5"/>
+  <line x1="46" y1="18" x2="50" y2="14" stroke="currentColor" stroke-width="1.5"/>
+  <line x1="18" y1="18" x2="14" y2="14" stroke="currentColor" stroke-width="1.5"/>
+  <line x1="50" y1="28" x2="54" y2="28" stroke="currentColor" stroke-width="1.5"/>
+  <line x1="10" y1="28" x2="14" y2="28" stroke="currentColor" stroke-width="1.5"/>
+
+  <!-- Petits rayons secondaires -->
+  <line x1="44" y1="12" x2="46" y2="10" stroke="currentColor" stroke-width="1" opacity="0.6"/>
+  <line x1="20" y1="12" x2="18" y2="10" stroke="currentColor" stroke-width="1" opacity="0.6"/>
+  <line x1="52" y1="22" x2="54" y2="20" stroke="currentColor" stroke-width="1" opacity="0.6"/>
+  <line x1="12" y1="22" x2="10" y2="20" stroke="currentColor" stroke-width="1" opacity="0.6"/>
+
+  <!-- Étincelles d'idées -->
+  <path d="M8 34L10 32L8 30L6 32Z" fill="currentColor" opacity="0.4"/>
+  <path d="M58 34L56 32L58 30L60 32Z" fill="currentColor" opacity="0.4"/>
+  <path d="M38 6L36 8L38 10L40 8Z" fill="currentColor" opacity="0.4"/>
+
+  <!-- Particules créatives -->
+  <circle cx="48" cy="38" r="1" fill="currentColor" opacity="0.5"/>
+  <circle cx="16" cy="42" r="1" fill="currentColor" opacity="0.5"/>
+  <circle cx="52" cy="32" r="0.5" fill="currentColor" opacity="0.6"/>
+  <circle cx="12" cy="36" r="0.5" fill="currentColor" opacity="0.6"/>
+</svg>

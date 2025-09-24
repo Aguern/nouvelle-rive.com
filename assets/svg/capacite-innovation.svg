@@ -1,0 +1,14 @@
+<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M32 16C38.6274 16 44 21.3726 44 28C44 34.6274 38.6274 40 32 40C25.3726 40 20 34.6274 20 28C20 21.3726 25.3726 16 32 16Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+  <path d="M28 40V44H36V40" stroke="currentColor" stroke-width="1.5"/>
+  <path d="M30 44V48H34V44" stroke="currentColor" stroke-width="1.5"/>
+  <line x1="32" y1="6" x2="32" y2="10" stroke="currentColor" stroke-width="1"/>
+  <line x1="50" y1="28" x2="54" y2="28" stroke="currentColor" stroke-width="1"/>
+  <line x1="10" y1="28" x2="14" y2="28" stroke="currentColor" stroke-width="1"/>
+  <line x1="45.25" y1="12.75" x2="47.89" y2="10.11" stroke="currentColor" stroke-width="1"/>
+  <line x1="16.11" y1="45.89" x2="18.75" y2="43.25" stroke="currentColor" stroke-width="1"/>
+  <line x1="18.75" y1="12.75" x2="16.11" y2="10.11" stroke="currentColor" stroke-width="1"/>
+  <line x1="47.89" y1="45.89" x2="45.25" y2="43.25" stroke="currentColor" stroke-width="1"/>
+  <circle cx="32" cy="28" r="4" stroke="currentColor" stroke-width="1" fill="none" opacity="0.6"/>
+  <path d="M32 22L34 26L32 30L30 26Z" fill="currentColor" opacity="0.8"/>
+</svg>
