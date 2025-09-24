@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notre Approche - Nouvelle Rive</title>
+    <meta name="description" content="Notre approche artisanale pour transformer vos processus avec l'IA. Une méthode claire en 3 étapes pour libérer le potentiel de vos équipes.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- SVG Icons -->
+    <script>
+        fetch('../assets/svg/icons.svg')
+            .then(response => response.text())
+            .then(data => {
+                const div = document.createElement('div');
+                div.innerHTML = data;
+                document.body.insertBefore(div.firstElementChild, document.body.firstChild);
+            });
+    </script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../css/base.css">
+
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header id="header" class="header">
+        <div class="container">
+            <nav class="nav">
+                <div class="nav__brand">
+                    <a href="../" class="brand">Nouvelle Rive</a>
+                </div>
+
+                <div class="nav__menu" id="navMenu">
+                    <a href="./" class="nav__link nav__link--active">Approche</a>
+                    <a href="../cas-usage/" class="nav__link">Nos Explorations</a>
+                    <a href="../contact/" class="nav__link nav__link--cta">Contact</a>
+                </div>
+
+                <button class="nav__toggle" id="navToggle" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero-approach">
+            <div class="hero-approach__background">
+                <img src="../assets/road-4476056.jpg" alt="Route illustrant le chemin vers l'innovation">
+            </div>
+            <div class="hero-approach__overlay"></div>
+            <div class="container">
+                <h1 class="hero-approach__title">Une approche sur-mesure pour une IA de confiance.</h1>
+                <p class="hero-approach__subtitle">Nous ne vendons pas de technologie. Nous co-construisons des solutions qui ont du sens, en traduisant votre expertise métier en un avantage compétitif durable.</p>
+            </div>
+        </section>
+
+        <section id="philosophie" class="section section--alt">
+            <div class="container text-container">
+                <header class="section__header">
+                    <span class="eyebrow-text">Notre Philosophie</span>
+                    <h2 class="section__title">Augmenter, ne pas remplacer.</h2>
+                </header>
+                <p class="intro-paragraph">Notre conviction est simple : la véritable performance naît de la collaboration entre l'intelligence humaine et l'intelligence artificielle. Chacune excelle dans son domaine.</p>
+                <div class="philosophy-split">
+                    <div class="philosophy-card">
+                        <h4>Ce que l'IA fait de mieux : la Rigueur à Grande Échelle</h4>
+                        <p>Analyser des milliers de documents, extraire des données, détecter des schémas... L'IA est un assistant infatigable qui prépare, synthétise et fiabilise l'information.</p>
+                    </div>
+                    <div class="philosophy-card">
+                        <h4>Ce que l'Humain fait de mieux : le Jugement Stratégique</h4>
+                        <p>Comprendre un contexte, gérer une relation, prendre une décision créative... Le jugement et la nuance de vos experts sont irremplaçables. C'est là que se trouve votre vraie valeur.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Vision Technologique -->
+        <section id="technologie" class="section">
+            <div class="container">
+                <header class="section__header">
+                    <span class="eyebrow-text">Notre Boîte à Outils</span>
+                    <h2 class="section__title">La Technologie au Service du Sens</h2>
+                </header>
+                <div class="tech-split">
+                    <div class="tech-split__text">
+                        <p>Pour construire le pont entre ces deux mondes, nous n'utilisons pas une "IA" monolithique, mais nous assemblons trois briques technologiques fondamentales :</p>
+                        <ul>
+                            <li><strong>Agents Spécialistes :</strong> Des "mini-experts" IA, chacun entraîné pour une tâche unique (lire un contrat, analyser un bilan, etc.).</li>
+                            <li><strong>Workflows Intelligents :</strong> Le "scénario" qui définit quelles tâches doivent être accomplies et dans quel ordre, en imitant la logique de vos processus métier.</li>
+                            <li><strong>Orchestration Transparente :</strong> La plateforme qui supervise le travail des agents, assure que le workflow est suivi, et présente le résultat final à l'expert humain pour validation.</li>
+                        </ul>
+                    </div>
+                    <div class="tech-split__visual">
+                        <video autoplay muted loop playsinline>
+                            <source src="../assets/215485.mp4" type="video/mp4">
+                            Votre navigateur ne supporte pas la vidéo HTML5.
+                        </video>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="methode" class="section section--alt">
+            <div class="container">
+                <header class="section__header">
+                    <span class="eyebrow-text">Notre Méthode</span>
+                    <h2 class="section__title">Une Exploration Guidée en 3 Étapes</h2>
+                </header>
+            </div>
+            <div class="interactive-timeline-container">
+                <div class="interactive-timeline">
+                    <div class="timeline-content">
+                        <!-- Étape 1 -->
+                        <div class="timeline-step" data-step="1">
+                            <h3>01. Diagnostic & Cadrage</h3>
+                            <p>Nous commençons par cartographier votre processus pour identifier le périmètre précis où un prototype apportera une valeur tangible et mesurable.</p>
+                            <strong>Livrable : Note de cadrage du prototype.</strong>
+                        </div>
+                        <!-- Étape 2 -->
+                        <div class="timeline-step" data-step="2">
+                            <h3>02. Co-Construction</h3>
+                            <p>Nous développons un premier outil fonctionnel de manière itérative. Vous êtes impliqué à chaque étape pour que l'outil corresponde parfaitement à la réalité de votre métier.</p>
+                            <strong>Livrable : Outil prototype fonctionnel.</strong>
+                        </div>
+                        <!-- Étape 3 -->
+                        <div class="timeline-step" data-step="3">
+                            <h3>03. Déploiement & Mesure</h3>
+                            <p>Le prototype est déployé en conditions réelles auprès d'un groupe pilote. Nous mesurons ensemble son impact concret : gain de temps, réduction des erreurs, satisfaction des équipes.</p>
+                            <strong>Livrable : Rapport d'impact et de performance.</strong>
+                        </div>
+                    </div>
+                    <div class="timeline-visual">
+                        <div class="timeline-visual__sticky-container">
+                            <!-- Le SVG sera inséré ici -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="partenariat" class="section section--accent">
+            <div class="container text-container" style="text-align:center;">
+                <header class="section__header">
+                    <h2 class="section__title">Un Cadre de Collaboration Simple et Clair</h2>
+                </header>
+                <p class="partnership-text">Nous ne vous vendons pas une licence logicielle ou un abonnement. Nous vous proposons une <strong>mission de service</strong> pour la phase de diagnostic et de prototypage. C'est un projet avec un début, une fin, et un livrable concret : un outil fonctionnel qui vous appartient et qui résout un problème réel.</p>
+                <p class="partnership-text">Cette première collaboration est le moyen le plus pragmatique et le moins risqué pour vous de tester le potentiel de l'IA sur mesure, et pour nous de démontrer la valeur de notre approche.</p>
+                <a href="../contact/" class="btn btn--primary" style="margin-top: 2rem;">Discutons de votre premier projet</a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__content">
+                <div class="footer__brand">
+                    <span class="brand">Nouvelle Rive</span>
+                    <p class="footer__tagline">Redonner du temps à l'intelligence humaine</p>
+                </div>
+
+                <div class="footer__nav">
+                    <a href="../" class="footer__link">Accueil</a>
+                    <a href="./" class="footer__link">Approche</a>
+                    <a href="../cas-usage/" class="footer__link">Nos Explorations</a>
+                    <a href="../contact/" class="footer__link">Contact</a>
+                </div>
+            </div>
+
+            <div class="footer__bottom">
+                <p class="footer__copyright">© 2025 Nouvelle Rive. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../js/main.js"></script>
+</body>
+</html>

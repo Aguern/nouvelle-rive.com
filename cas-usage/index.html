@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nos Explorations - Nouvelle Rive</title>
+    <meta name="description" content="Le journal de nos explorations. Nos réflexions sur la manière de ré-imaginer des processus métier complexes avec une approche centrée sur l'humain et augmentée par l'IA.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- SVG Icons -->
+    <script>
+        fetch('../assets/svg/icons.svg')
+            .then(response => response.text())
+            .then(data => {
+                const div = document.createElement('div');
+                div.innerHTML = data;
+                document.body.insertBefore(div.firstElementChild, document.body.firstChild);
+            });
+    </script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../css/base.css">
+
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header id="header" class="header">
+        <div class="container">
+            <nav class="nav">
+                <div class="nav__brand">
+                    <a href="../" class="brand">Nouvelle Rive</a>
+                </div>
+
+                <div class="nav__menu" id="navMenu">
+                    <a href="../approche/" class="nav__link">Approche</a>
+                    <a href="./" class="nav__link nav__link--active">Nos Explorations</a>
+                    <a href="../contact/" class="nav__link nav__link--cta">Contact</a>
+                </div>
+
+                <button class="nav__toggle" id="navToggle" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero-page hero-page--video">
+            <div class="hero-page__background">
+                <video class="hero-page__video" autoplay muted loop playsinline>
+                    <source src="../assets/20681-311357919.mp4" type="video/mp4">
+                    Votre navigateur ne supporte pas la vidéo HTML5.
+                </video>
+                <div class="hero-page__overlay"></div>
+            </div>
+            <div class="container">
+                <h1 class="hero-page__title">Le Journal de nos Explorations</h1>
+                <p class="hero-page__subtitle">Ici, nous partageons nos réflexions sur la manière de ré-imaginer des processus métier complexes avec une approche centrée sur l'humain et augmentée par l'IA.</p>
+            </div>
+        </section>
+
+        <section class="section section--light explorations-grid">
+            <div class="container">
+                <div class="explorations">
+
+                    <!-- Carte 1: Fiscalité -->
+                    <article class="exploration-card" data-exploration="fiscalite">
+                        <header class="exploration-card__preview">
+                            <div class="exploration-card__header">
+                                <span class="exploration-card__badge">Droit Fiscal</span>
+                                <h3 class="exploration-card__title">Vision : Concevoir un Copilote pour l'Expertise Fiscale</h3>
+                            </div>
+                            <p class="exploration-card__teaser">Comment transformer la préparation des déclarations, un processus à haute valeur de conformité mais répétitif, en un levier stratégique ?</p>
+                            <div class="exploration-card__cta">
+                                <span>Explorer cette vision</span>
+                                <svg class="icon" width="24" height="24" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </div>
+                        </header>
+
+                        <div class="exploration-card__content" style="display: none;">
+                            <div class="article-content">
+                                <h3>Le Défi : Libérer l'Expert de la Tâche de Fond</h3>
+                                <p>Pour un cabinet fiscaliste, la valeur se crée dans le conseil, pas dans la compilation de chiffres. Pourtant, une part significative du temps des experts est consacrée à des tâches préparatoires indispensables mais à faible valeur ajoutée :</p>
+                                <ul>
+                                    <li>La lecture et l'extraction de données depuis une multitude de documents hétérogènes.</li>
+                                    <li>Le rapprochement et la classification de ces données selon les règles fiscales.</li>
+                                    <li>Le risque permanent d'erreur manuelle, qui impose des doubles vérifications chronophages.</li>
+                                </ul>
+
+                                <h3>Notre Vision d'un Outil d'Augmentation</h3>
+                                <p>Nous n'imaginons pas un logiciel qui "fait la déclaration à la place de l'avocat". Nous imaginons un <strong>copilote</strong> qui prépare le terrain de la manière la plus intelligente possible. L'objectif est de permettre à l'expert de commencer son travail avec un dossier déjà pré-analysé, synthétisé et fiabilisé.</p>
+
+                                <div class="workflow-highlight">
+                                    <h4>Les Capacités d'un tel Copilote :</h4>
+                                    <ol>
+                                        <li><strong>Lecture Intelligente :</strong> Il serait capable d'ingérer tous les documents d'un dossier client et d'en extraire les informations pertinentes, en comprenant le contexte de chaque chiffre.</li>
+                                        <li><strong>Pré-Classification :</strong> Il proposerait une classification de chaque revenu et chaque charge selon les catégories fiscales, en citant ses sources pour chaque proposition.</li>
+                                        <li><strong>Levée d'Alertes :</strong> Il ne prendrait pas de décision, mais signalerait les incohérences, les données manquantes ou les cas ambigus qui nécessitent l'arbitrage de l'expert.</li>
+                                        <li><strong>Préparation du Brouillon :</strong> Il générerait un projet de déclaration, non pas comme un document final, mais comme un support de travail clair et vérifiable pour l'expert.</li>
+                                    </ol>
+                                </div>
+
+                                <h3>L'Impact : d'Opérateur à Superviseur</h3>
+                                <p>Un tel outil ne change pas la nature du métier d'expert, mais il en change radicalement l'exercice. Le temps n'est plus consacré à "chercher et copier", mais à "analyser et valider". La valeur ajoutée est immense :</p>
+                                <ul>
+                                    <li><strong>Gain de Sérénité :</strong> Moins de stress lié aux erreurs et aux oublis.</li>
+                                    <li><strong>Gain de Temps :</strong> Des heures libérées pour le conseil client et le développement.</li>
+                                    <li><strong>Montée en Compétence :</strong> Les collaborateurs juniors apprennent plus vite en analysant les propositions de l'IA sous la supervision d'un senior.</li>
+                                </ul>
+
+                                <div class="call-to-action-box">
+                                    <h4>Vos processus ressemblent à ce défi ?</h4>
+                                    <p>Cette approche de "copilote IA" pourrait s'appliquer à votre métier. Si vous êtes prêt à explorer comment un outil sur-mesure pourrait augmenter la puissance de vos équipes, nous serions ravis d'en discuter.</p>
+                                    <a href="../contact/" class="btn btn--primary">Planifier une session d'exploration</a>
+                                </div>
+
+                                <div class="article-footer">
+                                    <button class="btn-close-article" onclick="window.explorationsPage && window.explorationsPage.closeCurrentCard(this)">
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M15 5L10 10L5 5" />
+                                        </svg>
+                                        <span>Fermer l'article</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Carte 2: Tourisme -->
+                    <article class="exploration-card" data-exploration="tourisme">
+                        <header class="exploration-card__preview">
+                            <div class="exploration-card__header">
+                                <span class="exploration-card__badge">Tourisme</span>
+                                <h3 class="exploration-card__title">Réinventer la Personnalisation dans le Voyage</h3>
+                            </div>
+                            <p class="exploration-card__teaser">Comment transformer l'expérience client en alliant l'analyse comportementale à l'expertise humaine ? Notre réflexion sur un assistant qui comprend avant de proposer.</p>
+                            <div class="exploration-card__cta">
+                                <span>Découvrir l'approche</span>
+                                <svg class="icon" width="24" height="24" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </div>
+                        </header>
+
+                        <div class="exploration-card__content" style="display: none;">
+                            <div class="article-content">
+                                <h3>Le Paradoxe de l'Offre Touristique Moderne</h3>
+                                <p>Les clients d'aujourd'hui ont accès à une infinité d'options de voyage, mais paradoxalement, ils se retrouvent souvent avec des expériences standardisées. Les algorithmes actuels recommandent ce qui se vend, pas nécessairement ce qui correspond à la personnalité unique du voyageur.</p>
+
+                                <h3>Notre Vision : Un Conseiller Augmenté</h3>
+                                <p>Nous imaginons un système qui ne remplace pas le conseiller voyage, mais qui le transforme en expert ultra-informé. Cet outil analyserait les préférences non-dites du client - celles qu'il n'arrive pas toujours à exprimer - pour permettre au conseiller de proposer des expériences vraiment sur-mesure.</p>
+
+                                <div class="workflow-highlight">
+                                    <h4>Les Dimensions d'Analyse :</h4>
+                                    <ol>
+                                        <li><strong>Profil Comportemental :</strong> Analyse des interactions passées, rythmes préférés, types d'activités recherchées.</li>
+                                        <li><strong>Contexte Situationnel :</strong> Comprendre s'il s'agit d'un voyage de détente, d'aventure, en famille ou professionnel.</li>
+                                        <li><strong>Contraintes Personnelles :</strong> Budget, dates, contraintes logistiques ou accessibilité.</li>
+                                        <li><strong>Inspiration Latente :</strong> Détecter les envies non exprimées à travers les hésitations et questions.</li>
+                                    </ol>
+                                </div>
+
+                                <h3>L'Augmentation de l'Expertise Humaine</h3>
+                                <p>Le conseiller devient alors capable de :</p>
+                                <ul>
+                                    <li><strong>Anticiper les Besoins :</strong> Proposer des options auxquelles le client n'aurait pas pensé mais qui correspondent parfaitement à son profil.</li>
+                                    <li><strong>Optimiser le Temps :</strong> Passer moins de temps sur la recherche d'options et plus sur la création d'expériences mémorables.</li>
+                                    <li><strong>Créer de la Différenciation :</strong> Offrir un niveau de service que les plateformes automatisées ne peuvent pas égaler.</li>
+                                </ul>
+
+                                <div class="call-to-action-box">
+                                    <h4>Vous travaillez dans l'expérience client ?</h4>
+                                    <p>Les principes de cette approche s'appliquent à de nombreux secteurs où la personnalisation fait la différence. Explorons ensemble comment augmenter l'impact de vos équipes.</p>
+                                    <a href="../contact/" class="btn btn--primary">Discuter de votre contexte</a>
+                                </div>
+
+                                <div class="article-footer">
+                                    <button class="btn-close-article" onclick="window.explorationsPage && window.explorationsPage.closeCurrentCard(this)">
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M15 5L10 10L5 5" />
+                                        </svg>
+                                        <span>Fermer l'article</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Carte 3: Reporting -->
+                    <article class="exploration-card" data-exploration="reporting">
+                        <header class="exploration-card__preview">
+                            <div class="exploration-card__header">
+                                <span class="exploration-card__badge">Pilotage d'Entreprise</span>
+                                <h3 class="exploration-card__title">De la Donnée à l'Insight : Repenser le Reporting</h3>
+                            </div>
+                            <p class="exploration-card__teaser">Pourquoi la plupart des tableaux de bord ne servent qu'à rassurer ? Notre vision pour transformer les données en véritables leviers de décision stratégique.</p>
+                            <div class="exploration-card__cta">
+                                <span>Explorer cette réflexion</span>
+                                <svg class="icon" width="24" height="24" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </div>
+                        </header>
+
+                        <div class="exploration-card__content" style="display: none;">
+                            <div class="article-content">
+                                <h3>Le Piège du Reporting Décoratif</h3>
+                                <p>Beaucoup d'entreprises croulent sous les tableaux de bord colorés qui donnent l'impression de maîtriser la performance. Mais combien de ces indicateurs mènent réellement à des actions concrètes ? Souvent, le reporting devient un rituel plutôt qu'un outil de pilotage.</p>
+
+                                <h3>Notre Approche : L'Intelligence Contextuelle</h3>
+                                <p>Nous envisageons des systèmes qui ne se contentent pas d'afficher des chiffres, mais qui comprennent le contexte métier et alertent sur ce qui mérite vraiment l'attention des décideurs.</p>
+
+                                <div class="workflow-highlight">
+                                    <h4>Les Principes d'un Reporting Intelligent :</h4>
+                                    <ol>
+                                        <li><strong>Détection d'Anomalies :</strong> Signaler les écarts significatifs par rapport aux tendances normales.</li>
+                                        <li><strong>Mise en Perspective :</strong> Contextualiser chaque métrique par rapport aux enjeux business actuels.</li>
+                                        <li><strong>Prédiction d'Impact :</strong> Estimer les conséquences des tendances observées.</li>
+                                        <li><strong>Recommandations Actionnables :</strong> Suggérer des pistes d'action concrètes.</li>
+                                    </ol>
+                                </div>
+
+                                <h3>Vers une Prise de Décision Augmentée</h3>
+                                <p>L'objectif n'est pas de remplacer le jugement managérial, mais de l'armer avec une compréhension plus fine et plus rapide des dynamiques en cours. Le dirigeant peut ainsi concentrer son attention sur la stratégie plutôt que sur le décryptage de données.</p>
+
+                                <div class="call-to-action-box">
+                                    <h4>Vos équipes passent trop de temps à "faire du reporting" ?</h4>
+                                    <p>Si vous ressentez que vos outils actuels vous font perdre du temps au lieu de vous en faire gagner, explorons ensemble une approche plus intelligente du pilotage.</p>
+                                    <a href="../contact/" class="btn btn--primary">Échanger sur vos enjeux</a>
+                                </div>
+
+                                <div class="article-footer">
+                                    <button class="btn-close-article" onclick="window.explorationsPage && window.explorationsPage.closeCurrentCard(this)">
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M15 5L10 10L5 5" />
+                                        </svg>
+                                        <span>Fermer l'article</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__content">
+                <div class="footer__brand">
+                    <span class="brand">Nouvelle Rive</span>
+                    <p class="footer__tagline">Redonner du temps à l'intelligence humaine</p>
+                </div>
+
+                <div class="footer__nav">
+                    <a href="../" class="footer__link">Accueil</a>
+                    <a href="../approche/" class="footer__link">Approche</a>
+                    <a href="./" class="footer__link">Nos Explorations</a>
+                    <a href="../contact/" class="footer__link">Contact</a>
+                </div>
+            </div>
+
+            <div class="footer__bottom">
+                <p class="footer__copyright">© 2025 Nouvelle Rive. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../js/main.js"></script>
+</body>
+</html>
