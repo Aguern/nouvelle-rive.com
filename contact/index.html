@@ -23,7 +23,7 @@
     </script>
 
     <!-- Styles -->
-    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/base.css?v=2.3">
 
     <!-- GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -33,13 +33,14 @@
     <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js"></script>
 </head>
 <body>
-    <!-- Header -->
+    <!-- Header Amélioré -->
     <header id="header" class="header">
         <div class="container">
             <nav class="nav">
-                <div class="nav__brand">
-                    <a href="../" class="brand">Nouvelle Rive</a>
-                </div>
+                <a href="../" class="nav__brand" aria-label="Accueil Nouvelle Rive">
+                    <svg class="nav__logo" width="32" height="32" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 80C20 46.86 46.86 20 80 20V80H20Z" fill="currentColor"/><path d="M20 80C20 46.86 46.86 20 80 20" stroke="currentColor" stroke-width="8"/></svg>
+                    <span class="brand-text">Nouvelle Rive</span>
+                </a>
 
                 <div class="nav__menu" id="navMenu">
                     <a href="../approche/" class="nav__link">Approche</a>
@@ -47,7 +48,7 @@
                     <a href="./" class="nav__link nav__link--cta nav__link--active">Contact</a>
                 </div>
 
-                <button class="nav__toggle" id="navToggle" aria-label="Menu">
+                <button class="nav__toggle" id="navToggle" aria-label="Menu" aria-expanded="false">
                     <span></span>
                     <span></span>
                     <span></span>
@@ -58,6 +59,12 @@
 
     <main>
         <section class="contact-page">
+            <!-- NOUVEL ELEMENT POUR LE FOND VISUEL -->
+            <div class="contact-background-visual">
+                <div class="shape1"></div>
+                <div class="shape2"></div>
+            </div>
+
             <div class="container">
                 <div class="contact-wrapper">
                     <!-- Colonne de gauche : Le Discours -->
@@ -88,9 +95,11 @@
                     </div>
 
                     <!-- Colonne de droite : L'Action (Calendly) -->
-                    <div class="contact-calendly-container">
-                        <div id="calendly-widget-container">
-                            <!-- Le widget Calendly sera injecté ici par le JS -->
+                    <div class="contact-calendly">
+                        <div class="contact-calendly-container">
+                            <div id="calendly-widget-container">
+                                <!-- Le widget Calendly sera injecté ici par le JS -->
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -98,25 +107,35 @@
         </section>
     </main>
 
-    <!-- Footer -->
+    <!-- Footer Amélioré -->
     <footer class="footer">
         <div class="container">
-            <div class="footer__content">
+            <div class="footer__main">
                 <div class="footer__brand">
-                    <span class="brand">Nouvelle Rive</span>
-                    <p class="footer__tagline">Redonner du temps à l'intelligence humaine</p>
+                    <a href="../" class="nav__brand" aria-label="Accueil Nouvelle Rive">
+                        <svg class="nav__logo" width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 80C20 46.86 46.86 20 80 20V80H20Z" fill="currentColor"/><path d="M20 80C20 46.86 46.86 20 80 20" stroke="currentColor" stroke-width="8"/></svg>
+                        <span class="brand-text">Nouvelle Rive</span>
+                    </a>
+                    <p class="footer__tagline">Redonner du temps à votre intelligence métier.</p>
+                    <p class="footer__copyright">© 2025 Nouvelle Rive. Une initiative propulsée avec passion.</p>
                 </div>
-
-                <div class="footer__nav">
+                <div class="footer__nav-col">
+                    <h4 class="footer__nav-title">Navigation</h4>
                     <a href="../" class="footer__link">Accueil</a>
-                    <a href="../approche/" class="footer__link">Approche</a>
+                    <a href="../approche/" class="footer__link">Notre Approche</a>
                     <a href="../cas-usage/" class="footer__link">Nos Explorations</a>
-                    <a href="./" class="footer__link">Contact</a>
                 </div>
-            </div>
-
-            <div class="footer__bottom">
-                <p class="footer__copyright">© 2025 Nouvelle Rive. Tous droits réservés.</p>
+                <div class="footer__nav-col">
+                    <h4 class="footer__nav-title">Contact</h4>
+                    <a href="./" class="footer__link">Planifier un échange</a>
+                    <a href="mailto:contact@nouvelle-rive.com" class="footer__link">Nous écrire</a>
+                </div>
+                <div class="footer__nav-col">
+                    <h4 class="footer__nav-title">Solutions</h4>
+                    <a href="../cas-usage/" class="footer__link">Copilote Fiscal</a>
+                    <a href="../cas-usage/" class="footer__link">Guide Intelligent</a>
+                    <a href="../cas-usage/" class="footer__link">Reporting Contextuel</a>
+                </div>
             </div>
         </div>
     </footer>
