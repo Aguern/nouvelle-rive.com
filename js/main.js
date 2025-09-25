@@ -1491,43 +1491,44 @@ class ContactPage {
      * Animations d'apparition au scroll
      */
     initScrollAnimations() {
-        // Hero animation
-        gsap.fromTo('.hero-contact__title', {
+        // Animation du fond visuel
+        const tl = gsap.timeline({ repeat: -1, yoyo: true });
+        tl.to('.contact-background-visual .shape1', {
+            x: 100,
             y: 50,
-            opacity: 0
-        }, {
-            y: 0,
-            opacity: 1,
-            duration: 1,
-            ease: "power3.out",
-            delay: 0.2
+            duration: 20,
+            ease: "sine.inOut"
         });
+        tl.to('.contact-background-visual .shape2', {
+            x: -80,
+            y: -60,
+            duration: 20,
+            ease: "sine.inOut"
+        }, "-=20");
 
-        gsap.fromTo('.hero-contact__subtitle', {
+        // Animation d'entrée du contenu
+        const introElements = [
+            '.contact-intro__title',
+            '.contact-intro__subtitle',
+            '.contact-intro__step',
+            '.contact-separator',
+            '.contact-alternative'
+        ];
+
+        gsap.from(introElements, {
             y: 30,
-            opacity: 0
-        }, {
-            y: 0,
-            opacity: 1,
+            opacity: 0,
             duration: 0.8,
             ease: "power2.out",
-            delay: 0.5
+            stagger: 0.1,
         });
 
-        // Section headers
-        gsap.fromTo('.section__title', {
-            y: 40,
-            opacity: 0
-        }, {
-            y: 0,
-            opacity: 1,
-            duration: 0.8,
+        gsap.from('.contact-calendly', {
+            y: 50,
+            opacity: 0,
+            duration: 1,
             ease: "power3.out",
-            scrollTrigger: {
-                trigger: '.section__title',
-                start: "top 80%",
-                toggleActions: "play none none reverse"
-            }
+            delay: 0.5
         });
     }
 
