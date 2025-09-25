@@ -471,10 +471,43 @@ class NouvelleRive {
             });
         });
 
-        // Animation d'icônes au hover
-        const icons = document.querySelectorAll('.icon');
-        icons.forEach(icon => {
-            const iconParent = icon.closest('.challenge-card__icon, .timeline__marker');
+        // Animation spécifique pour les icônes de la section défis
+        const challengeCards = document.querySelectorAll('#defis .challenge-card');
+        challengeCards.forEach(card => {
+            const icon = card.querySelector('.icon--challenge');
+            const iconParent = card.querySelector('.challenge-card__icon');
+
+            if (icon && iconParent) {
+                // Nettoyer les styles inline existants
+                gsap.set(icon, { clearProps: "all" });
+
+                card.addEventListener('mouseenter', () => {
+                    // Animation du conteneur icône
+                    gsap.to(iconParent, {
+                        scale: 1.15,
+                        background: "linear-gradient(135deg, var(--color-primary), #0099ff)",
+                        boxShadow: "0 8px 25px rgba(0, 116, 217, 0.4)",
+                        duration: 0.3,
+                        ease: "back.out(1.7)"
+                    });
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    gsap.to(iconParent, {
+                        scale: 1,
+                        background: "var(--color-primary)",
+                        boxShadow: "var(--shadow-md)",
+                        duration: 0.3,
+                        ease: "back.out(1.7)"
+                    });
+                });
+            }
+        });
+
+        // Animation d'icônes pour les autres sections (timeline, etc.)
+        const otherIcons = document.querySelectorAll('.icon:not(.icon--challenge)');
+        otherIcons.forEach(icon => {
+            const iconParent = icon.closest('.timeline__marker');
             if (iconParent) {
                 iconParent.addEventListener('mouseenter', () => {
                     gsap.to(icon, {
@@ -562,6 +595,82 @@ class NouvelleRive {
                 gsap.to(card, { scale: 1, duration: 0.3, ease: 'power2.out' });
             });
         });
+
+        // Animation des lignes de connexion Bento
+        this.initBentoConnections();
+    }
+
+    /**
+     * Animation des lignes de connexion Bento
+     */
+    initBentoConnections() {
+        const bentoGrid = document.querySelector('.bento-grid');
+        const connectionLines = document.querySelectorAll('.connection-line');
+
+        if (!bentoGrid || connectionLines.length === 0) return;
+
+        // Animation d'apparition séquentielle des lignes
+        ScrollTrigger.create({
+            trigger: bentoGrid,
+            start: "top 70%",
+            onEnter: () => {
+                connectionLines.forEach((line, index) => {
+                    gsap.to(line, {
+                        strokeDashoffset: 0,
+                        opacity: 1,
+                        duration: 1.5,
+                        ease: "power2.inOut",
+                        delay: index * 0.4 // Décalage pour effet séquentiel
+                    });
+                });
+            }
+        });
+
+        // Animation au hover des cartes
+        document.querySelectorAll('.bento-card').forEach((card, index) => {
+            card.addEventListener('mouseenter', () => {
+                // Mettre en évidence les lignes connectées à cette carte
+                const relatedLines = this.getBentoRelatedLines(index);
+                relatedLines.forEach(lineIndex => {
+                    const line = connectionLines[lineIndex];
+                    if (line) {
+                        gsap.to(line, {
+                            opacity: 1,
+                            strokeWidth: 3,
+                            duration: 0.3,
+                            ease: "power2.out"
+                        });
+                    }
+                });
+            });
+
+            card.addEventListener('mouseleave', () => {
+                // Retour à l'état normal
+                connectionLines.forEach(line => {
+                    gsap.to(line, {
+                        opacity: 0.6,
+                        strokeWidth: 2,
+                        duration: 0.3,
+                        ease: "power2.out"
+                    });
+                });
+            });
+        });
+    }
+
+    /**
+     * Retourne les indices des lignes connectées à une carte donnée
+     */
+    getBentoRelatedLines(cardIndex) {
+        // Connection path: Block 1 → Block 2 → Block 3 (L'Humain) → Block 4 (Prototype) → Block 1
+        // DOM mapping: 0 → 1 → 3 → 2 → 0
+        const connections = {
+            0: [0, 3], // Votre Contexte (Block 1): lignes 1→2 et 4→1
+            1: [0, 1], // La Clarté (Block 2): lignes 1→2 et 2→3
+            2: [2, 3], // Prototype (Block 4): lignes 3→4 et 4→1
+            3: [1, 2]  // L'Humain (Block 3): lignes 2→3 et 3→4
+        };
+        return connections[cardIndex] || [];
     }
 
     /**
