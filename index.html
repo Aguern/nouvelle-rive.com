@@ -23,7 +23,7 @@
     </script>
 
     <!-- Styles -->
-    <link rel="stylesheet" href="css/base.css?v=2.1">
+    <link rel="stylesheet" href="css/base.css?v=2.5">
 
     <!-- GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -60,18 +60,22 @@
     <main>
         <!-- Hero Section -->
         <section id="hero" class="hero">
-            <video class="hero__video" autoplay muted loop playsinline>
-                <source src="https://res.cloudinary.com/dwnevq3ba/video/upload/summit.mp4" type="video/mp4">
-                Votre navigateur ne supporte pas la vidéo HTML5.
-            </video>
-
-            <div class="hero__overlay"></div>
-
-            <div class="hero__content">
-                <div class="container">
-                    <h1 class="hero__title">Redonner du temps à l'intelligence humaine.</h1>
-                    <p class="hero__subtitle">Nous concevons des copilotes IA sur-mesure qui libèrent vos experts des tâches complexes et répétitives, pour qu'ils puissent se concentrer sur la stratégie et la décision.</p>
-                    <a href="contact/" class="btn btn--primary hero__cta">Explorons vos possibilités</a>
+            <div class="container">
+                <div class="hero__wrapper">
+                    <div class="hero__content">
+                        <h1 class="hero__title">Redonner du temps à l'intelligence humaine.</h1>
+                        <p class="hero__subtitle">Nous concevons des copilotes IA sur-mesure qui libèrent vos experts des tâches complexes et répétitives, pour qu'ils puissent se concentrer sur la stratégie et la décision.</p>
+                        <div class="hero__cta-wrapper">
+                            <a href="contact/" class="btn btn--primary hero__cta">Explorons vos possibilités</a>
+                        </div>
+                    </div>
+                    <div class="hero__video-container">
+                        <video class="hero__video" autoplay muted loop playsinline>
+                            <source src="https://res.cloudinary.com/dwnevq3ba/video/upload/summit.mp4" type="video/mp4">
+                            Votre navigateur ne supporte pas la vidéo HTML5.
+                        </video>
+                        <div class="hero__overlay"></div>
+                    </div>
                 </div>
             </div>
         </section>
