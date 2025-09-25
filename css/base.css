@@ -351,7 +351,8 @@ h6 { font-size: var(--text-base); }
   z-index: var(--z-sticky);
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid var(--color-gris-moyen);
+  box-shadow: var(--shadow-sm);
   transition: all var(--transition-base);
 }
 
@@ -400,6 +401,7 @@ h6 { font-size: var(--text-base); }
 }
 
 .nav__link {
+  color: var(--color-text);
   font-weight: 500;
   transition: color var(--transition-fast);
   position: relative;
@@ -467,13 +469,26 @@ h6 { font-size: var(--text-base); }
 /* Hero Section */
 .hero {
   position: relative;
-  height: 100vh !important;
-  min-height: 800px;
-  max-height: 1000px;
+  padding: 120px 0 var(--space-4xl);
+  background: var(--color-section-alt);
+  min-height: 80vh;
   display: flex;
   align-items: center;
+}
+
+.hero__wrapper {
+  display: grid;
+  grid-template-columns: 1.2fr 1.1fr;
+  gap: var(--space-3xl);
+  align-items: start;
+}
+
+.hero__video-container {
+  position: relative;
+  border-radius: var(--radius-xl);
   overflow: hidden;
-  perspective: 1000px;
+  box-shadow: var(--shadow-2xl);
+  height: 500px;
 }
 
 .hero__video {
@@ -483,7 +498,7 @@ h6 { font-size: var(--text-base); }
   width: 100%;
   height: 100%;
   object-fit: cover;
-  z-index: -2;
+  filter: brightness(1.2) contrast(0.95);
 }
 
 .hero__overlay {
@@ -492,46 +507,94 @@ h6 { font-size: var(--text-base); }
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(32, 49, 68, 0.5));
-  backdrop-filter: blur(1px);
-  z-index: -1;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(32, 49, 68, 0.2));
+  backdrop-filter: blur(0.5px);
+  z-index: 1;
+  pointer-events: none;
 }
 
 .hero__content {
   position: relative;
   z-index: 1;
-  text-align: center;
-  color: white;
-  width: 100%;
-  transform: translateZ(50px);
-  will-change: transform;
+  text-align: left;
+  max-width: 600px;
+  padding-top: 0;
+  display: flex;
+  flex-direction: column;
+  height: 500px;
+  justify-content: center;
+  gap: var(--space-lg);
+}
+
+.hero__cta-wrapper {
+  text-align: left;
 }
 
 .hero__title {
-  font-size: var(--text-5xl);
+  font-size: 3.5rem;
   margin-bottom: var(--space-xl);
-  max-width: 900px;
-  margin-left: auto;
-  margin-right: auto;
-  color: white;
+  color: var(--color-text);
   line-height: 1.1;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  text-align: left;
+  font-weight: 700;
 }
 
 .hero__subtitle {
-  font-size: var(--text-xl);
-  margin-bottom: var(--space-2xl);
-  opacity: 0.95;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
+  font-size: 1.15rem;
+  margin-bottom: var(--space-sm);
+  color: var(--color-text-light);
   line-height: 1.6;
+  text-align: left;
 }
 
 .hero__cta {
-  font-size: var(--text-lg);
-  padding: var(--space-lg) var(--space-2xl);
+  font-size: var(--text-base);
+  padding: var(--space-md) var(--space-xl);
+}
+
+/* Hero Responsive */
+@media (max-width: 992px) {
+  .hero__wrapper {
+    grid-template-columns: 1fr;
+    gap: var(--space-2xl);
+  }
+
+  .hero__content {
+    height: auto;
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  .hero__title {
+    text-align: center;
+  }
+
+  .hero__video-container {
+    height: 400px;
+  }
+
+  .hero__cta-wrapper {
+    margin-top: var(--space-xl);
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    padding: 100px 0 var(--space-3xl);
+  }
+
+  .hero__title {
+    font-size: var(--text-3xl);
+    margin-bottom: var(--space-xl);
+  }
+
+  .hero__subtitle {
+    font-size: var(--text-base);
+  }
+
+  .hero__video-container {
+    height: 300px;
+  }
 }
 
 /* Section Layout */
@@ -1314,11 +1377,6 @@ h6 { font-size: var(--text-base); }
    Extension du design system pour une expérience premium
    ================================================== */
 
-/* Fix pour le bouton Contact actif dans le header */
-.nav__link--cta.nav__link--active {
-    color: white !important;
-}
-
 /* 1. HERO PAGE SECTION */
 .hero-page {
     padding: calc(var(--space-4xl) + 80px) 0 var(--space-4xl) 0;
@@ -1941,11 +1999,6 @@ h6 { font-size: var(--text-base); }
    EXPLORATIONS INTERACTIVES - Styles spécialisés
    Design pour cartes dépliables et experience interactive
    ================================================== */
-
-/* Fix pour le bouton Contact actif dans le header */
-.nav__link--cta.nav__link--active {
-    color: white !important;
-}
 
 /* 1. HERO DARK */
 .hero-page {
@@ -2597,11 +2650,6 @@ h6 { font-size: var(--text-base); }
    Extension du design system pour la page de contact
    ================================================== */
 
-/* Fix pour le bouton Contact actif dans le header */
-.nav__link--cta.nav__link--active {
-    color: white !important;
-}
-
 /* 1. HERO CONTACT SECTION */
 .hero-contact {
     padding: calc(var(--space-4xl) + 80px) 0 var(--space-2xl) 0;
@@ -2755,23 +2803,6 @@ h6 { font-size: var(--text-base); }
     margin: 0;
     position: relative;
     z-index: 2;
-}
-
-/* 4. NAVIGATION ACTIVE STATES */
-.nav__link--active {
-    color: var(--color-primary);
-    font-weight: 600;
-    position: relative;
-}
-
-.nav__link--active::after {
-    content: '';
-    position: absolute;
-    bottom: -4px;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: var(--color-primary);
 }
 
 /* 5. ANIMATIONS */
@@ -3537,13 +3568,7 @@ h6 { font-size: var(--text-base); }
 .header {
     transition: background-color 0.3s, box-shadow 0.3s, border-color 0.3s;
 }
-.header:not(.header--transparent) {
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--color-gris-moyen);
-    box-shadow: var(--shadow-sm);
-}
+/* Header non-transparent rule removed - default header is now opaque */
 
 /* 2. Footer Amélioré */
 .footer {
