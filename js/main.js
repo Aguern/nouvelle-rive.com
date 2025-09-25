@@ -35,26 +35,8 @@ class NouvelleRive {
         const header = document.getElementById('header');
         if (!header) return;
 
-        let isTransparent = true;
-
-        ScrollTrigger.create({
-            start: 'top -80',
-            end: 99999,
-            onUpdate: (self) => {
-                if (self.direction === 1 && isTransparent) {
-                    // Scrolling down - show solid header
-                    header.classList.remove('header--transparent');
-                    isTransparent = false;
-                } else if (self.direction === -1 && !isTransparent && self.scroll() < 80) {
-                    // Scrolling up and near top - show transparent header
-                    header.classList.add('header--transparent');
-                    isTransparent = true;
-                }
-            }
-        });
-
-        // Set initial state
-        header.classList.add('header--transparent');
+        // Header is always solid (no transparent logic)
+        // This ensures uniform appearance across all pages
     }
 
     /**
