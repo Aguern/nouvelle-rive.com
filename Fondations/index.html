@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notre Approche - Nouvelle Rive</title>
+    <meta name="description" content="Notre approche artisanale pour transformer vos processus avec l'IA. Une méthode claire en 3 étapes pour libérer le potentiel de vos équipes.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- SVG Icons -->
+    <script>
+        fetch('../assets/svg/icons.svg')
+            .then(response => response.text())
+            .then(data => {
+                const div = document.createElement('div');
+                div.innerHTML = data;
+                document.body.insertBefore(div.firstElementChild, document.body.firstChild);
+            });
+    </script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../css/base.css?v=2.0">
+
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+</head>
+<body>
+    <!-- Header Amélioré -->
+    <header id="header" class="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="../" class="nav__brand" aria-label="Accueil Nouvelle Rive">
+                    <svg class="nav__logo" width="32" height="32" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 80C20 46.86 46.86 20 80 20V80H20Z" fill="currentColor"/><path d="M20 80C20 46.86 46.86 20 80 20" stroke="currentColor" stroke-width="8"/></svg>
+                    <span class="brand-text">Nouvelle Rive</span>
+                </a>
+
+                <div class="nav__menu" id="navMenu">
+                    <a href="cas-usage/" class="nav__link">Solutions</a>
+                    <a href="approche/" class="nav__link">Approche</a>
+                    <a href="Fondations/" class="nav__link">Fondations</a>
+                    <a href="contact/" class="nav__link nav__link--cta">Définir mon projet</a>
+                </div>
+
+                <button class="nav__toggle" id="navToggle" aria-label="Menu" aria-expanded="false">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero-approach">
+            <div class="hero-approach__background">
+                <img src="https://res.cloudinary.com/dwnevq3ba/image/upload/road.jpg" alt="Route illustrant le chemin vers l'innovation">
+            </div>
+            <div class="hero-approach__overlay"></div>
+            <div class="container">
+                <h1 class="hero-approach__title">On ne recrute pas un collaborateur sans un processus clair. Pour un assistant IA, c'est pareil.</h1>
+                <p class="hero-approach__subtitle">Nous avons développé une méthode rigoureuse pour garantir que votre futur assistant digital soit non seulement performant, mais parfaitement intégré à votre équipe et à vos outils.</p>
+            </div>
+        </section>
+
+        <section id="technologie" class="section">
+            <div class="container">
+                <header class="section__header">
+                    <span class="eyebrow-text">Notre Boîte à Outils</span>
+                    <h2 class="section__title">La Technologie au Service du Sens</h2>
+                </header>
+                <div class="tech-split">
+                    <div class="tech-split__text">
+                        <p>Pour construire le pont entre ces deux mondes, nous n'utilisons pas une "IA" monolithique, mais nous assemblons trois briques technologiques fondamentales :</p>
+                        <ul>
+                            <li><strong>Agents Spécialistes :</strong> Nous codons le savoir-faire de vos experts en "Recettes" : des modules autonomes qui encapsulent une compétence métier. Chaque recette est un actif réutilisable, garantissant cohérence et performance.</li>
+                            <li><strong>Orchestration intelligente</strong> Nous ne concevons pas des processus linéaire. Grâce à un moteur d'orchestration de pointe, nos agents peuvent raisonner, boucler, et choisir les meilleurs outils pour accomplir des tâches complexes.</li>
+                            <li><strong>La Collaboration Humain-IA :</strong> Un copilote n'impose pas, il collabore. Nos agents sont conçus pour s'arrêter, poser des questions et demander une validation humaine aux étapes critiques, garantissant un contrôle total et une confiance absolue dans le résultat.</li>
+                        </ul>
+                    </div>
+                    <div class="tech-split__visual">
+                        <video autoplay muted loop playsinline>
+                            <source src="https://res.cloudinary.com/dwnevq3ba/video/upload/bridge.mp4" type="video/mp4">
+                            Votre navigateur ne supporte pas la vidéo HTML5.
+                        </video>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- NOUVELLE SECTION POUR L'APPROFONDISSEMENT TECHNIQUE -->
+        <section class="section">
+            <div class="container" style="max-width: 900px;">
+                <header class="section__header">
+                    <span class="eyebrow-text">L'Ingénierie de nos Assistants</span>
+                    <h2 class="section__title">Les Composants de notre Savoir-Faire</h2>
+                </header>
+
+                <div class="philosophy-card" style="margin-bottom: var(--space-xl);">
+                    <h4>Raisonnement & Orchestration : Des assistants qui réfléchissent</h4>
+                    <p>Pour qu'un assistant soit réellement autonome, il doit pouvoir raisonner. Nous intégrons des techniques de **Chaîne de Pensée (Chain-of-Thought)** qui lui apprennent à décomposer un problème, à planifier ses actions et à auto-corriger ses erreurs, comme un humain le ferait. Cette capacité de raisonnement est orchestrée par des frameworks comme **LangGraph**, qui permettent à une équipe d'agents de collaborer (**A2A**) et de s'adapter à des situations imprévues, bien au-delà des workflows linéaires traditionnels.</p>
+                </div>
+
+                <div class="philosophy-card" style="margin-bottom: var(--space-xl);">
+                    <h4>Connexion & Action : Des assistants connectés à votre monde</h4>
+                    <p>L'intelligence n'est rien sans la capacité d'agir. Nous donnons à nos assistants des "mains" pour interagir avec vos logiciels via des **API** sécurisées ou des techniques de **RPA** (automatisation des processus robotisés) pour les systèmes plus anciens. Ils ont aussi des "yeux" pour consulter l'information en temps réel via le **Web Search**. Cette architecture ouverte anticipe les futurs standards de communication (**MCP**) pour garantir la pérennité de votre investissement.</p>
+                </div>
+
+                <div class="philosophy-card">
+                    <h4>Fiabilité des Données : Des assistants qui s'appuient sur du solide</h4>
+                    <p>Un assistant n'est fiable que si les informations qu'il utilise le sont. Notre approche de **Data Science** consiste à préparer le terrain. En amont, des modèles de **Machine Learning** nettoient, classifient et enrichissent vos données brutes. Ainsi, les grands modèles de langage (**LLM, Deep Learning**) travaillent sur une information saine, ce qui maximise leur pertinence et minimise le risque d'erreur.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Amélioré -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__main">
+                <div class="footer__brand">
+                    <a href="/" class="nav__brand" aria-label="Accueil Nouvelle Rive">
+                        <svg class="nav__logo" width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 80C20 46.86 46.86 20 80 20V80H20Z" fill="currentColor"/><path d="M20 80C20 46.86 46.86 20 80 20" stroke="currentColor" stroke-width="8"/></svg>
+                        <span class="brand-text">Nouvelle Rive</span>
+                    </a>
+                    <p class="footer__tagline">L'IA au service de votre expertise.</p>
+                    <p class="footer__copyright">© 2025 Nouvelle Rive. Basé à Annecy, France.</p>
+                </div>
+                <div class="footer__nav-col">
+                    <h4 class="footer__nav-title">Navigation</h4>
+                    <a href="/" class="footer__link">Accueil</a>
+                    <a href="cas-usage/" class="footer__link">Nos Solutions</a>
+                    <a href="approche/" class="footer__link">Notre Approche</a>
+                    <a href="Fondations/" class="footer__link">Nos Fondations</a>
+                </div>
+                <div class="footer__nav-col">
+                    <h4 class="footer__nav-title">Contact</h4>
+                    <a href="contact/" class="footer__link">Planifier une session</a>
+                    <a href="mailto:contact@nouvelle-rive.com" class="footer__link">Nous écrire</a>
+                </div>
+                <div class="footer__nav-col">
+                    <h4 class="footer__nav-title">Démonstrations</h4>
+                    <a href="cas-usage/" class="footer__link">Copilote Fiscal</a>
+                    <a href="cas-usage/" class="footer__link">Guide Intelligent</a>
+                    <a href="cas-usage/" class="footer__link">Reporting Contextuel</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../js/main.js"></script>
+</body>
+</html>
