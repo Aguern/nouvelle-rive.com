@@ -777,6 +777,7 @@ class ApprochePage {
         this.initProgressiveReveal();
         this.initAccessibility();
         this.initInteractiveTimeline();
+        this.initInteractiveArchitecture();
 
         console.log('🎯 Page Approche initialized');
     }
@@ -798,6 +799,65 @@ class ApprochePage {
             });
     }
 
+    /**
+     * NOUVELLE FONCTION : Gère l'architecture interactive sur la page Fondations.
+     */
+    initInteractiveArchitecture() {
+        const architectureContainer = document.querySelector('#interactive-architecture');
+        if (!architectureContainer) return;
+
+        const visualContainer = architectureContainer.querySelector('.visual-sticky-container');
+        const steps = gsap.utils.toArray(".arch-step");
+        
+        // Charger le SVG
+        fetch('../assets/svg/architecture-interactive.svg')
+            .then(response => response.text())
+            .then(data => {
+                visualContainer.innerHTML = data;
+                const svg = visualContainer.querySelector('svg');
+                const svgGroups = {
+                    data: svg.querySelector('#arch-data'),
+                    reasoning: svg.querySelector('#arch-reasoning'),
+                    connection: svg.querySelector('#arch-connection'),
+                    core: svg.querySelector('#arch-core') // Le coeur est toujours un peu visible
+                };
+                
+                // Le coeur est toujours un peu actif
+                svgGroups.core.classList.add('is-active');
+
+                steps.forEach(step => {
+                    ScrollTrigger.create({
+                        trigger: step,
+                        start: "top center",
+                        end: "bottom center",
+                        onToggle: self => {
+                            const stepId = step.dataset.step;
+                            if (self.isActive) {
+                                this.updateArchitectureVisual(stepId, svgGroups, steps, step);
+                            }
+                        },
+                    });
+                });
+
+                // Activer le premier élément par défaut
+                this.updateArchitectureVisual(steps[0].dataset.step, svgGroups, steps, steps[0]);
+            });
+    }
+
+    updateArchitectureVisual(activeStepId, svgGroups, allSteps, activeStep) {
+        // Mettre à jour la classe active pour le texte
+        allSteps.forEach(s => {
+            s.classList.toggle('is-active', s === activeStep);
+        });
+
+        // Mettre à jour l'opacité des visuels SVG
+        for (const key in svgGroups) {
+            if (key !== 'core') { // Ne pas désactiver le coeur
+                svgGroups[key].classList.toggle('is-active', key === activeStepId);
+            }
+        }
+    }
+
     setupTimelineAnimation(visualContainer) {
         const steps = gsap.utils.toArray(".timeline-step");
         const visuals = {
@@ -805,6 +865,7 @@ class ApprochePage {
             step2: visualContainer.querySelector('#step2-visual'),
             step3: visualContainer.querySelector('#step3-visual')
         };
+        
 
         // Cache tous les visuels sauf le premier
         gsap.set([visuals.step2, visuals.step3], { opacity: 0 });
