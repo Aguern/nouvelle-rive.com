@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="600" height="600" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <!-- Gradient pour l'engrenage central -->
+        <linearGradient id="centralGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#0074D9;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#0099ff;stop-opacity:1" />
+        </linearGradient>
+
+        <!-- Gradient pour les engrenages satellites -->
+        <linearGradient id="satelliteGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#3898FF;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#00A8FF;stop-opacity:1" />
+        </linearGradient>
+
+        <!-- Filtre pour l'ombre -->
+        <filter id="gearShadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+            <feOffset dx="2" dy="2" result="offsetblur"/>
+            <feComponentTransfer>
+                <feFuncA type="linear" slope="0.3"/>
+            </feComponentTransfer>
+            <feMerge>
+                <feMergeNode/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+
+        <!-- Pattern pour l'effet mécanique -->
+        <pattern id="mechanicalTexture" x="0" y="0" width="4" height="4" patternUnits="userSpaceOnUse">
+            <circle cx="2" cy="2" r="0.5" fill="#fff" opacity="0.1"/>
+        </pattern>
+    </defs>
+
+    <!-- Engrenage Central (Core Intelligence) -->
+    <g id="gear-core" class="gear central-gear" transform="translate(300, 300)" filter="url(#gearShadow)">
+        <!-- Corps de l'engrenage -->
+        <circle cx="0" cy="0" r="55" fill="url(#centralGradient)"/>
+        <circle cx="0" cy="0" r="55" fill="url(#mechanicalTexture)"/>
+
+        <!-- 12 dents autour -->
+        <g class="gear-teeth">
+            <rect x="-6" y="-65" width="12" height="15" rx="2" fill="url(#centralGradient)" transform="rotate(0)"/>
+            <rect x="-6" y="-65" width="12" height="15" rx="2" fill="url(#centralGradient)" transform="rotate(30)"/>
+            <rect x="-6" y="-65" width="12" height="15" rx="2" fill="url(#centralGradient)" transform="rotate(60)"/>
+            <rect x="-6" y="-65" width="12" height="15" rx="2" fill="url(#centralGradient)" transform="rotate(90)"/>
+            <rect x="-6" y="-65" width="12" height="15" rx="2" fill="url(#centralGradient)" transform="rotate(120)"/>
+            <rect x="-6" y="-65" width="12" height="15" rx="2" fill="url(#centralGradient)" transform="rotate(150)"/>
+            <rect x="-6" y="-65" width="12" height="15" rx="2" fill="url(#centralGradient)" transform="rotate(180)"/>
+            <rect x="-6" y="-65" width="12" height="15" rx="2" fill="url(#centralGradient)" transform="rotate(210)"/>
+            <rect x="-6" y="-65" width="12" height="15" rx="2" fill="url(#centralGradient)" transform="rotate(240)"/>
+            <rect x="-6" y="-65" width="12" height="15" rx="2" fill="url(#centralGradient)" transform="rotate(270)"/>
+            <rect x="-6" y="-65" width="12" height="15" rx="2" fill="url(#centralGradient)" transform="rotate(300)"/>
+            <rect x="-6" y="-65" width="12" height="15" rx="2" fill="url(#centralGradient)" transform="rotate(330)"/>
+        </g>
+
+        <!-- Centre de l'engrenage -->
+        <circle cx="0" cy="0" r="25" fill="#001F3F"/>
+        <circle cx="0" cy="0" r="20" fill="none" stroke="#0074D9" stroke-width="2"/>
+
+        <!-- Icône centrale (puce) -->
+        <rect x="-10" y="-10" width="20" height="20" rx="2" fill="#0074D9"/>
+        <rect x="-7" y="-7" width="14" height="14" rx="1" fill="#fff" opacity="0.3"/>
+    </g>
+</svg>

@@ -1,0 +1,24 @@
+<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Triangle principal d'alerte -->
+  <path d="M32 12L50 44H14L32 12Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+
+  <!-- Ligne d'exclamation -->
+  <line x1="32" y1="24" x2="32" y2="36" stroke="currentColor" stroke-width="2"/>
+
+  <!-- Point d'exclamation -->
+  <circle cx="32" cy="40" r="1.5" fill="currentColor"/>
+
+  <!-- Éléments de danger dispersés -->
+  <path d="M18 18L16 16" stroke="currentColor" stroke-width="1" opacity="0.4"/>
+  <path d="M46 18L48 16" stroke="currentColor" stroke-width="1" opacity="0.4"/>
+
+  <!-- Petites croix d'erreur -->
+  <path d="M12 48L10 46M10 48L12 46" stroke="currentColor" stroke-width="1" opacity="0.5"/>
+  <path d="M54 48L52 46M52 48L54 46" stroke="currentColor" stroke-width="1" opacity="0.5"/>
+
+  <!-- Lignes de stress -->
+  <path d="M8 28L12 28" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+  <path d="M52 28L56 28" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+  <path d="M8 32L12 32" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+  <path d="M52 32L56 32" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+</svg>

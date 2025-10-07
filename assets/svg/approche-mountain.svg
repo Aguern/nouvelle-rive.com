@@ -1,0 +1,148 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" id="approche-mountain">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="sky-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e3a5f;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3898FF;stop-opacity:0.3" />
+    </linearGradient>
+
+    <linearGradient id="mountain-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#2d5a7b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a3a52;stop-opacity:1" />
+    </linearGradient>
+
+    <linearGradient id="path-glow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#3898FF;stop-opacity:0" />
+      <stop offset="50%" style="stop-color:#3898FF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3898FF;stop-opacity:0" />
+    </linearGradient>
+
+    <!-- Filter for glow effect -->
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background: Sky -->
+  <rect class="sky" width="800" height="600" fill="url(#sky-gradient)"/>
+
+  <!-- Mountain silhouette -->
+  <path id="mountain-outline"
+        d="M 0,600 L 0,400 Q 100,350 150,300 Q 200,250 250,280 Q 300,310 350,240 Q 400,170 450,200 Q 500,230 550,150 Q 600,70 650,100 Q 700,130 750,50 L 750,600 Z"
+        fill="url(#mountain-gradient)"
+        stroke="#3898FF"
+        stroke-width="2"
+        stroke-dasharray="2200"
+        stroke-dashoffset="2200"
+        opacity="0.9"/>
+
+  <!-- Progress path (invisible, used for motion) -->
+  <path id="progress-path"
+        d="M 100,500 Q 180,460 220,430 Q 280,380 340,360 Q 420,330 480,280 Q 540,220 580,180 Q 630,130 680,90"
+        stroke="transparent"
+        stroke-width="3"
+        fill="none"/>
+
+  <!-- Visible glowing path -->
+  <path id="visible-path"
+        d="M 100,500 Q 180,460 220,430 Q 280,380 340,360 Q 420,330 480,280 Q 540,220 580,180 Q 630,130 680,90"
+        stroke="url(#path-glow)"
+        stroke-width="4"
+        fill="none"
+        stroke-dasharray="800"
+        stroke-dashoffset="800"
+        filter="url(#glow)"/>
+
+  <!-- Camp 1: Entretien d'embauche -->
+  <g id="camp-1" transform="translate(220, 430)" opacity="0">
+    <circle class="camp-base" r="35" fill="rgba(56, 152, 255, 0.2)" stroke="#3898FF" stroke-width="2"/>
+
+    <!-- Tent icon -->
+    <path class="tent"
+          d="M -15,-10 L 0,-25 L 15,-10 Z M -15,-10 L 15,-10 L 15,-5 L -15,-5 Z"
+          fill="#3898FF" opacity="0.8"/>
+
+    <!-- Diagnostic icon (magnifying glass + checklist) -->
+    <g class="icon-diagnostic" transform="translate(0, 8)">
+      <circle r="8" fill="none" stroke="white" stroke-width="2"/>
+      <line x1="6" y1="6" x2="12" y2="12" stroke="white" stroke-width="2" stroke-linecap="round"/>
+      <path d="M -4,-2 L -2,-2 M -4,2 L -1,2 M -4,6 L 0,6" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+    </g>
+
+    <text class="camp-label" y="50" text-anchor="middle" fill="white" font-size="14" font-weight="600">Entretien</text>
+    <text class="camp-sublabel" y="65" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="11">Diagnostic</text>
+  </g>
+
+  <!-- Camp 2: Formation -->
+  <g id="camp-2" transform="translate(480, 280)" opacity="0">
+    <circle class="camp-base" r="35" fill="rgba(56, 152, 255, 0.2)" stroke="#3898FF" stroke-width="2"/>
+
+    <!-- Tent icon -->
+    <path class="tent"
+          d="M -15,-10 L 0,-25 L 15,-10 Z M -15,-10 L 15,-10 L 15,-5 L -15,-5 Z"
+          fill="#3898FF" opacity="0.8"/>
+
+    <!-- Training icon (robot + tools) -->
+    <g class="icon-training" transform="translate(0, 8)">
+      <rect x="-6" y="-6" width="12" height="12" rx="2" fill="none" stroke="white" stroke-width="2"/>
+      <circle cx="-3" cy="-2" r="1.5" fill="white"/>
+      <circle cx="3" cy="-2" r="1.5" fill="white"/>
+      <path d="M -3,3 Q 0,5 3,3" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <!-- Wrench -->
+      <path d="M -10,-8 L -8,-6 M 8,-8 L 10,-6" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+    </g>
+
+    <text class="camp-label" y="50" text-anchor="middle" fill="white" font-size="14" font-weight="600">Formation</text>
+    <text class="camp-sublabel" y="65" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="11">Développement</text>
+  </g>
+
+  <!-- Camp 3: Période d'essai -->
+  <g id="camp-3" transform="translate(680, 90)" opacity="0">
+    <circle class="camp-base" r="38" fill="rgba(56, 152, 255, 0.2)" stroke="#3898FF" stroke-width="2"/>
+
+    <!-- Flag icon -->
+    <path class="flag"
+          d="M 0,-28 L 0,10 M 0,-28 L 15,-22 L 15,-10 L 0,-16"
+          fill="#3898FF" stroke="#3898FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- Performance dashboard icon -->
+    <g class="icon-performance" transform="translate(0, 8)">
+      <rect x="-8" y="-6" width="16" height="12" rx="1" fill="none" stroke="white" stroke-width="2"/>
+      <!-- Bars -->
+      <line x1="-5" y1="2" x2="-5" y2="-2" stroke="white" stroke-width="2" stroke-linecap="round"/>
+      <line x1="0" y1="2" x2="0" y2="-4" stroke="white" stroke-width="2" stroke-linecap="round"/>
+      <line x1="5" y1="2" x2="5" y2="0" stroke="white" stroke-width="2" stroke-linecap="round"/>
+    </g>
+
+    <text class="camp-label" y="52" text-anchor="middle" fill="white" font-size="14" font-weight="600">Période d'essai</text>
+    <text class="camp-sublabel" y="67" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="11">Optimisation</text>
+  </g>
+
+  <!-- Summit: Assistant opérationnel -->
+  <g id="summit" transform="translate(680, 90)" opacity="0">
+    <circle r="50" fill="rgba(0, 204, 102, 0.15)" stroke="#00CC66" stroke-width="2" stroke-dasharray="5,5"/>
+
+    <!-- Success checkmark -->
+    <circle r="22" fill="#00CC66"/>
+    <path d="M -8,0 L -3,8 L 10,-8"
+          stroke="white"
+          stroke-width="3"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          fill="none"/>
+
+    <text class="summit-label" y="-65" text-anchor="middle" fill="#00CC66" font-size="16" font-weight="700">Assistant Opérationnel</text>
+  </g>
+
+  <!-- Climber (will follow the path) -->
+  <g id="climber" transform="translate(100, 500)">
+    <circle r="6" fill="#3898FF"/>
+    <circle r="4" fill="white" opacity="0.8"/>
+    <!-- Pulse effect -->
+    <circle class="climber-pulse" r="10" fill="none" stroke="#3898FF" stroke-width="2" opacity="0"/>
+  </g>
+</svg>

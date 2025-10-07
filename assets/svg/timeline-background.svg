@@ -1,0 +1,142 @@
+<svg viewBox="0 0 900 100" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+  <defs>
+    <!-- Gradients pour les différentes étapes -->
+    <linearGradient id="timelineGradient" x1="0%" y1="50%" x2="100%" y2="50%">
+      <stop offset="0%" style="stop-color:currentColor;stop-opacity:0.2"/>
+      <stop offset="33%" style="stop-color:currentColor;stop-opacity:0.4"/>
+      <stop offset="66%" style="stop-color:currentColor;stop-opacity:0.6"/>
+      <stop offset="100%" style="stop-color:currentColor;stop-opacity:0.8"/>
+    </linearGradient>
+
+    <!-- Pattern pour texture -->
+    <pattern id="timelinePattern" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse">
+      <circle cx="15" cy="15" r="1.5" fill="currentColor" opacity="0.15"/>
+    </pattern>
+  </defs>
+
+  <!-- Arrière-plan avec pattern -->
+  <rect width="900" height="100" fill="url(#timelinePattern)" opacity="0.3"/>
+
+  <!-- Ligne principale de timeline -->
+  <line x1="0" y1="50" x2="900" y2="50" stroke="url(#timelineGradient)" stroke-width="3"/>
+
+  <!-- Zone étape 1: Diagnostic (0-300px) -->
+  <g id="stage1" transform="translate(0, 0)">
+    <!-- Points de données éparpillés -->
+    <circle cx="50" cy="25" r="4" fill="currentColor" opacity="0.4">
+      <animate attributeName="opacity" values="0.2;0.6;0.2" dur="4s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="100" cy="35" r="3" fill="currentColor" opacity="0.3">
+      <animate attributeName="opacity" values="0.1;0.5;0.1" dur="5s" repeatCount="indefinite" begin="0.5s"/>
+    </circle>
+    <circle cx="80" cy="70" r="3.5" fill="currentColor" opacity="0.3">
+      <animate attributeName="opacity" values="0.1;0.4;0.1" dur="4.5s" repeatCount="indefinite" begin="1s"/>
+    </circle>
+    <circle cx="150" cy="20" r="2.5" fill="currentColor" opacity="0.35">
+      <animate attributeName="opacity" values="0.2;0.5;0.2" dur="3.5s" repeatCount="indefinite" begin="1.5s"/>
+    </circle>
+
+    <!-- Lignes de connexion fragmentées -->
+    <path d="M50,25 Q80,35 100,35" stroke="currentColor" stroke-width="1.5" opacity="0.25" stroke-dasharray="3,3">
+      <animate attributeName="stroke-dashoffset" values="0;6" dur="3s" repeatCount="indefinite"/>
+    </path>
+    <path d="M100,35 Q125,50 150,20" stroke="currentColor" stroke-width="1.5" opacity="0.25" stroke-dasharray="3,3">
+      <animate attributeName="stroke-dashoffset" values="0;6" dur="3.5s" repeatCount="indefinite"/>
+    </path>
+
+    <!-- Icône analyse -->
+    <circle cx="200" cy="50" r="12" stroke="currentColor" stroke-width="2" fill="none" opacity="0.4"/>
+    <circle cx="200" cy="50" r="6" stroke="currentColor" stroke-width="1" fill="none" opacity="0.3"/>
+  </g>
+
+  <!-- Milestone 1 à 300px -->
+  <g id="milestone1" transform="translate(300, 50)">
+    <circle r="6" fill="currentColor" opacity="0.6">
+      <animate attributeName="r" values="4;8;4" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.4;0.8;0.4" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="3" fill="currentColor"/>
+  </g>
+
+  <!-- Zone étape 2: Conception (300-600px) -->
+  <g id="stage2" transform="translate(300, 0)">
+    <!-- Formes géométriques en construction -->
+    <rect x="50" y="20" width="12" height="12" fill="currentColor" opacity="0.4" transform="rotate(45 56 26)">
+      <animateTransform attributeName="transform" type="rotate" values="0 56 26;360 56 26" dur="8s" repeatCount="indefinite"/>
+    </rect>
+    <polygon points="100,30 110,15 120,30 110,45" fill="currentColor" opacity="0.4">
+      <animate attributeName="opacity" values="0.2;0.6;0.2" dur="5s" repeatCount="indefinite"/>
+    </polygon>
+    <circle cx="150" cy="70" r="8" stroke="currentColor" stroke-width="2" fill="none" opacity="0.3">
+      <animate attributeName="r" values="6;10;6" dur="4s" repeatCount="indefinite"/>
+    </circle>
+    <rect x="80" y="60" width="20" height="8" rx="4" fill="currentColor" opacity="0.4"/>
+
+    <!-- Grille de construction -->
+    <path d="M40,20 L180,20 M40,40 L180,40 M40,60 L180,60 M40,80 L180,80" stroke="currentColor" stroke-width="1" opacity="0.15" stroke-dasharray="5,5">
+      <animate attributeName="stroke-dashoffset" values="0;10" dur="4s" repeatCount="indefinite"/>
+    </path>
+    <path d="M60,10 L60,90 M100,10 L100,90 M140,10 L140,90" stroke="currentColor" stroke-width="1" opacity="0.15" stroke-dasharray="5,5">
+      <animate attributeName="stroke-dashoffset" values="0;10" dur="4s" repeatCount="indefinite"/>
+    </path>
+  </g>
+
+  <!-- Milestone 2 à 600px -->
+  <g id="milestone2" transform="translate(600, 50)">
+    <circle r="6" fill="currentColor" opacity="0.6">
+      <animate attributeName="r" values="4;8;4" dur="3s" repeatCount="indefinite" begin="1s"/>
+      <animate attributeName="opacity" values="0.4;0.8;0.4" dur="3s" repeatCount="indefinite" begin="1s"/>
+    </circle>
+    <circle r="3" fill="currentColor"/>
+  </g>
+
+  <!-- Zone étape 3: Déploiement (600-900px) -->
+  <g id="stage3" transform="translate(600, 0)">
+    <!-- Réseau de déploiement -->
+    <circle cx="50" cy="25" r="3" fill="currentColor" opacity="0.5"/>
+    <circle cx="100" cy="20" r="3" fill="currentColor" opacity="0.5"/>
+    <circle cx="150" cy="30" r="3" fill="currentColor" opacity="0.5"/>
+    <circle cx="75" cy="45" r="3" fill="currentColor" opacity="0.5"/>
+    <circle cx="125" cy="60" r="3" fill="currentColor" opacity="0.5"/>
+    <circle cx="200" cy="40" r="3" fill="currentColor" opacity="0.5"/>
+    <circle cx="175" cy="70" r="3" fill="currentColor" opacity="0.5"/>
+
+    <!-- Connexions réseau -->
+    <path d="M50,25 L100,20 L150,30" stroke="currentColor" stroke-width="1.5" opacity="0.3"/>
+    <path d="M100,20 L75,45 L125,60" stroke="currentColor" stroke-width="1.5" opacity="0.3"/>
+    <path d="M150,30 L200,40" stroke="currentColor" stroke-width="1.5" opacity="0.3"/>
+    <path d="M125,60 L175,70" stroke="currentColor" stroke-width="1.5" opacity="0.3"/>
+
+    <!-- Impulsions réseau -->
+    <circle r="2" fill="currentColor" opacity="0.8">
+      <animateMotion dur="6s" repeatCount="indefinite">
+        <mpath href="#networkPath1"/>
+      </animateMotion>
+      <animate attributeName="opacity" values="0;1;0" dur="6s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="1.5" fill="currentColor" opacity="0.6">
+      <animateMotion dur="7s" repeatCount="indefinite" begin="2s">
+        <mpath href="#networkPath2"/>
+      </animateMotion>
+      <animate attributeName="opacity" values="0;1;0" dur="7s" repeatCount="indefinite" begin="2s"/>
+    </circle>
+  </g>
+
+  <!-- Milestone final à 900px -->
+  <g id="milestone3" transform="translate(900, 50)">
+    <circle r="8" fill="currentColor" opacity="0.8">
+      <animate attributeName="r" values="6;10;6" dur="3s" repeatCount="indefinite" begin="2s"/>
+      <animate attributeName="opacity" values="0.6;1;0.6" dur="3s" repeatCount="indefinite" begin="2s"/>
+    </circle>
+    <circle r="4" fill="currentColor"/>
+  </g>
+
+  <!-- Chemins pour les impulsions -->
+  <defs>
+    <path id="networkPath1" d="M650,25 Q675,35 700,20 Q725,15 750,30" fill="none"/>
+    <path id="networkPath2" d="M700,20 Q725,35 750,45 Q775,55 800,40" fill="none"/>
+  </defs>
+
+  <!-- Overlay gradient pour profondeur -->
+  <rect width="900" height="100" fill="url(#timelineGradient)" opacity="0.1"/>
+</svg>

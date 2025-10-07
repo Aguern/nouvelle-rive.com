@@ -1,0 +1,196 @@
+<svg viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gradient pour les pièces assemblées -->
+    <linearGradient id="pieceGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10B981;stop-opacity:0.8"/>
+      <stop offset="50%" style="stop-color:#059669;stop-opacity:0.6"/>
+      <stop offset="100%" style="stop-color:#047857;stop-opacity:0.9"/>
+    </linearGradient>
+
+    <!-- Gradient pour la solution finale -->
+    <radialGradient id="solutionGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:currentColor;stop-opacity:0.2"/>
+      <stop offset="70%" style="stop-color:currentColor;stop-opacity:0.4"/>
+      <stop offset="100%" style="stop-color:currentColor;stop-opacity:0.6"/>
+    </radialGradient>
+
+    <!-- Filtre pour l'effet de brillance -->
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Zone de construction centrale -->
+  <rect x="100" y="100" width="200" height="120" rx="15" fill="url(#solutionGradient)"
+        stroke="currentColor" stroke-width="2" stroke-dasharray="5,5" opacity="0.3">
+    <animate attributeName="stroke-dashoffset" values="0;10" dur="3s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.3;0.5;0.3" dur="4s" repeatCount="indefinite"/>
+  </rect>
+
+  <!-- Pièce de puzzle 1 - En haut à gauche (déjà assemblée) -->
+  <g transform="translate(120, 120)" opacity="1">
+    <path d="M0,0 L40,0 Q45,0 45,5 L45,25 Q45,30 40,30 L20,30 Q15,35 10,30 L0,30 Q0,25 0,20 Q-5,15 0,10 L0,5 Q0,0 5,0 Z"
+          fill="url(#pieceGradient)" stroke="currentColor" stroke-width="1.5" filter="url(#glow)">
+      <animate attributeName="opacity" values="0.8;1;0.8" dur="2s" repeatCount="indefinite"/>
+    </path>
+    <!-- Détail interne -->
+    <circle cx="22" cy="15" r="3" fill="currentColor" opacity="0.3"/>
+    <text x="22" y="18" text-anchor="middle" font-size="8" fill="currentColor" opacity="0.7">UI</text>
+  </g>
+
+  <!-- Pièce de puzzle 2 - En haut à droite (en cours d'assemblage) -->
+  <g transform="translate(180, 120)" opacity="0.8">
+    <path d="M0,0 L40,0 Q40,5 40,10 Q45,15 40,20 L40,25 Q40,30 35,30 L5,30 Q0,30 0,25 L0,10 Q-5,5 0,0 Z"
+          fill="url(#pieceGradient)" stroke="currentColor" stroke-width="1.5">
+      <animateTransform attributeName="transform"
+                        type="translate" values="200,100; 180,120; 180,120"
+                        dur="3s" repeatCount="indefinite"/>
+    </path>
+    <!-- Détail interne -->
+    <rect x="8" y="8" width="24" height="14" rx="2" fill="currentColor" opacity="0.2"/>
+    <text x="20" y="18" text-anchor="middle" font-size="8" fill="currentColor" opacity="0.7">API</text>
+  </g>
+
+  <!-- Pièce de puzzle 3 - En bas à gauche (en approche) -->
+  <g transform="translate(120, 170)" opacity="0.6">
+    <path d="M0,0 Q5,0 10,0 Q15,-5 20,0 L35,0 Q40,0 40,5 L40,25 Q40,30 35,30 L5,30 Q0,30 0,25 L0,5 Q0,0 5,0 Z"
+          fill="url(#pieceGradient)" stroke="currentColor" stroke-width="1.5">
+      <animateTransform attributeName="transform"
+                        type="translate" values="100,200; 120,170; 120,170"
+                        dur="4s" repeatCount="indefinite" begin="1s"/>
+    </path>
+    <!-- Détail interne -->
+    <polygon points="10,8 30,8 25,20 15,20" fill="currentColor" opacity="0.2"/>
+    <text x="20" y="18" text-anchor="middle" font-size="8" fill="currentColor" opacity="0.7">DB</text>
+  </g>
+
+  <!-- Pièce de puzzle 4 - En bas à droite (en attente) -->
+  <g transform="translate(220, 200)" opacity="0.4">
+    <path d="M0,0 L35,0 Q40,0 40,5 L40,10 Q45,15 40,20 L40,25 Q40,30 35,30 L20,30 Q15,35 10,30 L5,30 Q0,30 0,25 L0,5 Q0,0 5,0 Z"
+          fill="url(#pieceGradient)" stroke="currentColor" stroke-width="1.5">
+      <animateTransform attributeName="transform"
+                        type="translate" values="220,200; 180,170; 180,170"
+                        dur="5s" repeatCount="indefinite" begin="2s"/>
+    </path>
+    <!-- Détail interne -->
+    <ellipse cx="20" cy="15" rx="12" ry="8" fill="currentColor" opacity="0.2"/>
+    <text x="20" y="18" text-anchor="middle" font-size="7" fill="currentColor" opacity="0.7">AUTH</text>
+  </g>
+
+  <!-- Lignes de guidage et connexions -->
+  <g stroke="currentColor" stroke-width="1" stroke-dasharray="3,3" opacity="0.3">
+    <!-- Guides d'assemblage -->
+    <line x1="165" y1="120" x2="175" y2="120">
+      <animate attributeName="opacity" values="0.3;0.7;0.3" dur="2s" repeatCount="indefinite"/>
+    </line>
+    <line x1="120" y1="165" x2="120" y2="175">
+      <animate attributeName="opacity" values="0.3;0.7;0.3" dur="2s" repeatCount="indefinite" begin="0.5s"/>
+    </line>
+    <line x1="175" y1="165" x2="185" y2="175">
+      <animate attributeName="opacity" values="0.3;0.7;0.3" dur="2s" repeatCount="indefinite" begin="1s"/>
+    </line>
+  </g>
+
+  <!-- Flèches d'assemblage -->
+  <g stroke="currentColor" stroke-width="2" fill="currentColor" opacity="0.5">
+    <defs>
+      <marker id="arrowConcept" markerWidth="8" markerHeight="8" refX="6" refY="3"
+              orient="auto" markerUnits="strokeWidth">
+        <polygon points="0,0 0,6 6,3" fill="currentColor"/>
+      </marker>
+    </defs>
+
+    <!-- Flèche vers pièce 2 -->
+    <path d="M200,110 Q190,115 185,125" marker-end="url(#arrowConcept)" fill="none">
+      <animate attributeName="opacity" values="0.5;0.8;0.5" dur="3s" repeatCount="indefinite"/>
+    </path>
+
+    <!-- Flèche vers pièce 3 -->
+    <path d="M110,190 Q115,185 125,180" marker-end="url(#arrowConcept)" fill="none">
+      <animate attributeName="opacity" values="0.5;0.8;0.5" dur="4s" repeatCount="indefinite" begin="1s"/>
+    </path>
+
+    <!-- Flèche vers pièce 4 -->
+    <path d="M210,190 Q200,185 190,180" marker-end="url(#arrowConcept)" fill="none">
+      <animate attributeName="opacity" values="0.5;0.8;0.5" dur="5s" repeatCount="indefinite" begin="2s"/>
+    </path>
+  </g>
+
+  <!-- Étincelles de création/innovation -->
+  <g fill="currentColor" opacity="0.4">
+    <g transform="translate(140, 110)">
+      <polygon points="0,-8 2,-2 8,0 2,2 0,8 -2,2 -8,0 -2,-2">
+        <animateTransform attributeName="transform" type="scale"
+                          values="0;1.2;0" dur="2s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0;0.8;0" dur="2s" repeatCount="indefinite"/>
+      </polygon>
+    </g>
+
+    <g transform="translate(200, 140)">
+      <polygon points="0,-6 1.5,-1.5 6,0 1.5,1.5 0,6 -1.5,1.5 -6,0 -1.5,-1.5">
+        <animateTransform attributeName="transform" type="scale"
+                          values="0;1;0" dur="1.8s" repeatCount="indefinite" begin="0.5s"/>
+        <animate attributeName="opacity" values="0;0.6;0" dur="1.8s" repeatCount="indefinite" begin="0.5s"/>
+      </polygon>
+    </g>
+
+    <g transform="translate(170, 180)">
+      <polygon points="0,-4 1,-1 4,0 1,1 0,4 -1,1 -4,0 -1,-1">
+        <animateTransform attributeName="transform" type="scale"
+                          values="0;1.5;0" dur="2.2s" repeatCount="indefinite" begin="1s"/>
+        <animate attributeName="opacity" values="0;0.7;0" dur="2.2s" repeatCount="indefinite" begin="1s"/>
+      </polygon>
+    </g>
+  </g>
+
+  <!-- Zone de conception collaborative -->
+  <g transform="translate(50, 50)" opacity="0.6">
+    <!-- Représentation des intervenants -->
+    <circle cx="0" cy="0" r="15" fill="none" stroke="currentColor" stroke-width="2">
+      <animate attributeName="r" values="15;18;15" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    <text x="0" y="3" text-anchor="middle" font-size="8" fill="currentColor">Vous</text>
+
+    <circle cx="40" cy="10" r="12" fill="none" stroke="currentColor" stroke-width="2">
+      <animate attributeName="r" values="12;15;12" dur="3.2s" repeatCount="indefinite" begin="0.3s"/>
+    </circle>
+    <text x="40" y="13" text-anchor="middle" font-size="7" fill="currentColor">Expert</text>
+
+    <!-- Ligne de collaboration -->
+    <line x1="15" y1="5" x2="25" y2="8" stroke="currentColor" stroke-width="1"
+          stroke-dasharray="2,2">
+      <animate attributeName="stroke-dashoffset" values="0;4" dur="2s" repeatCount="indefinite"/>
+    </line>
+  </g>
+
+  <!-- Indicateurs de validation -->
+  <g transform="translate(320, 120)" opacity="0.7">
+    <circle cx="0" cy="0" r="20" fill="none" stroke="currentColor" stroke-width="2"/>
+    <path d="M-8,0 L-3,5 L8,-5" stroke="currentColor" stroke-width="3"
+          fill="none" stroke-linecap="round">
+      <animate attributeName="stroke-dasharray" values="0,20;20,0" dur="2s" repeatCount="indefinite"/>
+    </path>
+    <text x="0" y="35" text-anchor="middle" font-size="10" fill="currentColor" opacity="0.6">Validé</text>
+  </g>
+
+  <!-- Titre intégré -->
+  <text x="200" y="280" text-anchor="middle" font-size="14" font-weight="600"
+        fill="currentColor" opacity="0.7">
+    Co-création & Conception sur mesure
+  </text>
+
+  <!-- Barre de progression de la conception -->
+  <g transform="translate(100, 250)">
+    <rect x="0" y="0" width="200" height="8" rx="4" fill="currentColor" opacity="0.2"/>
+    <rect x="0" y="0" width="140" height="8" rx="4" fill="currentColor" opacity="0.6">
+      <animate attributeName="width" values="0;140;140" dur="6s" repeatCount="indefinite"/>
+    </rect>
+    <text x="100" y="20" text-anchor="middle" font-size="10" fill="currentColor" opacity="0.6">
+      70% assemblé
+    </text>
+  </g>
+</svg>
