@@ -23,7 +23,7 @@
     </script>
 
     <!-- Styles -->
-    <link rel="stylesheet" href="../css/base.css?v=2.0">
+    <link rel="stylesheet" href="../css/base.css?v=2.5">
 
     <!-- GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -40,10 +40,10 @@
                 </a>
 
                 <div class="nav__menu" id="navMenu">
-                    <a href="cas-usage/" class="nav__link">Solutions</a>
-                    <a href="approche/" class="nav__link">Approche</a>
-                    <a href="Fondations/" class="nav__link">Fondations</a>
-                    <a href="contact/" class="nav__link nav__link--cta">Définir mon projet</a>
+                    <a href="../cas-usage/" class="nav__link">Solutions</a>
+                    <a href="../approche/" class="nav__link">Approche</a>
+                    <a href="../Fondations/" class="nav__link">Fondations</a>
+                    <a href="../contact/" class="nav__link nav__link--cta">Définir mon projet</a>
                 </div>
 
                 <button class="nav__toggle" id="navToggle" aria-label="Menu" aria-expanded="false">
@@ -55,15 +55,27 @@
         </div>
     </header>
 
+    <nav class="breadcrumb" aria-label="Fil d'ariane">
+        <div class="container">
+            <ol class="breadcrumb__list">
+                <li class="breadcrumb__item"><a href="../">Accueil</a></li>
+                <li class="breadcrumb__separator">›</li>
+                <li class="breadcrumb__item breadcrumb__item--current">Fondations</li>
+            </ol>
+        </div>
+    </nav>
+
     <main>
-        <section class="hero-approach">
-            <div class="hero-approach__background">
-                <img src="https://res.cloudinary.com/dwnevq3ba/image/upload/road.jpg" alt="Route illustrant le chemin vers l'innovation">
+        <section class="hero-fondations-neural">
+            <div class="neural-canvas" id="neuralCanvas">
+                <!-- SVG Neural Network sera généré par JavaScript -->
             </div>
-            <div class="hero-approach__overlay"></div>
             <div class="container">
-                <h1 class="hero-approach__title">On ne recrute pas un collaborateur sans un processus clair. Pour un assistant IA, c'est pareil.</h1>
-                <p class="hero-approach__subtitle">Nous avons développé une méthode rigoureuse pour garantir que votre futur assistant digital soit non seulement performant, mais parfaitement intégré à votre équipe et à vos outils.</p>
+                <div class="hero-content">
+                    <span class="eyebrow-text">Nos Fondations</span>
+                    <h1 class="hero-fondations__title">De la donnée brute à l'intelligence augmentée</h1>
+                    <p class="hero-fondations__subtitle">Notre architecture transforme le chaos en clarté : de la donnée à l'action, du raisonnement à l'automatisation.</p>
+                </div>
             </div>
         </section>
 
@@ -92,46 +104,184 @@
             </div>
         </section>
 
-        <!-- NOUVELLE SECTION POUR L'APPROFONDISSEMENT TECHNIQUE -->
-        <!-- SECTION INTERACTIVE MISE À JOUR -->
-        <section id="interactive-architecture" class="section section--alt">
+        <!-- SECTION ARCHITECTURE INTERACTIVE - ENGRENAGES 2025 -->
+        <section id="gear-architecture" class="section section--dark">
             <div class="container">
                 <header class="section__header">
                     <span class="eyebrow-text">L'Ingénierie de nos Assistants</span>
-                    <h2 class="section__title">Les Composants de notre Savoir-Faire</h2>
+                    <h2 class="section__title">Le Pipeline d'Intelligence</h2>
+                    <p class="section__subtitle">Une architecture mécanique où chaque composant s'imbrique parfaitement</p>
                 </header>
 
-                <div class="architecture-layout">
-                    <div class="architecture-visual">
-                        <div class="visual-sticky-container">
-                            <!-- Le SVG corrigé sera injecté ici par le JS -->
+                <!-- Timeline Pipeline Progressive -->
+                <div class="pipeline-timeline">
+                    <!-- Ligne verticale centrale -->
+                    <div class="pipeline-line">
+                        <div class="pipeline-line__progress"></div>
+                    </div>
+
+                    <!-- Step 1: Ingénierie des Données -->
+                    <div class="pipeline-step" data-step="1">
+                        <div class="pipeline-step__marker">
+                            <div class="pipeline-step__number">01</div>
+                        </div>
+                        <div class="pipeline-step__card pipeline-step__card--right">
+                            <h3 class="pipeline-step__title">Ingénierie des Données</h3>
+                            <div class="pipeline-step__label">La Fondation</div>
+                            <p class="pipeline-step__description">
+                                Nous préparons le terrain avec une approche rigoureuse de <strong>Data Science</strong>.
+                                Nettoyage, classification et enrichissement des données brutes pour garantir une information de qualité.
+                            </p>
+                            <div class="pipeline-step__tags">
+                                <span class="tag">Data Science</span>
+                                <span class="tag">ETL</span>
+                                <span class="tag">Data Quality</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="architecture-content">
-                        <div class="arch-step" data-step="data">
-                            <h3>Fiabilité des Données : Des assistants qui s'appuient sur du solide</h3>
-                            <p>Un assistant n'est fiable que si les informations qu'il utilise le sont. Notre approche de <strong>Data Science</strong> consiste à préparer le terrain. En amont, des modèles de <strong>Machine Learning</strong> nettoient, classifient et enrichissent vos données brutes. Ainsi, les grands modèles de langage (<strong>LLM, Deep Learning</strong>) travaillent sur une information saine, ce qui maximise leur pertinence et minimise le risque d'erreur.</p>
+
+                    <!-- Step 2: Apprentissage Automatique -->
+                    <div class="pipeline-step" data-step="2">
+                        <div class="pipeline-step__marker">
+                            <div class="pipeline-step__number">02</div>
                         </div>
-                        <div class="arch-step" data-step="reasoning">
-                            <h3>Raisonnement & Orchestration : Des assistants qui réfléchissent</h3>
-                            <p>Pour qu'un assistant soit réellement autonome, il doit pouvoir raisonner. Nous intégrons des techniques de <strong>Chaîne de Pensée (Chain-of-Thought)</strong> qui lui apprennent à décomposer un problème et à planifier ses actions. Cette capacité est orchestrée par des frameworks comme <strong>LangGraph</strong>, qui permettent à une équipe d'agents de collaborer (<strong>A2A</strong>) et de s'adapter à des situations imprévues, bien au-delà des workflows linéaires traditionnels.</p>
+                        <div class="pipeline-step__card pipeline-step__card--left">
+                            <h3 class="pipeline-step__title">Machine Learning</h3>
+                            <div class="pipeline-step__label">La Préparation</div>
+                            <p class="pipeline-step__description">
+                                Des modèles d'<strong>Apprentissage Automatique</strong> analysent, prédisent et structurent l'information.
+                                Ils transforment les données brutes en insights exploitables par les modèles de langage.
+                            </p>
+                            <div class="pipeline-step__tags">
+                                <span class="tag">ML Models</span>
+                                <span class="tag">Classification</span>
+                                <span class="tag">Prediction</span>
+                            </div>
                         </div>
-                        <div class="arch-step" data-step="connection">
-                            <h3>Connexion & Action : Des assistants connectés à votre monde</h3>
-                            <p>L'intelligence n'est rien sans la capacité d'agir. Nous donnons à nos assistants des "mains" pour interagir avec vos logiciels via des <strong>API</strong> sécurisées ou des techniques de <strong>RPA</strong> pour les systèmes plus anciens. Ils ont aussi des "yeux" pour consulter l'information en temps réel via le <strong>Web Search</strong>. Cette architecture ouverte anticipe les futurs standards de communication (<strong>MCP</strong>) pour garantir la pérennité de votre investissement.</p>
+                    </div>
+
+                    <!-- Step 3: Raisonnement -->
+                    <div class="pipeline-step" data-step="3">
+                        <div class="pipeline-step__marker">
+                            <div class="pipeline-step__number">03</div>
                         </div>
+                        <div class="pipeline-step__card pipeline-step__card--right">
+                            <h3 class="pipeline-step__title">Raisonnement</h3>
+                            <div class="pipeline-step__label">La Réflexion</div>
+                            <p class="pipeline-step__description">
+                                La <strong>Chaîne de Pensée (Chain-of-Thought)</strong> permet aux assistants de décomposer les problèmes complexes,
+                                de planifier leurs actions et de raisonner de manière structurée.
+                            </p>
+                            <div class="pipeline-step__tags">
+                                <span class="tag">Chain-of-Thought</span>
+                                <span class="tag">LLM</span>
+                                <span class="tag">Stratégie</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Orchestration -->
+                    <div class="pipeline-step" data-step="4">
+                        <div class="pipeline-step__marker">
+                            <div class="pipeline-step__number">04</div>
+                        </div>
+                        <div class="pipeline-step__card pipeline-step__card--left">
+                            <h3 class="pipeline-step__title">Orchestration</h3>
+                            <div class="pipeline-step__label">La Coordination</div>
+                            <p class="pipeline-step__description">
+                                L'<strong>orchestration multi-agents</strong> permet à plusieurs IA spécialisées de collaborer. Chaque agent apporte son expertise, et un coordinateur intelligent décide qui fait quoi, dans quel ordre, pour atteindre l'objectif efficacement.
+                            </p>
+                            <div class="pipeline-step__tags">
+                                <span class="tag">Multi-Agents</span>
+                                <span class="tag">Orchestration</span>
+                                <span class="tag">Collaboration</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 5: Perception & Mémoire -->
+                    <div class="pipeline-step" data-step="5">
+                        <div class="pipeline-step__marker">
+                            <div class="pipeline-step__number">05</div>
+                        </div>
+                        <div class="pipeline-step__card pipeline-step__card--right">
+                            <h3 class="pipeline-step__title">Perception & Mémoire</h3>
+                            <div class="pipeline-step__label">L'Intelligence Contextuelle</div>
+                            <p class="pipeline-step__description">
+                                Des "yeux" pour observer et se souvenir : <strong>Recherche Web</strong> en temps réel pour accéder à l'actualité, <strong>RAG</strong> couplé aux <strong>Vector Databases</strong> pour retrouver instantanément les connaissances internes, et <strong>mémoire conversationnelle</strong> pour maintenir le fil de la discussion.
+                            </p>
+                            <div class="pipeline-step__tags">
+                                <span class="tag">Recherche Web</span>
+                                <span class="tag">RAG</span>
+                                <span class="tag">Contexte</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 6: Action & Intégration -->
+                    <div class="pipeline-step" data-step="6">
+                        <div class="pipeline-step__marker">
+                            <div class="pipeline-step__number">06</div>
+                        </div>
+                        <div class="pipeline-step__card pipeline-step__card--left">
+                            <h3 class="pipeline-step__title">Action & Intégration</h3>
+                            <div class="pipeline-step__label">L'Exécution</div>
+                            <p class="pipeline-step__description">
+                                Des "mains" pour agir sur vos outils quotidiens : connexion à vos <strong>logiciels métier</strong> (CRM, ERP, comptabilité) via <strong>API</strong>, automatisation <strong>RPA</strong> pour les systèmes sans API, et le standard émergent <strong>MCP</strong> pour une intégration pérenne et évolutive.
+                            </p>
+                            <div class="pipeline-step__tags">
+                                <span class="tag">API</span>
+                                <span class="tag">RPA</span>
+                                <span class="tag">MCP</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 7: Amélioration Continue -->
+                    <div class="pipeline-step pipeline-step--loop" data-step="7">
+                        <div class="pipeline-step__marker">
+                            <div class="pipeline-step__number">07</div>
+                        </div>
+                        <div class="pipeline-step__card pipeline-step__card--right">
+                            <h3 class="pipeline-step__title">Amélioration Continue</h3>
+                            <div class="pipeline-step__label">L'Évolution</div>
+                            <p class="pipeline-step__description">
+                                Un cycle perpétuel d'optimisation : <strong>Monitoring</strong> des performances en temps réel, <strong>Fine-tuning</strong> des modèles à partir des retours terrain, <strong>A/B Testing</strong> des stratégies, et boucles de <strong>feedback utilisateurs</strong> pour améliorer continuellement la qualité.
+                            </p>
+                            <div class="pipeline-step__tags">
+                                <span class="tag">Monitoring</span>
+                                <span class="tag">Fine-tuning</span>
+                                <span class="tag">Feedback Loops</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bouton de cycle -->
+                    <div class="pipeline-loop-action">
+                        <button class="loop-btn" id="restartPipeline">
+                            <span class="loop-btn__icon">↻</span>
+                            <span class="loop-btn__text">Cycle d'amélioration</span>
+                        </button>
                     </div>
                 </div>
             </div>
         </section>
     </main>
 
+    <!-- Bouton retour en haut -->
+    <button id="backToTop" class="back-to-top" aria-label="Retour en haut de la page">
+        <svg class="back-to-top__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="19" x2="12" y2="5"/>
+            <polyline points="5,12 12,5 19,12"/>
+        </svg>
+    </button>
+
     <!-- Footer Amélioré -->
     <footer class="footer">
         <div class="container">
             <div class="footer__main">
                 <div class="footer__brand">
-                    <a href="/" class="nav__brand" aria-label="Accueil Nouvelle Rive">
+                    <a href="../" class="nav__brand" aria-label="Accueil Nouvelle Rive">
                         <svg class="nav__logo" width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 80C20 46.86 46.86 20 80 20V80H20Z" fill="currentColor"/><path d="M20 80C20 46.86 46.86 20 80 20" stroke="currentColor" stroke-width="8"/></svg>
                         <span class="brand-text">Nouvelle Rive</span>
                     </a>
@@ -140,21 +290,21 @@
                 </div>
                 <div class="footer__nav-col">
                     <h4 class="footer__nav-title">Navigation</h4>
-                    <a href="/" class="footer__link">Accueil</a>
-                    <a href="cas-usage/" class="footer__link">Nos Solutions</a>
-                    <a href="approche/" class="footer__link">Notre Approche</a>
-                    <a href="Fondations/" class="footer__link">Nos Fondations</a>
+                    <a href="../" class="footer__link">Accueil</a>
+                    <a href="../cas-usage/" class="footer__link">Nos Solutions</a>
+                    <a href="../approche/" class="footer__link">Notre Approche</a>
+                    <a href="../Fondations/" class="footer__link">Nos Fondations</a>
                 </div>
                 <div class="footer__nav-col">
                     <h4 class="footer__nav-title">Contact</h4>
-                    <a href="contact/" class="footer__link">Planifier une session</a>
+                    <a href="../contact/" class="footer__link">Planifier une session</a>
                     <a href="mailto:contact@nouvelle-rive.com" class="footer__link">Nous écrire</a>
                 </div>
                 <div class="footer__nav-col">
                     <h4 class="footer__nav-title">Démonstrations</h4>
-                    <a href="cas-usage/" class="footer__link">Copilote Fiscal</a>
-                    <a href="cas-usage/" class="footer__link">Guide Intelligent</a>
-                    <a href="cas-usage/" class="footer__link">Reporting Contextuel</a>
+                    <a href="../cas-usage/" class="footer__link">Copilote Fiscal</a>
+                    <a href="../cas-usage/" class="footer__link">Guide Intelligent</a>
+                    <a href="../cas-usage/" class="footer__link">Reporting Contextuel</a>
                 </div>
             </div>
         </div>
