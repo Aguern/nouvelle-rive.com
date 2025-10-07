@@ -11,17 +11,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- SVG Icons -->
-    <script>
-        fetch('assets/svg/icons.svg')
-            .then(response => response.text())
-            .then(data => {
-                const div = document.createElement('div');
-                div.innerHTML = data;
-                document.body.insertBefore(div.firstElementChild, document.body.firstChild);
-            });
-    </script>
-
     <!-- Styles -->
     <link rel="stylesheet" href="css/base.css?v=2.5">
 
@@ -33,6 +22,202 @@
     <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js"></script>
 </head>
 <body>
+    <!-- Icônes SVG harmonisées pour Nouvelle Rive -->
+    <svg style="display: none;" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <!-- Icône Temps fragmenté -->
+        <symbol id="icon-time-fragmented" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 6v6l4 2"/>
+          <path d="M8 8l-2-2M16 8l2-2M8 16l-2 2M16 16l2 2" opacity="0.5"/>
+        </symbol>
+
+        <!-- Icône Données dispersées -->
+        <symbol id="icon-data-dispersed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="8" cy="8" r="1"/>
+          <circle cx="16" cy="8" r="1"/>
+          <circle cx="8" cy="16" r="1"/>
+          <circle cx="16" cy="16" r="1"/>
+          <circle cx="12" cy="12" r="1"/>
+          <path d="M8 8l4 4M16 8l-4 4M8 16l4-4M16 16l-4-4" opacity="0.3" stroke-dasharray="2,2"/>
+        </symbol>
+
+        <!-- Icône Opportunités invisibles -->
+        <symbol id="icon-opportunities-hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M3 3l18 18" opacity="0.6"/>
+        </symbol>
+
+        <!-- Icône Diagnostic -->
+        <symbol id="icon-diagnostic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="M21 21l-4.35-4.35"/>
+          <circle cx="11" cy="11" r="3" opacity="0.3"/>
+        </symbol>
+
+        <!-- Icône Conception -->
+        <symbol id="icon-conception" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+          <rect x="7" y="7" width="3" height="9"/>
+          <rect x="14" y="7" width="3" height="5"/>
+          <rect x="14" y="16" width="3" height="1"/>
+        </symbol>
+
+        <!-- Icône Déploiement -->
+        <symbol id="icon-deployment" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12,2 22,8.5 22,15.5 12,22 2,15.5 2,8.5 12,2"/>
+          <path d="M12 22V12"/>
+          <path d="M22 8.5L12 15L2 8.5"/>
+          <circle cx="12" cy="8" r="2" opacity="0.5"/>
+        </symbol>
+
+        <!-- Icône Avocats -->
+        <symbol id="icon-lawyers" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14,2 14,8 20,8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+          <polyline points="10,9 9,9 8,9"/>
+        </symbol>
+
+        <!-- Icône Tourisme -->
+        <symbol id="icon-tourism" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+          <circle cx="12" cy="10" r="3"/>
+          <path d="M8 21h8" opacity="0.5"/>
+        </symbol>
+
+        <!-- Icône Entreprises -->
+        <symbol id="icon-enterprises" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+          <line x1="8" y1="21" x2="16" y2="21"/>
+          <line x1="12" y1="17" x2="12" y2="21"/>
+          <rect x="6" y="7" width="4" height="2" opacity="0.5"/>
+          <rect x="14" y="7" width="4" height="2" opacity="0.5"/>
+          <rect x="6" y="11" width="4" height="2" opacity="0.3"/>
+          <rect x="14" y="11" width="4" height="2" opacity="0.3"/>
+        </symbol>
+
+        <!-- Icône Innovation -->
+        <symbol id="icon-innovation" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 12l2 2 4-4"/>
+          <path d="M21 12c.552 0 1-.449 1-1s-.448-1-1-1-1 .449-1 1 .448 1 1 1z"/>
+          <path d="M3 12c.552 0 1-.449 1-1s-.448-1-1-1-1 .449-1 1 .448 1 1 1z"/>
+          <path d="M12 21c.552 0 1-.449 1-1s-.448-1-1-1-1 .449-1 1 .448 1 1 1z"/>
+          <path d="M12 3c.552 0 1-.449 1-1s-.448-1-1-1-1 .449-1 1 .448 1 1 1z"/>
+          <circle cx="12" cy="12" r="7" opacity="0.2"/>
+        </symbol>
+
+        <!-- Icône Transparence -->
+        <symbol id="icon-transparency" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+          <circle cx="12" cy="12" r="3"/>
+          <rect x="8" y="8" width="8" height="8" rx="1" opacity="0.2"/>
+        </symbol>
+
+        <!-- Icône Prototype -->
+        <symbol id="icon-prototype" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+          <polyline points="2,17 12,22 22,17"/>
+          <polyline points="2,12 12,17 22,12"/>
+          <circle cx="12" cy="7" r="1" opacity="0.6"/>
+        </symbol>
+
+        <!-- Icône Technologies -->
+        <symbol id="icon-technologies" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="6" width="20" height="8" rx="1"/>
+          <path d="M6 10h.01"/>
+          <path d="M10 10h.01"/>
+          <path d="M14 10h4"/>
+          <circle cx="12" cy="2" r="1" opacity="0.5"/>
+          <circle cx="5" cy="22" r="1" opacity="0.5"/>
+          <circle cx="19" cy="22" r="1" opacity="0.5"/>
+        </symbol>
+
+        <!-- Icône Contact -->
+        <symbol id="icon-contact" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+          <polyline points="22,6 12,13 2,6"/>
+          <circle cx="8" cy="10" r="1" opacity="0.5"/>
+          <circle cx="16" cy="10" r="1" opacity="0.5"/>
+        </symbol>
+
+        <!-- Icône Calendrier -->
+        <symbol id="icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+          <line x1="16" y1="2" x2="16" y2="6"/>
+          <line x1="8" y1="2" x2="8" y2="6"/>
+          <line x1="3" y1="10" x2="21" y2="10"/>
+          <rect x="7" y="14" width="2" height="2" opacity="0.6"/>
+          <rect x="15" y="14" width="2" height="2" opacity="0.3"/>
+        </symbol>
+
+        <!-- Icône Réussite -->
+        <symbol id="icon-success" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+          <polyline points="22,4 12,14.01 9,11.01"/>
+          <circle cx="12" cy="12" r="6" opacity="0.2"/>
+        </symbol>
+
+        <!-- Icône Menu (Hamburger) -->
+        <symbol id="icon-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </symbol>
+
+        <!-- Icône Fermer -->
+        <symbol id="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </symbol>
+
+        <!-- Icône Flèche vers le bas -->
+        <symbol id="icon-arrow-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"/>
+          <polyline points="19,12 12,19 5,12"/>
+        </symbol>
+
+        <!-- Icône Flèche vers le haut -->
+        <symbol id="icon-arrow-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="19" x2="12" y2="5"/>
+          <polyline points="5,12 12,5 19,12"/>
+        </symbol>
+
+        <!-- Icône Flèche vers la droite -->
+        <symbol id="icon-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"/>
+          <polyline points="12,5 19,12 12,19"/>
+        </symbol>
+
+        <!-- Icône Étoile -->
+        <symbol id="icon-star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26 12,2"/>
+          <circle cx="12" cy="12" r="4" opacity="0.2"/>
+        </symbol>
+
+        <!-- Icône Check Circle -->
+        <symbol id="icon-check-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="9,12 12,15 15,9"/>
+        </symbol>
+
+        <!-- Icône Map -->
+        <symbol id="icon-map" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="1,6 1,22 8,18 16,22 23,18 23,2 16,6 8,2"/>
+          <line x1="8" y1="2" x2="8" y2="18"/>
+          <line x1="16" y1="6" x2="16" y2="22"/>
+        </symbol>
+
+        <!-- Icône Flag -->
+        <symbol id="icon-flag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
+          <line x1="4" y1="22" x2="4" y2="15"/>
+        </symbol>
+      </defs>
+    </svg>
+
     <!-- Header Amélioré -->
     <header id="header" class="header">
         <div class="container">
@@ -59,8 +244,8 @@
     </header>
 
     <main>
-        <!-- Hero Section -->
-        <section id="hero" class="hero">
+        <!-- Hero Section - Alpine Tech -->
+        <section id="hero" class="hero hero--alpine">
             <div class="container">
                 <div class="hero__wrapper">
                     <div class="hero__content">
@@ -70,12 +255,10 @@
                             <a href="contact/" class="btn btn--primary hero__cta">Explorons vos possibilités</a>
                         </div>
                     </div>
-                    <div class="hero__video-container">
-                        <video class="hero__video" autoplay muted loop playsinline>
-                            <source src="https://res.cloudinary.com/dwnevq3ba/video/upload/summit.mp4" type="video/mp4">
-                            Votre navigateur ne supporte pas la vidéo HTML5.
-                        </video>
-                        <div class="hero__overlay"></div>
+                    <div class="hero__alpine-container">
+                        <div id="enterKeyCanvas" class="enter-key-canvas">
+                            <!-- Animation sera générée par JavaScript -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -128,34 +311,6 @@
             </div>
         </section>
 
-        <!-- Notre Approche Section -->
-        <section id="approche-preview" class="section">
-            <div class="container">
-                <header class="section__header">
-                    <h2 class="section__title">Comment nous intégrons votre assistant IA</h2>
-                    <p class="section__subtitle">Notre méthode en 3 étapes garantit que votre agent IA sera un véritable partenaire pour votre équipe.</p>
-                </header>
-                <div class="approach-preview">
-                    <div class="approach-preview__line"></div>
-                    <div class="approach-preview__step">
-                        <div class="approach-preview__marker">01</div>
-                        <h3 class="approach-preview__title">Définir sa mission (Audit)</h3>
-                    </div>
-                    <div class="approach-preview__step">
-                        <div class="approach-preview__marker">02</div>
-                        <h3 class="approach-preview__title">Le former (Construction)</h3>
-                    </div>
-                    <div class="approach-preview__step">
-                        <div class="approach-preview__marker">03</div>
-                        <h3 class="approach-preview__title">L'intégrer (Déploiement)</h3>
-                    </div>
-                </div>
-                <div class="section__cta">
-                    <a href="approche/" class="btn btn--secondary">Découvrir notre méthode en détail</a>
-                </div>
-            </div>
-        </section>
-
         <!-- Le Potentiel Section -->
         <section id="potentiel" class="section section--accent">
             <div class="container">
@@ -187,65 +342,107 @@
             </div>
         </section>
 
+        <section id="approche-preview" class="section">
+            <div class="container">
+                <header class="section__header">
+                    <h2 class="section__title">Comment nous intégrons votre assistant IA</h2>
+                    <p class="section__subtitle">Notre méthode en 3 étapes garantit que votre agent IA sera un véritable partenaire pour votre équipe.</p>
+                </header>
+                <div class="approach-preview">
+                    <div class="approach-preview__line"></div>
+                    <div class="approach-preview__step">
+                        <div class="approach-preview__marker">01</div>
+                        <h3 class="approach-preview__title">Définir sa mission (Audit)</h3>
+                    </div>
+                    <div class="approach-preview__step">
+                        <div class="approach-preview__marker">02</div>
+                        <h3 class="approach-preview__title">Le former (Construction)</h3>
+                    </div>
+                    <div class="approach-preview__step">
+                        <div class="approach-preview__marker">03</div>
+                        <h3 class="approach-preview__title">L'intégrer (Déploiement)</h3>
+                    </div>
+                </div>
+                <div class="section__cta">
+                    <a href="approche/" class="btn btn--secondary">Découvrir notre méthode en détail</a>
+                </div>
+            </div>
+        </section>
+
         <!-- Pourquoi Nouvelle-Rive Section -->
         <section id="pourquoi" class="section section--accent">
             <div class="container">
                 <header class="section__header">
                     <h2 class="section__title">Une collaboration basée sur la confiance</h2>
-                    <p class="section__subtitle">L'intégration d'un outil externe demande une confiance absolue. La sécurité et la confidentialité de vos données sont nos priorités non-négociables.</p>
+                    <p class="section__subtitle">L'intégration d'un outil externe demande une confiance absolue. La sécurité et la confidentialité de vos données sont nos priorités.</p>
                 </header>
 
-                <div class="bento-grid">
-                    <!-- Lignes de connexion -->
-                    <svg class="bento-connections" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <linearGradient id="connectionGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                <stop offset="0%" style="stop-color:#0099ff;stop-opacity:0.8" />
-                                <stop offset="50%" style="stop-color:#00ccff;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#0099ff;stop-opacity:0.8" />
-                            </linearGradient>
-                        </defs>
-
-                        <!-- Ligne 1: Block 1 (Votre Contexte) vers Block 2 (La Clarté) -->
-                        <path class="connection-line" data-line="1" d="M 400 120 Q 500 80 600 120"
-                              stroke="url(#connectionGradient)" stroke-width="2" fill="none" opacity="0"/>
-
-                        <!-- Ligne 2: Block 2 (La Clarté) vers Block 3 (L'Humain) -->
-                        <path class="connection-line" data-line="2" d="M 600 180 Q 650 300 600 380"
-                              stroke="url(#connectionGradient)" stroke-width="2" fill="none" opacity="0"/>
-
-                        <!-- Ligne 3: Block 3 (L'Humain) vers Block 4 (Prototype) -->
-                        <path class="connection-line" data-line="3" d="M 400 420 Q 300 450 200 380"
-                              stroke="url(#connectionGradient)" stroke-width="2" fill="none" opacity="0"/>
-
-                        <!-- Ligne 4: Block 4 (Prototype) vers Block 1 (Votre Contexte) -->
-                        <path class="connection-line" data-line="4" d="M 150 320 Q 100 200 200 120"
-                              stroke="url(#connectionGradient)" stroke-width="2" fill="none" opacity="0"/>
-                    </svg>
-
-                    <div class="bento-card bento-card--large">
-                        <h3 class="bento-card__title">Contrôle Total</h3>
-                        <p class="bento-card__description">
-                            Les agents IA n'accèdent qu'aux informations strictement nécessaires à leur mission, selon des règles définies avec vous. Vous gardez la maîtrise.
-                        </p>
+                <div class="trust-qa">
+                    <!-- Timeline verticale -->
+                    <div class="trust-qa__timeline">
+                        <div class="trust-qa__timeline-line"></div>
+                        <div class="trust-qa__timeline-progress"></div>
                     </div>
-                    <div class="bento-card">
-                        <h3 class="bento-card__title">Données Protégées</h3>
-                        <p class="bento-card__description">
-                            Vos données sont hébergées sur des serveurs en Europe, conformément au RGPD. La confidentialité de vos informations est garantie.
-                        </p>
+
+                    <div class="trust-qa__item" data-qa-index="1">
+                        <div class="trust-qa__marker trust-qa__marker--security">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            </svg>
+                        </div>
+                        <div class="trust-qa__content">
+                            <h3 class="trust-qa__question">Mes données sont-elles en sécurité ?</h3>
+                            <p class="trust-qa__answer">
+                                Vos données restent chez vous, hébergées en Europe (RGPD). L'assistant n'accède qu'aux informations strictement nécessaires, selon des règles que vous définissez. Vous gardez le contrôle total.
+                            </p>
+                        </div>
                     </div>
-                    <div class="bento-card">
-                        <h3 class="bento-card__title">Prototype avant Engagement</h3>
-                        <p class="bento-card__description">
-                            Notre objectif est de livrer rapidement un prototype fonctionnel qui résout une petite partie de votre problème. Vous pouvez ainsi tester la valeur et valider notre approche avant de vous engager plus loin.
-                        </p>
+
+                    <div class="trust-qa__item" data-qa-index="2">
+                        <div class="trust-qa__marker trust-qa__marker--method">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M12 6v6l4 2"/>
+                            </svg>
+                        </div>
+                        <div class="trust-qa__content">
+                            <h3 class="trust-qa__question">Comment être sûr que ça marchera pour moi ?</h3>
+                            <p class="trust-qa__answer">
+                                Nous ne vendons pas de solution clé en main. Nous prenons le temps de comprendre votre métier, puis nous livrons un prototype fonctionnel en 2-3 semaines. Vous testez sur vos vraies données avant tout engagement.
+                            </p>
+                        </div>
                     </div>
-                    <div class="bento-card bento-card--wide">
-                        <h3 class="bento-card__title">L'Humain au Centre de l'Équation</h3>
-                        <p class="bento-card__description">
-                            Notre travail ne prend son sens que s'il augmente et valorise vos équipes. Nous concevons des outils pour assister l'intelligence humaine, pas pour la remplacer. Nos assistants augmentent votre contrôle, ils ne le suppriment pas.
-                        </p>
+
+                    <div class="trust-qa__item" data-qa-index="3">
+                        <div class="trust-qa__marker trust-qa__marker--human">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                        </div>
+                        <div class="trust-qa__content">
+                            <h3 class="trust-qa__question">L'IA va-t-elle remplacer mes équipes ?</h3>
+                            <p class="trust-qa__answer">
+                                Jamais. Nous concevons des assistants pour libérer du temps, pas des postes. L'IA propose, vos équipes décident. Notre mission : redonner du temps à l'intelligence humaine.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="trust-qa__item trust-qa__item--last" data-qa-index="4">
+                        <div class="trust-qa__marker trust-qa__marker--trust">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                        </div>
+                        <div class="trust-qa__content">
+                            <h3 class="trust-qa__question">Pourquoi vous faire confiance ?</h3>
+                            <p class="trust-qa__answer">
+                                Parce que nous codons votre expertise, pas un chatbot générique. Nous sommes artisans, pas vendeurs de licences. Si le prototype ne vous convainc pas, vous n'allez pas plus loin. Simple.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -273,6 +470,13 @@
             </div>
         </section>
     </main>
+
+    <!-- Bouton retour en haut -->
+    <button id="backToTop" class="back-to-top" aria-label="Retour en haut de la page">
+        <svg class="back-to-top__icon" width="24" height="24">
+            <use href="#icon-arrow-up"></use>
+        </svg>
+    </button>
 
     <!-- Footer Amélioré -->
     <footer class="footer">
