@@ -23,7 +23,7 @@
     </script>
 
     <!-- Styles -->
-    <link rel="stylesheet" href="../css/base.css?v=2.0">
+    <link rel="stylesheet" href="../css/base.css?v=2.5">
 
     <!-- GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -40,9 +40,10 @@
                 </a>
 
                 <div class="nav__menu" id="navMenu">
-                    <a href="cas-usage/" class="nav__link">Solutions</a>
-                    <a href="approche/" class="nav__link">Approche</a>
-                    <a href="contact/" class="nav__link nav__link--cta">Définir mon projet</a>
+                    <a href="../cas-usage/" class="nav__link">Solutions</a>
+                    <a href="../approche/" class="nav__link">Approche</a>
+                    <a href="../Fondations/" class="nav__link">Fondations</a>
+                    <a href="../contact/" class="nav__link nav__link--cta">Définir mon projet</a>
                 </div>
 
                 <button class="nav__toggle" id="navToggle" aria-label="Menu" aria-expanded="false">
@@ -54,18 +55,140 @@
         </div>
     </header>
 
+    <nav class="breadcrumb" aria-label="Fil d'ariane">
+        <div class="container">
+            <ol class="breadcrumb__list">
+                <li class="breadcrumb__item"><a href="../">Accueil</a></li>
+                <li class="breadcrumb__separator">›</li>
+                <li class="breadcrumb__item breadcrumb__item--current">Solutions</li>
+            </ol>
+        </div>
+    </nav>
+
     <main>
-        <section class="hero-page hero-page--video">
-            <div class="hero-page__background">
-                <video class="hero-page__video" autoplay muted loop playsinline>
-                    <source src="https://res.cloudinary.com/dwnevq3ba/video/upload/horizon.mp4" type="video/mp4">
-                    Votre navigateur ne supporte pas la vidéo HTML5.
-                </video>
-                <div class="hero-page__overlay"></div>
-            </div>
+        <section class="hero-solutions-bento">
             <div class="container">
-                <h1 class="hero-page__title">Nos assistants IA en action</h1>
-                <p class="hero-page__subtitle">Ce ne sont pas des concepts, mais des démonstrations concrètes. Découvrez comment nos assistants digitaux résolvent des problèmes réels, et imaginez ce qu'ils pourraient faire pour vous.</p>
+                <!-- Header -->
+                <div class="bento-header">
+                    <span class="eyebrow-text">Nos Solutions</span>
+                    <h1 class="bento-title">
+                        Découvrez vos futurs assistants IA
+                    </h1>
+                </div>
+
+                <!-- Bento Grid -->
+                <div class="bento-grid">
+
+                    <!-- Carousel Zone (Grande zone gauche) -->
+                    <div class="bento-showcase">
+                        <div class="showcase-carousel" id="solutionsCarousel">
+
+                            <!-- Slide 1: Fiscal -->
+                            <div class="carousel-slide active" data-solution="fiscalite">
+                                <div class="mockup-container">
+                                    <!-- Placeholder - À remplacer par votre vidéo/image -->
+                                    <div class="mockup-placeholder">
+                                        <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                            <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                        </svg>
+                                        <p>Démo Copilote Fiscal</p>
+                                        <small>Vidéo ou Image à intégrer</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Slide 2: Tourism -->
+                            <div class="carousel-slide" data-solution="tourisme">
+                                <div class="mockup-container">
+                                    <div class="mockup-placeholder">
+                                        <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                            <path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                            <path d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"/>
+                                        </svg>
+                                        <p>Démo Guide Intelligent</p>
+                                        <small>Vidéo ou Image à intégrer</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Slide 3: Reporting -->
+                            <div class="carousel-slide" data-solution="reporting">
+                                <div class="mockup-container">
+                                    <div class="mockup-placeholder">
+                                        <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                            <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                                        </svg>
+                                        <p>Démo Analyste Auto</p>
+                                        <small>Vidéo ou Image à intégrer</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Navigation -->
+                        <div class="carousel-nav">
+                            <button class="carousel-btn carousel-btn--prev" aria-label="Slide précédent">‹</button>
+                            <div class="carousel-dots">
+                                <span class="dot active" data-slide="0" aria-label="Slide 1"></span>
+                                <span class="dot" data-slide="1" aria-label="Slide 2"></span>
+                                <span class="dot" data-slide="2" aria-label="Slide 3"></span>
+                            </div>
+                            <button class="carousel-btn carousel-btn--next" aria-label="Slide suivant">›</button>
+                        </div>
+                    </div>
+
+                    <!-- Solution Cards (Zone droite) -->
+                    <div class="bento-cards">
+
+                        <!-- Card 1: Fiscal -->
+                        <div class="solution-card active" data-solution="fiscalite">
+                            <div class="solution-card__header">
+                                <div class="solution-card__icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                    </svg>
+                                </div>
+                                <h3 class="solution-card__title">Copilote Fiscal</h3>
+                            </div>
+                            <p class="solution-card__description">Préparation automatique des déclarations fiscales</p>
+                            <span class="solution-card__badge">Droit & Comptabilité</span>
+                            <div class="solution-card__arrow">→</div>
+                        </div>
+
+                        <!-- Card 2: Tourism -->
+                        <div class="solution-card" data-solution="tourisme">
+                            <div class="solution-card__header">
+                                <div class="solution-card__icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        <path d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"/>
+                                    </svg>
+                                </div>
+                                <h3 class="solution-card__title">Guide Intelligent</h3>
+                            </div>
+                            <p class="solution-card__description">Recommandations personnalisées en temps réel</p>
+                            <span class="solution-card__badge">Expérience Client</span>
+                            <div class="solution-card__arrow">→</div>
+                        </div>
+
+                        <!-- Card 3: Reporting -->
+                        <div class="solution-card" data-solution="reporting">
+                            <div class="solution-card__header">
+                                <div class="solution-card__icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                                    </svg>
+                                </div>
+                                <h3 class="solution-card__title">Analyste Auto</h3>
+                            </div>
+                            <p class="solution-card__description">Rapports intelligents multi-sources</p>
+                            <span class="solution-card__badge">Pilotage & Décision</span>
+                            <div class="solution-card__arrow">→</div>
+                        </div>
+
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -263,12 +386,20 @@
 
     </main>
 
+    <!-- Bouton retour en haut -->
+    <button id="backToTop" class="back-to-top" aria-label="Retour en haut de la page">
+        <svg class="back-to-top__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="19" x2="12" y2="5"/>
+            <polyline points="5,12 12,5 19,12"/>
+        </svg>
+    </button>
+
     <!-- Footer Amélioré -->
     <footer class="footer">
         <div class="container">
             <div class="footer__main">
                 <div class="footer__brand">
-                    <a href="/" class="nav__brand" aria-label="Accueil Nouvelle Rive">
+                    <a href="../" class="nav__brand" aria-label="Accueil Nouvelle Rive">
                         <svg class="nav__logo" width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 80C20 46.86 46.86 20 80 20V80H20Z" fill="currentColor"/><path d="M20 80C20 46.86 46.86 20 80 20" stroke="currentColor" stroke-width="8"/></svg>
                         <span class="brand-text">Nouvelle Rive</span>
                     </a>
@@ -277,21 +408,21 @@
                 </div>
                 <div class="footer__nav-col">
                     <h4 class="footer__nav-title">Navigation</h4>
-                    <a href="/" class="footer__link">Accueil</a>
-                    <a href="cas-usage/" class="footer__link">Nos Solutions</a>
-                    <a href="approche/" class="footer__link">Notre Approche</a>
-                    <a href="Fondations/" class="footer__link">Nos Fondations</a>
+                    <a href="../" class="footer__link">Accueil</a>
+                    <a href="../cas-usage/" class="footer__link">Nos Solutions</a>
+                    <a href="../approche/" class="footer__link">Notre Approche</a>
+                    <a href="../Fondations/" class="footer__link">Nos Fondations</a>
                 </div>
                 <div class="footer__nav-col">
                     <h4 class="footer__nav-title">Contact</h4>
-                    <a href="contact/" class="footer__link">Planifier une session</a>
+                    <a href="../contact/" class="footer__link">Planifier une session</a>
                     <a href="mailto:contact@nouvelle-rive.com" class="footer__link">Nous écrire</a>
                 </div>
                 <div class="footer__nav-col">
                     <h4 class="footer__nav-title">Démonstrations</h4>
-                    <a href="cas-usage/" class="footer__link">Copilote Fiscal</a>
-                    <a href="cas-usage/" class="footer__link">Guide Intelligent</a>
-                    <a href="cas-usage/" class="footer__link">Reporting Contextuel</a>
+                    <a href="../cas-usage/" class="footer__link">Copilote Fiscal</a>
+                    <a href="../cas-usage/" class="footer__link">Guide Intelligent</a>
+                    <a href="../cas-usage/" class="footer__link">Reporting Contextuel</a>
                 </div>
             </div>
         </div>
