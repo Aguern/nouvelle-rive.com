@@ -3,6 +3,85 @@
  * Architecture moderne et performante
  */
 
+/**
+ * Bouton retour en haut - Fonction standalone pour toutes les pages
+ */
+function initBackToTop() {
+    const backToTopBtn = document.getElementById('backToTop');
+    if (!backToTopBtn) return;
+
+    // Afficher/masquer le bouton selon le scroll
+    const toggleButton = () => {
+        if (window.scrollY > 300) {
+            backToTopBtn.classList.add('is-visible');
+        } else {
+            backToTopBtn.classList.remove('is-visible');
+        }
+    };
+
+    // Écouter le scroll avec throttle pour les performances
+    let scrollTimeout;
+    window.addEventListener('scroll', () => {
+        if (scrollTimeout) {
+            window.cancelAnimationFrame(scrollTimeout);
+        }
+        scrollTimeout = window.requestAnimationFrame(toggleButton);
+    });
+
+    // Retour en haut au clic
+    backToTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+}
+
+/**
+ * Menu mobile - Fonction standalone pour toutes les pages
+ */
+function initMobileMenu() {
+    const toggle = document.getElementById('navToggle');
+    const menu = document.getElementById('navMenu');
+    const links = menu?.querySelectorAll('.nav__link');
+
+    if (!toggle || !menu) return;
+
+    let isOpen = false;
+
+    toggle.addEventListener('click', () => {
+        isOpen = !isOpen;
+
+        toggle.classList.toggle('active', isOpen);
+        menu.classList.toggle('active', isOpen);
+
+        // Prevent body scroll when menu is open
+        document.body.style.overflow = isOpen ? 'hidden' : '';
+    });
+
+    // Close menu when clicking on links
+    links?.forEach(link => {
+        link.addEventListener('click', () => {
+            if (isOpen) {
+                isOpen = false;
+                toggle.classList.remove('active');
+                menu.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+    });
+
+    // Close menu on escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && isOpen) {
+            isOpen = false;
+            toggle.classList.remove('active');
+            menu.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    });
+}
+
 class NouvelleRive {
     constructor() {
         this.init();
@@ -14,7 +93,6 @@ class NouvelleRive {
 
         // Initialisation des modules
         this.initHeader();
-        this.initMobileMenu();
         this.initStaggeredAnimations();
         this.initApproachPreviewAnimation();
         this.initCalendlyIntegration();
@@ -24,6 +102,7 @@ class NouvelleRive {
         this.initValueCardsTilt();
         this.initMicroInteractions();
         this.initArtisanalCardAnimation();
+        this.initTrustQAAnimation();
 
         console.log('🚀 Nouvelle Rive initialized');
     }
@@ -37,51 +116,6 @@ class NouvelleRive {
 
         // Header is always solid (no transparent logic)
         // This ensures uniform appearance across all pages
-    }
-
-    /**
-     * Menu mobile avec animations fluides
-     */
-    initMobileMenu() {
-        const toggle = document.getElementById('navToggle');
-        const menu = document.getElementById('navMenu');
-        const links = menu?.querySelectorAll('.nav__link');
-
-        if (!toggle || !menu) return;
-
-        let isOpen = false;
-
-        toggle.addEventListener('click', () => {
-            isOpen = !isOpen;
-
-            toggle.classList.toggle('active', isOpen);
-            menu.classList.toggle('active', isOpen);
-
-            // Prevent body scroll when menu is open
-            document.body.style.overflow = isOpen ? 'hidden' : '';
-        });
-
-        // Close menu when clicking on links
-        links?.forEach(link => {
-            link.addEventListener('click', () => {
-                if (isOpen) {
-                    isOpen = false;
-                    toggle.classList.remove('active');
-                    menu.classList.remove('active');
-                    document.body.style.overflow = '';
-                }
-            });
-        });
-
-        // Close menu on escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && isOpen) {
-                isOpen = false;
-                toggle.classList.remove('active');
-                menu.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-        });
     }
 
     /**
@@ -737,6 +771,45 @@ class NouvelleRive {
     }
 
     /**
+     * Animation de la section Trust Q&A avec timeline verticale
+     */
+    initTrustQAAnimation() {
+        const trustQA = document.querySelector('.trust-qa');
+        if (!trustQA) {
+            console.log('Trust QA section not found');
+            return;
+        }
+
+        const items = gsap.utils.toArray('.trust-qa__item');
+        const progressLine = document.querySelector('.trust-qa__timeline-progress');
+
+        // Animation de la ligne de progression
+        if (progressLine) {
+            gsap.to(progressLine, {
+                height: '100%',
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: '.trust-qa',
+                    start: 'top center',
+                    end: 'bottom center',
+                    scrub: 0.5
+                }
+            });
+            console.log('Trust QA progress line animation initialized');
+        }
+
+        // Animation de chaque item au scroll
+        items.forEach((item, index) => {
+            ScrollTrigger.create({
+                trigger: item,
+                start: 'top center+=100',
+                onEnter: () => item.classList.add('is-visible'),
+                onLeaveBack: () => item.classList.remove('is-visible')
+            });
+        });
+    }
+
+    /**
      * Gestion des erreurs globales
      */
     handleErrors() {
@@ -769,6 +842,13 @@ class ApprochePage {
 
         gsap.registerPlugin(ScrollTrigger);
 
+        // Register MotionPathPlugin if available (for mountain animation)
+        if (typeof MotionPathPlugin !== 'undefined') {
+            gsap.registerPlugin(MotionPathPlugin);
+        }
+
+        // Animation montagne du hero désactivée (utilise vidéo maintenant)
+        // this.initApprocheMountainAnimation();
         this.initScrollAnimations();
         this.initPhilosophyCards();
         this.initStepCards();
@@ -778,6 +858,7 @@ class ApprochePage {
         this.initAccessibility();
         this.initInteractiveTimeline();
         this.initInteractiveArchitecture();
+        this.initGearAnimation(); // Nouvelle animation d'engrenages 2025
 
         console.log('🎯 Page Approche initialized');
     }
@@ -789,14 +870,540 @@ class ApprochePage {
         const timelineContainer = document.querySelector('.interactive-timeline');
         if (!timelineContainer) return; // N'exécute le code que sur la bonne page
 
-        // Charge le SVG et l'insère dans le conteneur
         const visualContainer = document.querySelector('.timeline-visual__sticky-container');
-        fetch('../assets/svg/timeline-animation.svg')
-            .then(response => response.text())
-            .then(data => {
-                visualContainer.innerHTML = data;
-                this.setupTimelineAnimation(visualContainer);
+        // Les SVG sont maintenant inline dans le HTML, pas besoin de les charger
+        if (visualContainer) {
+            this.setupTimelineAnimation(visualContainer);
+            this.animateMethodeVisuals();
+        }
+    }
+
+    /**
+     * Anime les éléments SVG de la section méthode
+     */
+    animateMethodeVisuals() {
+        // Animer Étape 1 : Document d'audit qui se remplit
+        const docFrame = document.querySelector('#step1-visual .doc-frame');
+        const docHeader = document.querySelector('#step1-visual .doc-header');
+        const textLines = document.querySelectorAll('#step1-visual .text-line');
+        const checkCircles = document.querySelectorAll('#step1-visual .check-circle');
+        const checkmarks = document.querySelectorAll('#step1-visual .check-mark');
+        const magnifier = document.querySelector('#step1-visual .magnifier');
+        const magnifierGlow = document.querySelector('#step1-visual .magnifier-glow');
+        const magnifierLens = document.querySelector('#step1-visual .magnifier-lens');
+
+        // 1. Cadre du document se dessine
+        if (docFrame) {
+            gsap.to(docFrame, {
+                strokeDashoffset: 0,
+                duration: 0.8,
+                ease: 'power2.out',
+                scrollTrigger: {
+                    trigger: '.timeline-step[data-step="1"]',
+                    start: 'top center',
+                    toggleActions: 'play none none reverse'
+                }
             });
+        }
+
+        // 2. Header du document pulse (loop)
+        if (docHeader) {
+            gsap.to(docHeader, {
+                opacity: 0.8,
+                duration: 1.5,
+                delay: 0.5,
+                yoyo: true,
+                repeat: -1,
+                ease: 'sine.inOut',
+                scrollTrigger: {
+                    trigger: '.timeline-step[data-step="1"]',
+                    start: 'top center',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        }
+
+        // 3. Lignes de texte se remplissent
+        textLines.forEach((line, index) => {
+            gsap.to(line, {
+                strokeDashoffset: 0,
+                duration: 0.6,
+                delay: 0.5 + (index * 0.2),
+                ease: 'power2.out',
+                scrollTrigger: {
+                    trigger: '.timeline-step[data-step="1"]',
+                    start: 'top center',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        });
+
+        // 4. Checkmarks se cochent avec bounce
+        checkmarks.forEach((mark, index) => {
+            // Cercle pulse
+            if (checkCircles[index]) {
+                gsap.to(checkCircles[index], {
+                    scale: 1.3,
+                    duration: 0.3,
+                    delay: 1.5 + (index * 0.4),
+                    yoyo: true,
+                    repeat: 1,
+                    ease: 'power2.out',
+                    scrollTrigger: {
+                        trigger: '.timeline-step[data-step="1"]',
+                        start: 'top center',
+                        toggleActions: 'play none none reverse'
+                    }
+                });
+            }
+
+            // Checkmark apparaît avec bounce
+            gsap.fromTo(mark, {
+                opacity: 0,
+                scale: 0
+            }, {
+                opacity: 1,
+                scale: 1,
+                duration: 0.5,
+                delay: 1.6 + (index * 0.4),
+                ease: 'back.out(2)',
+                scrollTrigger: {
+                    trigger: '.timeline-step[data-step="1"]',
+                    start: 'top center',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        });
+
+        // 5. Loupe scanne (mouvement + pulse)
+        if (magnifier) {
+            // Mouvement vertical de scan
+            gsap.to(magnifier, {
+                y: -10,
+                duration: 1.5,
+                delay: 2.5,
+                yoyo: true,
+                repeat: -1,
+                ease: 'sine.inOut',
+                scrollTrigger: {
+                    trigger: '.timeline-step[data-step="1"]',
+                    start: 'top center',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        }
+
+        if (magnifierLens) {
+            // Pulse de la lentille
+            gsap.to(magnifierLens, {
+                scale: 1.15,
+                duration: 1.5,
+                delay: 2.5,
+                yoyo: true,
+                repeat: -1,
+                ease: 'sine.inOut',
+                transformOrigin: 'center',
+                scrollTrigger: {
+                    trigger: '.timeline-step[data-step="1"]',
+                    start: 'top center',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        }
+
+        if (magnifierGlow) {
+            // Glow pulse
+            gsap.to(magnifierGlow, {
+                opacity: 0.3,
+                scale: 1.1,
+                duration: 1.5,
+                delay: 2.5,
+                yoyo: true,
+                repeat: -1,
+                ease: 'sine.inOut',
+                transformOrigin: 'center',
+                scrollTrigger: {
+                    trigger: '.timeline-step[data-step="1"]',
+                    start: 'top center',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        }
+
+        // Animer Étape 2 : Robot en construction
+        const robotParts = document.querySelectorAll('#step2-visual .robot-part');
+        const robotEyes = document.querySelectorAll('#step2-visual .robot-eye');
+        const robotHands = document.querySelectorAll('#step2-visual .robot-hand');
+        const antennaLights = document.querySelectorAll('#step2-visual .antenna-light');
+        const controlPanel = document.querySelectorAll('#step2-visual .control-panel');
+        const progressBarFill = document.querySelector('#step2-visual .progress-bar-fill');
+        const progressText = document.querySelector('#step2-visual .progress-text');
+        const progressTextColored = document.querySelector('#step2-visual .progress-text-colored');
+        const progressClipRect = document.querySelector('#step2-visual .progress-clip-rect');
+        const skillIcons = document.querySelectorAll('#step2-visual .skill-icon');
+
+        // Les parties du robot se dessinent séquentiellement
+        robotParts.forEach((part, index) => {
+            gsap.to(part, {
+                strokeDashoffset: 0,
+                duration: 0.8,
+                delay: index * 0.15,
+                ease: 'power2.out',
+                scrollTrigger: {
+                    trigger: '.timeline-step[data-step="2"]',
+                    start: 'top center',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        });
+
+        // Yeux apparaissent
+        gsap.to(robotEyes, {
+            opacity: 1,
+            duration: 0.3,
+            delay: 1.5,
+            stagger: 0.1,
+            scrollTrigger: {
+                trigger: '.timeline-step[data-step="2"]',
+                start: 'top center',
+                toggleActions: 'play none none reverse'
+            }
+        });
+
+        // Mains apparaissent
+        gsap.to(robotHands, {
+            opacity: 1,
+            duration: 0.3,
+            delay: 1.8,
+            stagger: 0.1,
+            scrollTrigger: {
+                trigger: '.timeline-step[data-step="2"]',
+                start: 'top center',
+                toggleActions: 'play none none reverse'
+            }
+        });
+
+        // Lumières antennes pulsent
+        gsap.to(antennaLights, {
+            opacity: 1,
+            duration: 0.5,
+            delay: 2,
+            yoyo: true,
+            repeat: -1,
+            repeatDelay: 0.5,
+            scrollTrigger: {
+                trigger: '.timeline-step[data-step="2"]',
+                start: 'top center',
+                toggleActions: 'play none none reverse'
+            }
+        });
+
+        // Panneau de contrôle apparaît
+        gsap.to(controlPanel, {
+            opacity: 1,
+            duration: 0.4,
+            delay: 2.2,
+            stagger: 0.1,
+            scrollTrigger: {
+                trigger: '.timeline-step[data-step="2"]',
+                start: 'top center',
+                toggleActions: 'play none none reverse'
+            }
+        });
+
+        // Jauge de progression se remplit
+        if (progressBarFill) {
+            gsap.to(progressBarFill, {
+                attr: { width: 125 },
+                duration: 1.5,
+                delay: 2.5,
+                ease: 'power2.out',
+                scrollTrigger: {
+                    trigger: '.timeline-step[data-step="2"]',
+                    start: 'top center',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        }
+
+        // Clip-path synchronisé avec la jauge
+        if (progressClipRect) {
+            gsap.to(progressClipRect, {
+                attr: { width: 125 },
+                duration: 1.5,
+                delay: 2.5,
+                ease: 'power2.out',
+                scrollTrigger: {
+                    trigger: '.timeline-step[data-step="2"]',
+                    start: 'top center',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        }
+
+        // Textes apparaissent
+        if (progressText && progressTextColored) {
+            gsap.to([progressText, progressTextColored], {
+                opacity: 1,
+                duration: 0.3,
+                delay: 3,
+                scrollTrigger: {
+                    trigger: '.timeline-step[data-step="2"]',
+                    start: 'top center',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        }
+
+        // Icônes de compétences apparaissent
+        skillIcons.forEach((icon, index) => {
+            gsap.to(icon, {
+                opacity: 1,
+                scale: 1,
+                duration: 0.5,
+                delay: 3.3 + (index * 0.2),
+                ease: 'back.out(1.7)',
+                scrollTrigger: {
+                    trigger: '.timeline-step[data-step="2"]',
+                    start: 'top center',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        });
+
+        // Animer Étape 3 : Dashboard live monitoring
+        const dashboardFrame = document.querySelector('#step3-visual .dashboard-frame');
+        const dashboardTitle = document.querySelector('#step3-visual .dashboard-title');
+        const dashboardTitleText = document.querySelector('#step3-visual .dashboard-title-text');
+        const liveDots = document.querySelectorAll('#step3-visual .live-dot');
+        const gaugeBackgrounds = document.querySelectorAll('#step3-visual .gauge-bg');
+        const gaugeProgressCircles = document.querySelectorAll('#step3-visual .gauge-progress');
+        const gaugeValues = document.querySelectorAll('#step3-visual .gauge-value');
+        const gaugeLabels = document.querySelectorAll('#step3-visual .gauge-label');
+        const barLabels = document.querySelectorAll('#step3-visual .bar-label');
+        const barFills = document.querySelectorAll('#step3-visual .bar-fill');
+        const successCircle = document.querySelector('#step3-visual .success-circle');
+        const successCheckmark = document.querySelector('#step3-visual .success-checkmark');
+        const successRays = document.querySelectorAll('#step3-visual .success-ray');
+
+        // 1. Cadre du dashboard se dessine (boot up)
+        if (dashboardFrame) {
+            gsap.to(dashboardFrame, {
+                strokeDashoffset: 0,
+                duration: 0.8,
+                ease: 'power2.out',
+                scrollTrigger: {
+                    trigger: '.timeline-step[data-step="3"]',
+                    start: 'top center',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        }
+
+        // 2. Titre se remplit (typing effect)
+        if (dashboardTitle) {
+            gsap.to(dashboardTitle, {
+                attr: { width: 120 },
+                duration: 0.6,
+                delay: 0.8,
+                ease: 'power2.out',
+                scrollTrigger: {
+                    trigger: '.timeline-step[data-step="3"]',
+                    start: 'top center',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        }
+
+        // 2b. Texte "Tableau de bord" apparaît
+        if (dashboardTitleText) {
+            gsap.to(dashboardTitleText, {
+                opacity: 1,
+                duration: 0.4,
+                delay: 1.2,
+                ease: 'power2.out',
+                scrollTrigger: {
+                    trigger: '.timeline-step[data-step="3"]',
+                    start: 'top center',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        }
+
+        // 3. Indicateurs LIVE clignotent
+        liveDots.forEach((dot, index) => {
+            gsap.to(dot, {
+                opacity: 1,
+                duration: 0.5,
+                delay: 1.2 + (index * 0.15),
+                yoyo: true,
+                repeat: -1,
+                repeatDelay: 0.3,
+                ease: 'power2.inOut',
+                scrollTrigger: {
+                    trigger: '.timeline-step[data-step="3"]',
+                    start: 'top center',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        });
+
+        // 4. Labels des gauges apparaissent
+        gaugeLabels.forEach((label, index) => {
+            gsap.to(label, {
+                opacity: 1,
+                duration: 0.3,
+                delay: 1.5 + (index * 0.1),
+                scrollTrigger: {
+                    trigger: '.timeline-step[data-step="3"]',
+                    start: 'top center',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        });
+
+        // 5. Backgrounds des gauges pulsent (calibration)
+        gaugeBackgrounds.forEach((bg, index) => {
+            gsap.to(bg, {
+                opacity: 0.5,
+                duration: 0.5,
+                delay: 1.5 + (index * 0.3),
+                yoyo: true,
+                repeat: 2,
+                ease: 'sine.inOut',
+                scrollTrigger: {
+                    trigger: '.timeline-step[data-step="3"]',
+                    start: 'top center',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        });
+
+        // 6. Gauges se remplissent + compteur numérique
+        gaugeProgressCircles.forEach((gauge, index) => {
+            const targetValue = index === 0 ? 85 : 92;
+
+            // Gauge progress
+            gsap.to(gauge, {
+                strokeDashoffset: 55,
+                duration: 1.5,
+                delay: 2 + (index * 0.3),
+                ease: 'power2.out',
+                scrollTrigger: {
+                    trigger: '.timeline-step[data-step="3"]',
+                    start: 'top center',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+
+            // Counter animation
+            if (gaugeValues[index]) {
+                gsap.to({ val: 0 }, {
+                    val: targetValue,
+                    duration: 1.5,
+                    delay: 2 + (index * 0.3),
+                    ease: 'power2.out',
+                    onUpdate: function() {
+                        gaugeValues[index].textContent = Math.round(this.targets()[0].val) + '%';
+                    },
+                    scrollTrigger: {
+                        trigger: '.timeline-step[data-step="3"]',
+                        start: 'top center',
+                        toggleActions: 'play none none reverse'
+                    }
+                });
+            }
+        });
+
+        // 7. Labels des barres apparaissent
+        barLabels.forEach((label, index) => {
+            gsap.to(label, {
+                opacity: 1,
+                duration: 0.3,
+                delay: 3 + (index * 0.2),
+                scrollTrigger: {
+                    trigger: '.timeline-step[data-step="3"]',
+                    start: 'top center',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        });
+
+        // 8. Barres se remplissent avec overshoot
+        barFills.forEach((bar, index) => {
+            const targetWidth = 240 * (0.8 + index * 0.1);
+            gsap.to(bar, {
+                attr: { width: targetWidth },
+                duration: 1.2,
+                delay: 3.2 + (index * 0.3),
+                ease: 'back.out(1.2)',
+                scrollTrigger: {
+                    trigger: '.timeline-step[data-step="3"]',
+                    start: 'top center',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        });
+
+        // 9. Rayons lumineux du succès
+        successRays.forEach((ray, index) => {
+            gsap.to(ray, {
+                opacity: 0.8,
+                duration: 0.3,
+                delay: 4.5 + (index * 0.05),
+                scrollTrigger: {
+                    trigger: '.timeline-step[data-step="3"]',
+                    start: 'top center',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+
+            // Fade out rapide
+            gsap.to(ray, {
+                opacity: 0,
+                duration: 0.5,
+                delay: 4.8 + (index * 0.05),
+                scrollTrigger: {
+                    trigger: '.timeline-step[data-step="3"]',
+                    start: 'top center',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        });
+
+        // 10. Badge succès avec bounce
+        if (successCircle) {
+            gsap.fromTo(successCircle, {
+                opacity: 0,
+                scale: 0
+            }, {
+                opacity: 1,
+                scale: 0.85,
+                duration: 0.6,
+                delay: 4.5,
+                ease: 'back.out(2)',
+                scrollTrigger: {
+                    trigger: '.timeline-step[data-step="3"]',
+                    start: 'top center',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        }
+
+        // 11. Checkmark se dessine
+        if (successCheckmark) {
+            gsap.to(successCheckmark, {
+                strokeDashoffset: 0,
+                duration: 0.5,
+                delay: 4.7,
+                ease: 'power2.out',
+                scrollTrigger: {
+                    trigger: '.timeline-step[data-step="3"]',
+                    start: 'top center',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        }
     }
 
     /**
@@ -858,6 +1465,75 @@ class ApprochePage {
         }
     }
 
+    /**
+     * PIPELINE TIMELINE PROGRESSIVE - ScrollTrigger
+     */
+    initGearAnimation() {
+        const pipelineSection = document.querySelector('#gear-architecture');
+        if (!pipelineSection) {
+            console.log('⚠️ #gear-architecture not found');
+            return;
+        }
+
+        const pipelineSteps = gsap.utils.toArray('.pipeline-step');
+        const progressLine = document.querySelector('.pipeline-line__progress');
+
+        console.log(`🔧 Found ${pipelineSteps.length} pipeline steps`);
+
+        if (pipelineSteps.length === 0) return;
+
+        // Animer la ligne de progression
+        if (progressLine) {
+            gsap.to(progressLine, {
+                height: '100%',
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: '.pipeline-timeline',
+                    start: 'top center',
+                    end: 'bottom center',
+                    scrub: 0.5
+                }
+            });
+        }
+
+        // Créer ScrollTrigger pour chaque step
+        pipelineSteps.forEach((step, index) => {
+            ScrollTrigger.create({
+                trigger: step,
+                start: 'top center+=100',
+                end: 'bottom center-=100',
+                onEnter: () => {
+                    step.classList.add('is-active');
+                },
+                onLeave: () => {
+                    step.classList.remove('is-active');
+                },
+                onEnterBack: () => {
+                    step.classList.add('is-active');
+                },
+                onLeaveBack: () => {
+                    step.classList.remove('is-active');
+                }
+            });
+        });
+
+        // Bouton de cycle : retour au début de la section
+        const loopBtn = document.getElementById('restartPipeline');
+        if (loopBtn) {
+            loopBtn.addEventListener('click', () => {
+                const section = document.getElementById('gear-architecture');
+                if (section) {
+                    section.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        }
+
+        console.log('⚙️ Pipeline Timeline initialized with ScrollTrigger');
+    }
+
     setupTimelineAnimation(visualContainer) {
         const steps = gsap.utils.toArray(".timeline-step");
         const visuals = {
@@ -873,8 +1549,8 @@ class ApprochePage {
         steps.forEach((step, i) => {
             ScrollTrigger.create({
                 trigger: step,
-                start: "top center",
-                end: "bottom center",
+                start: "top center+=150",
+                end: "bottom center-=100",
                 onEnter: () => this.updateTimelineVisual(i + 1, visuals, steps),
                 onEnterBack: () => this.updateTimelineVisual(i + 1, visuals, steps),
             });
@@ -1054,680 +1730,4 @@ class ApprochePage {
             }, {
                 y: 0,
                 opacity: 1,
-                rotationX: 0,
-                scale: 1,
-                duration: 1,
-                ease: "power3.out",
-                scrollTrigger: {
-                    trigger: card,
-                    start: "top 80%",
-                    toggleActions: "play none none reverse"
-                },
-                delay: index * 0.15
-            });
-
-            const number = card.querySelector('.step-card__number');
-            const icon = card.querySelector('.step-card__icon');
-            const title = card.querySelector('.step-card__title');
-            const description = card.querySelector('.step-card__description');
-
-            // Interactions au hover avec orchestration
-            card.addEventListener('mouseenter', () => {
-                const tl = gsap.timeline();
-
-                tl.to(card, {
-                    scale: 1.05,
-                    rotationX: 5,
-                    rotationY: index % 2 === 0 ? -2 : 2,
-                    z: 100,
-                    duration: 0.4,
-                    ease: "power2.out"
-                })
-                .to(number, {
-                    rotationY: 360,
-                    scale: 1.15,
-                    background: 'linear-gradient(135deg, var(--color-primary), var(--color-accent))',
-                    duration: 0.6,
-                    ease: "back.out(1.7)"
-                }, 0.1)
-                .to(icon, {
-                    rotation: 15,
-                    scale: 1.2,
-                    color: 'rgba(255, 255, 255, 0.8)',
-                    duration: 0.3,
-                    ease: "power2.out"
-                }, 0.2)
-                .to([title, description], {
-                    y: -5,
-                    duration: 0.3,
-                    ease: "power2.out",
-                    stagger: 0.1
-                }, 0.1);
-            });
-
-            card.addEventListener('mouseleave', () => {
-                const tl = gsap.timeline();
-
-                tl.to(card, {
-                    scale: 1,
-                    rotationX: 0,
-                    rotationY: 0,
-                    z: 0,
-                    duration: 0.6,
-                    ease: "elastic.out(1, 0.3)"
-                })
-                .to(number, {
-                    rotationY: 0,
-                    scale: 1,
-                    background: 'var(--color-primary)',
-                    duration: 0.5,
-                    ease: "power2.out"
-                }, 0)
-                .to(icon, {
-                    rotation: 0,
-                    scale: 1,
-                    color: 'rgba(255, 255, 255, 0.3)',
-                    duration: 0.4,
-                    ease: "power2.out"
-                }, 0.1)
-                .to([title, description], {
-                    y: 0,
-                    duration: 0.4,
-                    ease: "power2.out",
-                    stagger: 0.05
-                }, 0);
-            });
-
-            // Effet de profondeur au mouvement de souris
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const centerX = rect.left + rect.width / 2;
-                const centerY = rect.top + rect.height / 2;
-
-                const deltaX = (e.clientX - centerX) / (rect.width / 2);
-                const deltaY = (e.clientY - centerY) / (rect.height / 2);
-
-                gsap.to(card, {
-                    rotationX: -deltaY * 8,
-                    rotationY: deltaX * 8,
-                    duration: 0.3,
-                    ease: "power2.out"
-                });
-
-                // Parallax subtil sur le contenu
-                gsap.to([title, description], {
-                    x: deltaX * 5,
-                    y: deltaY * 3,
-                    duration: 0.3,
-                    ease: "power2.out"
-                });
-            });
-        });
-    }
-
-    /**
-     * Effets de parallax subtils
-     */
-    initParallaxEffects() {
-        // Parallax sur le hero
-        gsap.to('.hero-page__title', {
-            yPercent: -30,
-            ease: "none",
-            scrollTrigger: {
-                trigger: ".hero-page",
-                start: "top bottom",
-                end: "bottom top",
-                scrub: true
-            }
-        });
-
-        gsap.to('.hero-page__subtitle', {
-            yPercent: -20,
-            ease: "none",
-            scrollTrigger: {
-                trigger: ".hero-page",
-                start: "top bottom",
-                end: "bottom top",
-                scrub: true
-            }
-        });
-
-        // Parallax sur les backgrounds des sections
-        gsap.to('.section--light', {
-            backgroundPosition: "50% 100px",
-            ease: "none",
-            scrollTrigger: {
-                trigger: ".section--light",
-                start: "top bottom",
-                end: "bottom top",
-                scrub: true
-            }
-        });
-    }
-
-    /**
-     * Micro-interactions et détails raffinés
-     */
-    initMicroInteractions() {
-        // Animation des eyebrow texts
-        const eyebrows = document.querySelectorAll('.eyebrow-text');
-        eyebrows.forEach(eyebrow => {
-            gsap.fromTo(eyebrow, {
-                opacity: 0,
-                y: 20,
-                scale: 0.9
-            }, {
-                opacity: 1,
-                y: 0,
-                scale: 1,
-                duration: 0.6,
-                ease: "back.out(1.7)",
-                scrollTrigger: {
-                    trigger: eyebrow,
-                    start: "top 85%",
-                    toggleActions: "play none none reverse"
-                }
-            });
-        });
-
-        // Animation des boutons CTA
-        const ctaButtons = document.querySelectorAll('.btn--primary');
-        ctaButtons.forEach(button => {
-            button.addEventListener('mouseenter', () => {
-                gsap.to(button, {
-                    scale: 1.05,
-                    rotationZ: 1,
-                    duration: 0.3,
-                    ease: "power2.out"
-                });
-
-                // Effet de particules simulé
-                gsap.to(button, {
-                    boxShadow: "0 10px 30px rgba(0, 168, 255, 0.4), 0 0 20px rgba(0, 168, 255, 0.2)",
-                    duration: 0.3
-                });
-            });
-
-            button.addEventListener('mouseleave', () => {
-                gsap.to(button, {
-                    scale: 1,
-                    rotationZ: 0,
-                    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-                    duration: 0.4,
-                    ease: "elastic.out(1, 0.3)"
-                });
-            });
-        });
-
-        // Animation des liens de navigation
-        const navLinks = document.querySelectorAll('.nav__link');
-        navLinks.forEach(link => {
-            link.addEventListener('mouseenter', () => {
-                if (!link.classList.contains('nav__link--cta')) {
-                    gsap.to(link, {
-                        y: -2,
-                        scale: 1.05,
-                        duration: 0.2,
-                        ease: "power2.out"
-                    });
-                }
-            });
-
-            link.addEventListener('mouseleave', () => {
-                if (!link.classList.contains('nav__link--cta')) {
-                    gsap.to(link, {
-                        y: 0,
-                        scale: 1,
-                        duration: 0.3,
-                        ease: "power2.out"
-                    });
-                }
-            });
-        });
-    }
-
-    /**
-     * Révélation progressive du contenu
-     */
-    initProgressiveReveal() {
-        // Animation en chaîne des sections
-        ScrollTrigger.batch('.philosophy-card, .step-card', {
-            onEnter: (elements) => {
-                gsap.fromTo(elements, {
-                    opacity: 0,
-                    y: 50,
-                    rotationX: 15
-                }, {
-                    opacity: 1,
-                    y: 0,
-                    rotationX: 0,
-                    duration: 0.8,
-                    ease: "power3.out",
-                    stagger: 0.15,
-                    overwrite: 'auto'
-                });
-            },
-            onLeave: (elements) => {
-                gsap.to(elements, {
-                    opacity: 0.3,
-                    scale: 0.95,
-                    duration: 0.3
-                });
-            },
-            onEnterBack: (elements) => {
-                gsap.to(elements, {
-                    opacity: 1,
-                    scale: 1,
-                    duration: 0.5
-                });
-            }
-        });
-
-        // Compteur animé si des métriques sont présentes
-        const numbers = document.querySelectorAll('[data-number]');
-        numbers.forEach(numberEl => {
-            const targetNumber = parseInt(numberEl.dataset.number);
-
-            ScrollTrigger.create({
-                trigger: numberEl,
-                start: "top 80%",
-                onEnter: () => {
-                    gsap.fromTo(numberEl, {
-                        textContent: 0
-                    }, {
-                        textContent: targetNumber,
-                        duration: 2,
-                        ease: "power2.out",
-                        snap: { textContent: 1 },
-                        onUpdate: function() {
-                            numberEl.textContent = Math.floor(this.targets()[0].textContent);
-                        }
-                    });
-                }
-            });
-        });
-    }
-
-    /**
-     * Améliorations d'accessibilité
-     */
-    initAccessibility() {
-        // Gestion du focus au clavier
-        const interactiveElements = document.querySelectorAll('.philosophy-card, .step-card, .btn');
-
-        interactiveElements.forEach(element => {
-            element.addEventListener('focus', () => {
-                gsap.to(element, {
-                    scale: 1.02,
-                    duration: 0.2,
-                    ease: "power2.out"
-                });
-            });
-
-            element.addEventListener('blur', () => {
-                gsap.to(element, {
-                    scale: 1,
-                    duration: 0.3,
-                    ease: "power2.out"
-                });
-            });
-        });
-
-        // Respect des préférences de mouvement réduit
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            // Désactiver les animations complexes
-            gsap.set('*', { clearProps: 'transform' });
-            ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-            console.log('🔇 Animations réduites pour l\'accessibilité');
-        }
-
-        // Support des hauts contrastes
-        if (window.matchMedia('(prefers-contrast: high)').matches) {
-            document.documentElement.classList.add('high-contrast');
-        }
-    }
-
-    /**
-     * Nettoyage et optimisation
-     */
-    cleanup() {
-        ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-        gsap.killTweensOf('*');
-    }
-}
-
-/**
- * PAGE CAS-USAGE - Interface des explorations
- * Module pour l'affichage et l'interaction avec les cartes d'exploration
- */
-
-class ExplorationsPage {
-    constructor() {
-        this.activeCard = null;
-        this.isAnimating = false;
-        this.init();
-    }
-
-    init() {
-        const cards = document.querySelectorAll('.exploration-card');
-        cards.forEach(card => {
-            const preview = card.querySelector('.exploration-card__preview');
-            preview.addEventListener('click', () => this.toggleCard(card));
-        });
-
-        console.log('🔍 ExplorationsPage initialized');
-    }
-
-    toggleCard(card) {
-        if (this.isAnimating) return;
-
-        const isOpening = !card.classList.contains('is-expanded');
-
-        // Fermer la carte déjà ouverte s'il y en a une
-        if (this.activeCard && this.activeCard !== card) {
-            this.closeCard(this.activeCard);
-        }
-
-        if (isOpening) {
-            this.openCard(card);
-        } else {
-            this.closeCard(card);
-        }
-    }
-
-    openCard(card) {
-        this.isAnimating = true;
-        this.activeCard = card;
-        card.classList.add('is-expanded');
-
-        const content = card.querySelector('.exploration-card__content');
-        content.style.display = 'block';
-
-        gsap.fromTo(content,
-            { height: 0, opacity: 0, paddingTop: 0, paddingBottom: 0 },
-            {
-                height: 'auto',
-                opacity: 1,
-                paddingTop: 'var(--space-2xl)',
-                paddingBottom: 'var(--space-2xl)',
-                duration: 0.6,
-                ease: 'power3.out',
-                onComplete: () => {
-                    this.isAnimating = false;
-                    ScrollTrigger.refresh(); // Met à jour les positions pour le scroll
-                }
-            }
-        );
-    }
-
-    closeCard(card) {
-        this.isAnimating = true;
-        card.classList.remove('is-expanded');
-
-        const content = card.querySelector('.exploration-card__content');
-
-        gsap.to(content,
-            {
-                height: 0,
-                opacity: 0,
-                paddingTop: 0,
-                paddingBottom: 0,
-                duration: 0.4,
-                ease: 'power2.in',
-                onComplete: () => {
-                    content.style.display = 'none';
-                    this.isAnimating = false;
-                    if (this.activeCard === card) {
-                        this.activeCard = null;
-                    }
-                }
-            }
-        );
-    }
-
-    /**
-     * Fermeture de la carte courante (méthode publique pour les boutons)
-     */
-    closeCurrentCard(buttonElement) {
-        const card = buttonElement.closest('.exploration-card');
-        if (card) {
-            this.closeCard(card);
-        }
-    }
-
-    /**
-     * Nettoyage des animations
-     */
-    cleanup() {
-        ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-        gsap.killTweensOf('*');
-    }
-}
-
-/**
- * PAGE CONTACT - JavaScript spécialisé
- * Animations et interactions pour la page de contact
- */
-
-class ContactPage {
-    constructor() {
-        this.init();
-    }
-
-    init() {
-        // Attendre que GSAP et ScrollTrigger soient chargés
-        if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
-            setTimeout(() => this.init(), 100);
-            return;
-        }
-
-        gsap.registerPlugin(ScrollTrigger);
-
-        this.initScrollAnimations();
-        this.initCalendlyIntegration();
-        this.initMicroInteractions();
-
-        console.log('📞 Page Contact initialized');
-    }
-
-    /**
-     * Animations d'apparition au scroll
-     */
-    initScrollAnimations() {
-        // Animation du fond visuel
-        const tl = gsap.timeline({ repeat: -1, yoyo: true });
-        tl.to('.contact-background-visual .shape1', {
-            x: 100,
-            y: 50,
-            duration: 20,
-            ease: "sine.inOut"
-        });
-        tl.to('.contact-background-visual .shape2', {
-            x: -80,
-            y: -60,
-            duration: 20,
-            ease: "sine.inOut"
-        }, "-=20");
-
-        // Animation d'entrée du contenu
-        const introElements = [
-            '.contact-intro__title',
-            '.contact-intro__subtitle',
-            '.contact-intro__step',
-            '.contact-separator',
-            '.contact-alternative'
-        ];
-
-        gsap.from(introElements, {
-            y: 30,
-            opacity: 0,
-            duration: 0.8,
-            ease: "power2.out",
-            stagger: 0.1,
-        });
-
-        gsap.from('.contact-calendly', {
-            y: 50,
-            opacity: 0,
-            duration: 1,
-            ease: "power3.out",
-            delay: 0.5
-        });
-    }
-
-
-    /**
-     * Simplified Calendly integration for new HTML structure
-     */
-    initCalendlyIntegration() {
-        const loadCalendlyWidget = () => {
-            const calendlyContainer = document.getElementById('calendly-widget-container');
-
-            if (!calendlyContainer) {
-                // Retry after 100ms if container not found
-                setTimeout(loadCalendlyWidget, 100);
-                return;
-            }
-
-            if (!window.Calendly) {
-                // Retry after 100ms if Calendly not loaded
-                setTimeout(loadCalendlyWidget, 100);
-                return;
-            }
-
-            window.Calendly.initInlineWidget({
-                url: 'https://calendly.com/angougeardnicolas/30min',
-                parentElement: calendlyContainer,
-                prefill: {},
-                utm: {
-                    utmCampaign: 'Nouvelle Rive Website',
-                    utmSource: 'website',
-                    utmMedium: 'contact_page'
-                }
-            });
-
-            console.log('📅 Calendly widget loaded successfully');
-        };
-
-        // Start loading the widget
-        loadCalendlyWidget();
-    }
-
-    /**
-     * Micro-interactions et détails
-     */
-    initMicroInteractions() {
-        // Animation des boutons CTA
-        const ctaButtons = document.querySelectorAll('.btn--primary');
-        ctaButtons.forEach(button => {
-            button.addEventListener('mouseenter', () => {
-                gsap.to(button, {
-                    scale: 1.05,
-                    rotationZ: 1,
-                    duration: 0.3,
-                    ease: "power2.out"
-                });
-
-                gsap.to(button, {
-                    boxShadow: "0 10px 30px rgba(0, 168, 255, 0.4), 0 0 20px rgba(0, 168, 255, 0.2)",
-                    duration: 0.3
-                });
-            });
-
-            button.addEventListener('mouseleave', () => {
-                gsap.to(button, {
-                    scale: 1,
-                    rotationZ: 0,
-                    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-                    duration: 0.4,
-                    ease: "elastic.out(1, 0.3)"
-                });
-            });
-        });
-
-        // Animation des liens de navigation
-        const navLinks = document.querySelectorAll('.nav__link');
-        navLinks.forEach(link => {
-            link.addEventListener('mouseenter', () => {
-                if (!link.classList.contains('nav__link--cta')) {
-                    gsap.to(link, {
-                        y: -2,
-                        scale: 1.05,
-                        duration: 0.2,
-                        ease: "power2.out"
-                    });
-                }
-            });
-
-            link.addEventListener('mouseleave', () => {
-                if (!link.classList.contains('nav__link--cta')) {
-                    gsap.to(link, {
-                        y: 0,
-                        scale: 1,
-                        duration: 0.3,
-                        ease: "power2.out"
-                    });
-                }
-            });
-        });
-
-        // Parallax subtil sur le hero
-        gsap.to('.hero-contact__title', {
-            yPercent: -20,
-            ease: "none",
-            scrollTrigger: {
-                trigger: ".hero-contact",
-                start: "top bottom",
-                end: "bottom top",
-                scrub: true
-            }
-        });
-
-        gsap.to('.hero-contact__subtitle', {
-            yPercent: -15,
-            ease: "none",
-            scrollTrigger: {
-                trigger: ".hero-contact",
-                start: "top bottom",
-                end: "bottom top",
-                scrub: true
-            }
-        });
-
-        // Respect des préférences de mouvement réduit
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            gsap.set('*', { clearProps: 'transform' });
-            ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-            console.log('🔇 Animations réduites pour l\'accessibilité');
-        }
-    }
-
-    /**
-     * Nettoyage
-     */
-    cleanup() {
-        ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-        gsap.killTweensOf('*');
-    }
-}
-
-// Initialisation intelligente par page
-document.addEventListener('DOMContentLoaded', () => {
-    const path = document.location.pathname;
-
-    if (path.includes('/approche')) {
-        new ApprochePage();
-    } else if (path.includes('/cas-usage')) {
-        window.explorationsPage = new ExplorationsPage();
-    } else if (path.includes('/contact')) {
-        new ContactPage();
-    } else {
-        // Si aucune autre page ne correspond, nous sommes sur l'accueil
-        new NouvelleRive();
-    }
-});
-
-// Export pour tests ou utilisation externe
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { NouvelleRive, ApprochePage, ExplorationsPage, ContactPage };
-}
+ 
