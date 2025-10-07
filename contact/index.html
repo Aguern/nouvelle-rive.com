@@ -23,7 +23,7 @@
     </script>
 
     <!-- Styles -->
-    <link rel="stylesheet" href="../css/base.css?v=2.3">
+    <link rel="stylesheet" href="../css/base.css?v=2.5">
 
     <!-- GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -43,10 +43,10 @@
                 </a>
 
                 <div class="nav__menu" id="navMenu">
-                    <a href="cas-usage/" class="nav__link">Solutions</a>
-                    <a href="approche/" class="nav__link">Approche</a>
-                    <a href="Fondations/" class="nav__link">Fondations</a>
-                    <a href="contact/" class="nav__link nav__link--cta">Définir mon projet</a>
+                    <a href="../cas-usage/" class="nav__link">Solutions</a>
+                    <a href="../approche/" class="nav__link">Approche</a>
+                    <a href="../Fondations/" class="nav__link">Fondations</a>
+                    <a href="../contact/" class="nav__link nav__link--cta">Définir mon projet</a>
                 </div>
 
                 <button class="nav__toggle" id="navToggle" aria-label="Menu" aria-expanded="false">
@@ -57,6 +57,16 @@
             </nav>
         </div>
     </header>
+
+    <nav class="breadcrumb" aria-label="Fil d'ariane">
+        <div class="container">
+            <ol class="breadcrumb__list">
+                <li class="breadcrumb__item"><a href="../">Accueil</a></li>
+                <li class="breadcrumb__separator">›</li>
+                <li class="breadcrumb__item breadcrumb__item--current">Contact</li>
+            </ol>
+        </div>
+    </nav>
 
     <main>
         <section class="contact-page">
@@ -108,12 +118,20 @@
         </section>
     </main>
 
+    <!-- Bouton retour en haut -->
+    <button id="backToTop" class="back-to-top" aria-label="Retour en haut de la page">
+        <svg class="back-to-top__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="19" x2="12" y2="5"/>
+            <polyline points="5,12 12,5 19,12"/>
+        </svg>
+    </button>
+
     <!-- Footer Amélioré -->
     <footer class="footer">
         <div class="container">
             <div class="footer__main">
                 <div class="footer__brand">
-                    <a href="/" class="nav__brand" aria-label="Accueil Nouvelle Rive">
+                    <a href="../" class="nav__brand" aria-label="Accueil Nouvelle Rive">
                         <svg class="nav__logo" width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 80C20 46.86 46.86 20 80 20V80H20Z" fill="currentColor"/><path d="M20 80C20 46.86 46.86 20 80 20" stroke="currentColor" stroke-width="8"/></svg>
                         <span class="brand-text">Nouvelle Rive</span>
                     </a>
@@ -122,21 +140,21 @@
                 </div>
                 <div class="footer__nav-col">
                     <h4 class="footer__nav-title">Navigation</h4>
-                    <a href="/" class="footer__link">Accueil</a>
-                    <a href="cas-usage/" class="footer__link">Nos Solutions</a>
-                    <a href="approche/" class="footer__link">Notre Approche</a>
-                    <a href="Fondations/" class="footer__link">Nos Fondations</a>
+                    <a href="../" class="footer__link">Accueil</a>
+                    <a href="../cas-usage/" class="footer__link">Nos Solutions</a>
+                    <a href="../approche/" class="footer__link">Notre Approche</a>
+                    <a href="../Fondations/" class="footer__link">Nos Fondations</a>
                 </div>
                 <div class="footer__nav-col">
                     <h4 class="footer__nav-title">Contact</h4>
-                    <a href="contact/" class="footer__link">Planifier une session</a>
+                    <a href="../contact/" class="footer__link">Planifier une session</a>
                     <a href="mailto:contact@nouvelle-rive.com" class="footer__link">Nous écrire</a>
                 </div>
                 <div class="footer__nav-col">
                     <h4 class="footer__nav-title">Démonstrations</h4>
-                    <a href="cas-usage/" class="footer__link">Copilote Fiscal</a>
-                    <a href="cas-usage/" class="footer__link">Guide Intelligent</a>
-                    <a href="cas-usage/" class="footer__link">Reporting Contextuel</a>
+                    <a href="../cas-usage/" class="footer__link">Copilote Fiscal</a>
+                    <a href="../cas-usage/" class="footer__link">Guide Intelligent</a>
+                    <a href="../cas-usage/" class="footer__link">Reporting Contextuel</a>
                 </div>
             </div>
         </div>
