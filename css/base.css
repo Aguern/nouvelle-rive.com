@@ -2339,7 +2339,7 @@ h6 { font-size: var(--text-base); }
   border-radius: var(--radius-xl);
   background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(56, 152, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   padding: var(--space-xl);
   overflow: hidden;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
@@ -2360,13 +2360,17 @@ h6 { font-size: var(--text-base); }
   width: 100%;
   height: 100%;
   opacity: 0;
-  transition: opacity 0.6s ease;
+  visibility: hidden;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
   pointer-events: none;
+  z-index: 1;
 }
 
 .carousel-slide.active {
   opacity: 1;
+  visibility: visible;
   pointer-events: auto;
+  z-index: 2;
 }
 
 .mockup-container {
@@ -2497,6 +2501,13 @@ h6 { font-size: var(--text-base); }
   position: relative;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  display: none;
+}
+
+.solution-card.active {
+  display: block;
+  border-color: var(--color-bleu-ciel);
+  background: linear-gradient(135deg, white, rgba(56, 152, 255, 0.03));
 }
 
 .solution-card::before {
@@ -2523,11 +2534,6 @@ h6 { font-size: var(--text-base); }
   border-color: var(--color-bleu-ciel);
   transform: translateY(-4px);
   box-shadow: 0 12px 24px rgba(56, 152, 255, 0.15);
-}
-
-.solution-card.active {
-  border-color: var(--color-bleu-ciel);
-  background: linear-gradient(135deg, white, rgba(56, 152, 255, 0.03));
 }
 
 .bento-cards .solution-card > :not(.solution-card__header) {
@@ -2707,6 +2713,227 @@ h6 { font-size: var(--text-base); }
     gap: var(--space-sm);
     margin-top: var(--space-md);
   }
+}
+
+/* ===== ENHANCED STYLES - Section Solutions avec effets visuels ===== */
+
+/* Fond sombre pour la section solutions */
+.hero-solutions-bento.section--dark {
+    background: linear-gradient(135deg, #0a0e27 0%, #16213e 50%, #1a1a2e 100%);
+    min-height: 100vh;
+}
+
+/* Background animé */
+.animated-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.grid-lines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+        linear-gradient(rgba(0, 168, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 168, 255, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: grid-flow 20s linear infinite;
+}
+
+@keyframes grid-flow {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(50px, 50px); }
+}
+
+.floating-particles {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: radial-gradient(circle, rgba(0, 168, 255, 0.8), transparent);
+    border-radius: 50%;
+    animation: float-particle 15s infinite ease-in-out;
+}
+
+.particle:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; animation-duration: 12s; }
+.particle:nth-child(2) { top: 30%; left: 80%; animation-delay: 2s; animation-duration: 15s; }
+.particle:nth-child(3) { top: 60%; left: 20%; animation-delay: 4s; animation-duration: 18s; }
+.particle:nth-child(4) { top: 80%; left: 70%; animation-delay: 1s; animation-duration: 14s; }
+.particle:nth-child(5) { top: 40%; left: 50%; animation-delay: 3s; animation-duration: 16s; }
+.particle:nth-child(6) { top: 90%; left: 30%; animation-delay: 5s; animation-duration: 13s; }
+
+@keyframes float-particle {
+    0%, 100% { transform: translate(0, 0) scale(1); opacity: 0; }
+    10% { opacity: 1; }
+    50% { transform: translate(50px, -100px) scale(1.5); opacity: 0.8; }
+    90% { opacity: 1; }
+}
+
+/* Glow effect sur le carousel */
+.section--dark .bento-showcase {
+    background: rgba(255, 255, 255, 0.02);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+
+/* Solution Cards - Glassmorphism */
+.section--dark .solution-card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.section--dark .solution-card::before {
+    background: linear-gradient(135deg, rgba(0, 168, 255, 0.1) 0%, transparent 100%);
+}
+
+.section--dark .solution-card:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: var(--color-bleu-ciel);
+    box-shadow:
+        0 8px 32px rgba(0, 168, 255, 0.25),
+        0 0 0 1px rgba(0, 168, 255, 0.3) inset;
+}
+
+.section--dark .solution-card.active {
+    background: rgba(0, 168, 255, 0.08);
+    border-color: var(--color-bleu-ciel);
+    box-shadow:
+        0 8px 24px rgba(0, 168, 255, 0.3),
+        0 0 0 2px rgba(0, 168, 255, 0.4) inset;
+}
+
+/* Solution Card Structure - Two CTA Zones */
+.solution-card__clickable {
+    flex: 1;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    z-index: 1;
+}
+
+.solution-card__clickable:hover {
+    transform: translateY(-2px);
+}
+
+.solution-card__clickable:hover .solution-card__play-hint {
+    opacity: 1;
+}
+
+.solution-card__play-hint {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: var(--space-sm);
+    padding: 0.5rem 0.75rem;
+    background: rgba(0, 168, 255, 0.05);
+    border-radius: var(--radius-sm);
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+
+.solution-card__play-hint svg {
+    width: 16px;
+    height: 16px;
+    color: var(--color-bleu-ciel);
+}
+
+.solution-card__play-hint span {
+    font-size: var(--text-xs);
+    color: var(--color-bleu-ciel);
+    font-weight: 500;
+}
+
+.solution-card__cta-section {
+    margin-top: var(--space-md);
+    padding-top: var(--space-md);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    z-index: 2;
+}
+
+/* Bouton "En savoir plus" */
+.solution-card__learn-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    justify-content: center;
+    padding: 0.75rem 1rem;
+    background: rgba(0, 168, 255, 0.1);
+    border: 1px solid rgba(0, 168, 255, 0.3);
+    border-radius: var(--radius-md);
+    color: var(--color-bleu-ciel);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.solution-card__learn-btn:hover {
+    background: rgba(0, 168, 255, 0.2);
+    border-color: var(--color-bleu-ciel);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 168, 255, 0.2);
+}
+
+.solution-card__learn-btn svg {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.2s ease;
+}
+
+.solution-card__learn-btn:hover svg {
+    transform: translateX(4px);
+}
+
+/* Dots avec progression */
+.section--dark .carousel-dots .dot {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.section--dark .carousel-dots .dot:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+.section--dark .carousel-dots .dot.active {
+    background: var(--color-bleu-ciel);
+    box-shadow: 0 0 16px var(--color-bleu-ciel);
+}
+
+
+/* Texte blanc sur fond sombre */
+.section--dark .bento-header .eyebrow-text {
+    color: var(--color-bleu-ciel);
+}
+
+.section--dark .bento-header .bento-title {
+    color: var(--color-gris-clair);
+}
+
+.section--dark .solution-card__title,
+.section--dark .solution-card__description {
+    color: var(--color-gris-clair);
+}
+
+.section--dark .solution-card__badge {
+    background: rgba(0, 168, 255, 0.15);
+    color: var(--color-bleu-ciel);
+    border: 1px solid rgba(0, 168, 255, 0.3);
 }
 
 /* 1. HERO DARK */
@@ -3733,58 +3960,250 @@ h6 { font-size: var(--text-base); }
   margin-top: var(--space-xl);
 }
 
-/* --- Section Potentiel (Accueil) --- */
-.potential-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(2, auto);
-  gap: var(--space-xl);
-  max-width: 1100px;
-  margin: 0 auto;
+/* =================================================
+   SECTION ASSISTANTS GLASS MORPHISM
+   ================================================= */
+
+.assistants-glass-section {
+  position: relative;
+  overflow: hidden;
+  background: var(--color-gris-clair) !important;
 }
-.potential-card {
-  background-color: var(--color-surface);
+
+/* Masquer le ::before de .section--accent pour la glass section */
+.assistants-glass-section::before {
+  display: none !important;
+}
+
+.assistants-glass-grid {
+  display: grid;
+  grid-template-columns: 40% 60%;
+  gap: var(--space-4xl);
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+/* --- Zone Gauche : Contenu --- */
+.assistants-glass-content {
+  max-width: 500px;
+}
+
+.assistants-glass-content .section__title {
+  margin-bottom: var(--space-lg);
+}
+
+.assistants-glass-baseline {
+  font-size: var(--text-lg);
+  color: var(--color-text-light);
+  line-height: 1.6;
+  margin-bottom: var(--space-2xl);
+}
+
+/* Statistique animée */
+.assistants-glass-stat {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
   border-radius: var(--radius-xl);
   padding: var(--space-xl);
+  margin-bottom: var(--space-2xl);
   box-shadow: var(--shadow-md);
-  transition: all var(--transition-base);
-  text-decoration: none;
-  color: var(--color-text);
-  border: 1px solid transparent;
 }
-.potential-card:hover {
-  transform: translateY(-8px);
-  box-shadow: var(--shadow-xl);
-  border-color: var(--color-primary);
+
+.stat-number {
+  font-size: 4rem;
+  font-weight: 700;
+  background: var(--gradient-aurore);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+  margin-bottom: var(--space-xs);
 }
-.potential-card--featured {
-  grid-row: 1 / 3; /* Occupe deux rangées */
-  grid-column: 1 / 2;
+
+.stat-number::after {
+  content: '%';
+  font-size: 2.5rem;
+  margin-left: 0.2em;
+}
+
+.stat-label {
+  font-size: var(--text-sm);
+  color: var(--color-text-light);
+  font-weight: 500;
+}
+
+.assistants-glass-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.assistants-glass-cta .btn-icon {
+  transition: transform var(--transition-base);
+}
+
+.assistants-glass-cta:hover .btn-icon {
+  transform: translateX(4px);
+}
+
+/* --- Zone Droite : Glass Cards --- */
+.assistants-glass-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-xl);
+  perspective: 1000px;
+}
+
+.glass-card {
+  position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  background: var(--color-primary);
-  color: white;
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(255, 255, 255, 0.7) 100%
+  );
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(138, 120, 242, 0.2);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-xl);
+  text-decoration: none;
+  color: var(--color-text);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow:
+    0 8px 32px rgba(29, 43, 72, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
+  transform-style: preserve-3d;
+  will-change: transform;
 }
-.potential-card--featured .potential-card__title { color: white; }
-.potential-card--featured:hover { border-color: white; }
-.potential-card__badge {
-  display: inline-block;
-  background: rgba(255,255,255,0.2);
-  padding: var(--space-xs) var(--space-sm);
-  border-radius: var(--radius-full);
-  font-size: var(--text-sm);
-  font-weight: 500;
-  margin-bottom: var(--space-md);
+
+/* Avec 4 cards, elles occupent chacune 1 colonne en grille 2x2 */
+/* .glass-card--1 occupe maintenant une seule colonne */
+
+/* Hover Effect 3D */
+.glass-card:hover {
+  transform: translateY(-12px) rotateX(5deg);
+  box-shadow:
+    0 20px 40px rgba(29, 43, 72, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 255, 255, 0.9) 100%
+  );
+  border-color: rgba(138, 120, 242, 0.5);
 }
-.potential-card__title {
+
+.glass-card:hover .glass-card__icon {
+  transform: rotateY(360deg) scale(1.1);
+}
+
+/* Icône */
+.glass-card__icon {
+  width: 56px;
+  height: 56px;
+  background: var(--gradient-aurore);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-lg);
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card__icon svg {
+  width: 28px !important;
+  height: 28px !important;
+  max-width: 28px;
+  max-height: 28px;
+  display: block;
+  stroke: white;
+  stroke-width: 2;
+}
+
+/* Titre */
+.glass-card__title {
   font-size: var(--text-xl);
+  font-weight: 600;
   margin-bottom: var(--space-sm);
+  color: var(--color-text);
 }
-.potential-card__arrow {
-  font-size: 2rem;
-  align-self: flex-end;
-  margin-top: var(--space-lg);
+
+/* Metric */
+.glass-card__metric {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  background: var(--gradient-aurore);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: var(--space-xs);
+}
+
+/* Description */
+.glass-card__description {
+  font-size: var(--text-sm);
+  color: var(--color-text-light);
+  line-height: 1.5;
+}
+
+/* --- Background Particles --- */
+.assistants-glass-particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: var(--color-aurore-start);
+  border-radius: 50%;
+  opacity: 0.3;
+  filter: blur(1px);
+}
+
+/* --- Responsive --- */
+@media (max-width: 1024px) {
+  .assistants-glass-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-3xl);
+  }
+
+  .assistants-glass-content {
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .assistants-glass-stat {
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .assistants-glass-cta {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@media (max-width: 640px) {
+  .assistants-glass-cards {
+    grid-template-columns: 1fr;
+  }
+
+  /* Les 4 cards s'affichent en colonne unique sur mobile */
+
+  .stat-number {
+    font-size: 3rem;
+  }
 }
 
 /* --- Section Pourquoi / Trust Q&A (Accueil) --- */
