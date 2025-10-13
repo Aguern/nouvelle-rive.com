@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Démo Assistant Fiscal IA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- GSAP - Librairie d'animation professionnelle -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .demo-state {
+           visibility: hidden; /* Géré par GSAP */
+           position: absolute;
+           width: 100%;
+           height: 100%;
+        }
+        .document-card {
+            position: absolute;
+            width: 120px;
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border: 1px solid #E5E7EB;
+        }
+        .category-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 11px;
+            font-weight: 600;
+            margin: 4px;
+        }
+        .badge-revenus { background: #DBEAFE; color: #1E40AF; }
+        .badge-charges { background: #FEF3C7; color: #92400E; }
+        .badge-etranger { background: #FECACA; color: #991B1B; }
+
+        .form-preview {
+            background: white;
+            border: 2px solid #10B981;
+            border-radius: 8px;
+            padding: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        @keyframes pulse-alert {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.05); }
+        }
+
+        .alert-badge {
+            animation: pulse-alert 2s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="bg-transparent m-0 p-0 w-full h-full overflow-hidden">
+
+    <div class="w-full h-full flex items-center justify-center">
+        <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-200 w-full h-full flex flex-col">
+            <div class="relative flex-1 overflow-hidden">
+
+                <!-- ÉTAPE 1: Le Chaos Documentaire -->
+                <div id="state-1" class="demo-state flex flex-col items-center justify-center text-center">
+                    <h3 class="text-base font-semibold text-gray-400 mb-4">Le Chaos Documentaire : 18 Documents Non Structurés</h3>
+                    <div class="relative w-full h-56">
+                        <div id="doc-1" class="document-card" style="top: 10px; left: 20px;">
+                            <svg class="w-8 h-8 text-red-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                            <p class="text-xs text-gray-600 font-medium">Relevé bancaire.pdf</p>
+                        </div>
+                        <div id="doc-2" class="document-card" style="top: 60px; left: 50px;">
+                            <svg class="w-8 h-8 text-orange-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            <p class="text-xs text-gray-600 font-medium">Facture scan.jpg</p>
+                        </div>
+                        <div id="doc-3" class="document-card" style="top: 20px; right: 60px;">
+                            <svg class="w-8 h-8 text-blue-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            <p class="text-xs text-gray-600 font-medium">Email Kraken</p>
+                        </div>
+                        <div id="doc-4" class="document-card" style="top: 80px; right: 20px;">
+                            <svg class="w-8 h-8 text-green-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            <p class="text-xs text-gray-600 font-medium">Taxe foncière.png</p>
+                        </div>
+                    </div>
+                     <div id="manual-time" class="mt-4 bg-gray-100 rounded-full px-4 py-2"><p class="text-sm font-medium text-gray-700">Temps manuel : <span class="font-bold text-red-500">8 heures</span></p></div>
+                </div>
+
+                <!-- ÉTAPE 2: La Classification Intelligente -->
+                <div id="state-2" class="demo-state flex flex-col items-center justify-center p-4">
+                    <h3 id="state2-title" class="text-base font-semibold text-gray-800 mb-3">La Classification Intelligente</h3>
+                    <div class="w-full max-w-md bg-gray-50 p-4 rounded-lg border">
+                        <div class="mb-3">
+                            <p class="text-xs font-semibold text-gray-500 mb-2">REVENUS FONCIERS (2044)</p>
+                            <div id="cat-revenus" class="flex flex-wrap gap-1 opacity-0">
+                                <span class="category-badge badge-revenus">Loyers : 24 000€</span>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <p class="text-xs font-semibold text-gray-500 mb-2">CHARGES DÉDUCTIBLES</p>
+                            <div id="cat-charges" class="flex flex-wrap gap-1 opacity-0">
+                                <span class="category-badge badge-charges">Assurance : 850€</span>
+                                <span class="category-badge badge-charges">Travaux : 3 050€</span>
+                                <span class="category-badge badge-charges">Taxe : 1 200€</span>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-xs font-semibold text-gray-500 mb-2">COMPTE ÉTRANGER (3916-bis)</p>
+                            <div id="cat-etranger" class="flex flex-wrap gap-1 opacity-0">
+                                <span class="category-badge badge-etranger">Kraken détecté</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="alert-box" class="mt-4 bg-red-50 border-2 border-red-300 rounded-lg px-4 py-2 opacity-0 alert-badge">
+                        <p class="text-xs font-bold text-red-700">🚨 ALERTE : Non-déclaration N-1 et N-2 détectée</p>
+                        <p class="text-xs text-red-600 mt-1">Risque d'amende : 3 000€</p>
+                    </div>
+                </div>
+
+                <!-- ÉTAPE 3: La Livraison Structurée -->
+                <div id="state-3" class="demo-state flex flex-col items-center justify-center p-4">
+                     <h3 id="state3-title" class="text-base font-semibold text-gray-800 mb-3">Dossier Complet Livré</h3>
+                     <div class="w-full max-w-sm space-y-3">
+                        <div id="form-2044" class="form-preview opacity-0">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-bold text-gray-800">Formulaire 2044</p>
+                                    <p class="text-xs text-gray-600">Revenus fonciers pré-rempli</p>
+                                </div>
+                                <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                        </div>
+                        <div id="form-3916" class="form-preview opacity-0">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-bold text-gray-800">Formulaire 3916-bis</p>
+                                    <p class="text-xs text-gray-600">Compte étranger pré-rempli</p>
+                                </div>
+                                <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                        </div>
+                        <div id="annexe" class="form-preview opacity-0">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-bold text-gray-800">Annexe de calcul</p>
+                                    <p class="text-xs text-gray-600">Traçabilité totale (Excel)</p>
+                                </div>
+                                <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                        </div>
+                     </div>
+                     <div id="final-time" class="mt-4 bg-emerald-100 rounded-full px-4 py-2 opacity-0"><p class="text-sm font-medium text-emerald-800">Dossier prêt en <span class="font-bold">2 heures</span></p></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const ACT_DURATION = 6; // Durée de chaque acte en secondes
+
+        // --- GSAP Timeline ---
+        const mainTimeline = gsap.timeline({
+            repeat: -1,
+            defaults: { duration: 0.6, ease: "power2.out" }
+        });
+
+        // --- Fonctions d'animation des scènes ---
+
+        function animateState1() {
+            const tl = gsap.timeline();
+            tl.to("#state-1", { autoAlpha: 1 })
+              .from(["#doc-1", "#doc-2", "#doc-3", "#doc-4"], {
+                  stagger: 0.15,
+                  opacity: 0,
+                  y: -30,
+                  rotation: -15,
+                  scale: 0.8,
+                  ease: "back.out(1.5)"
+              })
+              .from("#manual-time", { opacity: 0, scale: 0.9, ease: "back.out(1.5)" }, "+=0.3")
+              .to("#state-1", { autoAlpha: 0, delay: ACT_DURATION - 2 });
+            return tl;
+        }
+
+        function animateState2() {
+            const tl = gsap.timeline();
+            tl.to("#state-2", { autoAlpha: 1 })
+              .from("#state2-title", { opacity: 0, y: -15 })
+              .to("#cat-revenus", { opacity: 1, duration: 0.4 }, "+=0.2")
+              .to("#cat-charges", { opacity: 1, duration: 0.4 }, "+=0.3")
+              .to("#cat-etranger", { opacity: 1, duration: 0.4 }, "+=0.3")
+              .to("#alert-box", { opacity: 1, scale: 1.05, duration: 0.5, ease: "back.out(1.5)" }, "+=0.4")
+              .to("#state-2", { autoAlpha: 0, delay: ACT_DURATION - 3 });
+            return tl;
+        }
+
+        function animateState3() {
+            const tl = gsap.timeline();
+            tl.to("#state-3", { autoAlpha: 1 })
+              .from("#state3-title", { opacity: 0, y: -15 })
+              .to("#form-2044", { opacity: 1, y: 0, duration: 0.5, ease: "back.out(1.5)" }, "+=0.2")
+              .to("#form-3916", { opacity: 1, y: 0, duration: 0.5, ease: "back.out(1.5)" }, "+=0.2")
+              .to("#annexe", { opacity: 1, y: 0, duration: 0.5, ease: "back.out(1.5)" }, "+=0.2")
+              .to("#final-time", { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.7)" }, "+=0.3")
+              .to("#state-3", { autoAlpha: 0, delay: ACT_DURATION - 3 });
+            return tl;
+        }
+
+        // --- Construction de la timeline principale ---
+        mainTimeline.add(animateState1())
+                    .add(animateState2())
+                    .add(animateState3());
+    </script>
+</body>
+</html>

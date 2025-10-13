@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Démo Agent Assurance IA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- GSAP - Librairie d'animation professionnelle -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .demo-state {
+           visibility: hidden; /* Géré par GSAP */
+        }
+        .icon-done {
+            display: none;
+            color: #10B981; /* Vert émeraude */
+        }
+        .icon-pending {
+            color: #3B82F6; /* Bleu */
+            animation: spin 1.2s linear infinite;
+        }
+        .orchestration-list li.completed .icon-pending {
+            display: none;
+        }
+        .orchestration-list li.completed .icon-done {
+            display: block;
+        }
+
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="bg-transparent m-0 p-0 w-full h-full overflow-hidden">
+
+    <div class="w-full h-full flex items-center justify-center">
+        <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-200 w-full h-full flex flex-col">
+            <div class="relative flex-1 overflow-hidden">
+
+                <!-- ÉTAPE 1: Le Chaos Manuel -->
+                <div id="state-1" class="demo-state absolute w-full h-full flex flex-col items-center justify-center text-center p-4">
+                    <h3 class="text-lg font-semibold text-gray-400 mb-6">Le Traitement Manuel d'un Sinistre</h3>
+                    <div class="flex space-x-3 items-center text-gray-500" id="manual-process-icons">
+                        <div class="flex flex-col items-center text-center w-20"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-10 h-10 text-gray-400"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg><span class="text-xs mt-1">Analyser photos</span></div>
+                        <svg class="w-8 h-8 text-gray-300" viewBox="0 0 24 24"><path d="M5 12h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 3"/></svg>
+                        <div class="flex flex-col items-center text-center w-20"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-10 h-10 text-gray-400"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg><span class="text-xs mt-1">Vérifier police</span></div>
+                        <svg class="w-8 h-8 text-gray-300" viewBox="0 0 24 24"><path d="M5 12h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 3"/></svg>
+                        <div class="flex flex-col items-center text-center w-20"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-10 h-10 text-gray-400"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg><span class="text-xs mt-1">Contrôler fraude</span></div>
+                    </div>
+                    <div id="manual-time" class="mt-8 bg-gray-100 rounded-full px-4 py-2"><p class="text-sm font-medium text-gray-700">Temps estimé : <span class="font-bold text-red-500">2 heures</span></p></div>
+                </div>
+
+                <!-- ÉTAPE 2: L'Analyse Augmentée -->
+                <div id="state-2" class="demo-state absolute w-full h-full flex flex-col items-center justify-center text-center p-4">
+                    <h3 id="state2-title" class="text-lg font-semibold text-gray-800 mb-4">L'Analyse Augmentée</h3>
+                    <ul class="orchestration-list space-y-2 text-left text-sm w-full max-w-xs">
+                        <li class="flex items-center text-gray-600"><span class="icon-pending mr-3"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="2" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line><line x1="4.93" y1="19.07" x2="19.07" y2="4.93"></line></svg></span><span class="icon-done mr-3"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Analyse des images</li>
+                        <li class="flex items-center text-gray-600"><span class="icon-pending mr-3"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="2" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line><line x1="4.93" y1="19.07" x2="19.07" y2="4.93"></line></svg></span><span class="icon-done mr-3"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Vérification de la police</li>
+                        <li class="flex items-center text-gray-600"><span class="icon-pending mr-3"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="2" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line><line x1="4.93" y1="19.07" x2="19.07" y2="4.93"></line></svg></span><span class="icon-done mr-3"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Détection de fraude</li>
+                        <li class="flex items-center text-gray-600"><span class="icon-pending mr-3"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="2" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line><line x1="4.93" y1="19.07" x2="19.07" y2="4.93"></line></svg></span><span class="icon-done mr-3"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Estimation du coût</li>
+                    </ul>
+                     <div id="state2-banner" class="mt-6 bg-blue-100 rounded-full px-4 py-2"><p class="text-sm font-medium text-blue-800">Synthèse envoyée à l'expert...</p></div>
+                </div>
+
+                <!-- ÉTAPE 3: La Décision Éclairée -->
+                <div id="state-3" class="demo-state absolute w-full h-full flex flex-col items-center justify-center text-center p-4">
+                     <h3 id="state3-title" class="text-lg font-semibold text-gray-800 mb-4">La Décision Éclairée</h3>
+                     <div id="decision-card" class="bg-white border border-gray-200 rounded-lg p-4 w-full max-w-xs text-left shadow-sm">
+                        <p class="font-semibold text-gray-800">Sinistre N°789-A4B</p>
+                        <p class="text-sm text-gray-600 mt-2"><span class="text-emerald-500 font-medium">✓</span> Couverture OK</p>
+                        <p class="text-sm text-gray-600 mt-1"><span class="text-emerald-500 font-medium">✓</span> Faible risque de fraude</p>
+                        <p class="text-sm text-gray-600 mt-1"><strong>Estimation :</strong> ~1 500€</p>
+                        <button class="mt-4 w-full bg-emerald-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-emerald-600 transition-colors">Valider la recommandation</button>
+                     </div>
+                     <div id="final-time" class="mt-6 bg-emerald-100 rounded-full px-4 py-2"><p class="text-sm font-medium text-emerald-800">Dossier prêt en <span class="font-bold">6 minutes</span></p></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Configuration ---
+        const STATE_DURATION = 5; // Durée de chaque slide en secondes
+
+        // --- Éléments du DOM ---
+        const state1 = document.getElementById('state-1');
+        const state2 = document.getElementById('state-2');
+        const state3 = document.getElementById('state-3');
+        const orchestrationItems = state2.querySelectorAll('.orchestration-list li');
+
+        // --- Initialisation de GSAP ---
+        gsap.set([state1, state2, state3], { autoAlpha: 0 }); // Cache tous les états au début
+
+        function animateState1() {
+            const tl = gsap.timeline();
+            tl.to(state1, { autoAlpha: 1, duration: 0.5 })
+              .from("#manual-process-icons > *", {
+                  y: 20,
+                  opacity: 0,
+                  duration: 0.5,
+                  stagger: 0.2,
+                  ease: "power2.out"
+              })
+              .from("#manual-time", { scale: 0.8, opacity: 0, duration: 0.5, ease: "back.out(1.7)" }, "-=0.3");
+            return tl;
+        }
+
+        function animateState2() {
+            const tl = gsap.timeline();
+            tl.to(state2, { autoAlpha: 1, duration: 0.5 })
+              .from("#state2-title", { y: -10, opacity: 0, duration: 0.4 });
+
+            orchestrationItems.forEach((item, index) => {
+                const pendingIcon = item.querySelector('.icon-pending');
+                gsap.set(pendingIcon, { rotation: 0 }); // reset rotation
+
+                tl.from(item, { x: -20, opacity: 0, duration: 0.4, ease: "power2.out" }, `-=${index === 0 ? 0.2 : 0.3}`)
+                  .to(pendingIcon, { rotation: 360, duration: 0.8, ease: "none" })
+                  .call(() => item.classList.add('completed'), [], ">-0.2")
+                  .from(item.querySelector('.icon-done'), { scale: 0.5, duration: 0.3, ease: "back.out(1.7)" }, "<");
+            });
+
+            tl.from("#state2-banner", { scale: 0.8, opacity: 0, duration: 0.5, ease: "back.out(1.7)" });
+            return tl;
+        }
+
+        function animateState3() {
+            const tl = gsap.timeline();
+            tl.to(state3, { autoAlpha: 1, duration: 0.5 })
+              .from("#state3-title", { y: -10, opacity: 0, duration: 0.4 })
+              .from("#decision-card", {
+                  scale: 0.9,
+                  opacity: 0,
+                  duration: 0.6,
+                  ease: "power3.out"
+              })
+              .from("#final-time", { scale: 0.8, opacity: 0, duration: 0.5, ease: "back.out(1.7)" }, "-=0.3");
+            return tl;
+        }
+
+        // --- Timeline Principale ---
+        const mainTimeline = gsap.timeline({
+            repeat: -1,
+            onRepeat: () => {
+                // Réinitialise l'état visuel des tâches à chaque boucle
+                orchestrationItems.forEach(item => item.classList.remove('completed'));
+            }
+        });
+
+        mainTimeline.add(animateState1())
+                    .to(state1, { autoAlpha: 0, duration: 0.5, delay: STATE_DURATION - 1.5 })
+
+                    .add(animateState2())
+                    .to(state2, { autoAlpha: 0, duration: 0.5, delay: STATE_DURATION - 1 })
+
+                    .add(animateState3())
+                    .to(state3, { autoAlpha: 0, duration: 0.5, delay: STATE_DURATION - 2 });
+    </script>
+</body>
+</html>

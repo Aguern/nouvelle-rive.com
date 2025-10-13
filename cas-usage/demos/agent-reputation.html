@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Démo Agent Réputation IA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- GSAP - Librairie d'animation professionnelle -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .demo-state {
+           visibility: hidden; /* Géré par GSAP */
+           position: absolute;
+           width: 100%;
+           height: 100%;
+        }
+        .whatsapp-bubble {
+            max-width: 85%;
+            padding: 8px 12px;
+            border-radius: 12px;
+            line-height: 1.4;
+        }
+        .bubble-in {
+            background-color: #F3F4F6; /* Gray 100 */
+            align-self: flex-start;
+            border-bottom-left-radius: 3px;
+        }
+        .bubble-out {
+            background-color: #E0F2FE; /* Sky 100 */
+            align-self: flex-end;
+            border-bottom-right-radius: 3px;
+        }
+    </style>
+</head>
+<body class="bg-transparent m-0 p-0 w-full h-full overflow-hidden">
+
+    <div class="w-full h-full flex items-center justify-center">
+        <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-200 w-full h-full flex flex-col">
+            <div class="relative flex-1 overflow-hidden">
+
+                <!-- ÉTAPE 1: Le Processus Manuel -->
+                <div id="state-1" class="demo-state flex flex-col items-center justify-center text-center">
+                    <h3 class="text-base font-semibold text-gray-400 mb-4">Le Processus Manuel : Réactif et Désordonné</h3>
+                    <div class="relative w-full h-48">
+                        <div id="manual-card-1" class="absolute top-0 left-8 w-48 bg-white p-3 rounded-lg shadow-md border text-xs text-left">
+                            <p class="font-bold text-red-500">Avis 1-étoile</p>
+                            <p class="text-gray-600 mt-1">"Service très lent..."</p>
+                        </div>
+                        <div id="manual-card-2" class="absolute top-16 left-24 w-48 bg-white p-3 rounded-lg shadow-md border text-xs text-left">
+                            <p class="font-bold">Logiciel de Caisse</p>
+                            <p class="text-gray-600 mt-1">Analyse des ventes...</p>
+                        </div>
+                        <div id="manual-card-3" class="absolute top-8 right-8 w-48 bg-white p-3 rounded-lg shadow-md border text-xs text-left">
+                            <p class="font-bold">Planning RH</p>
+                            <p class="text-gray-600 mt-1">Vérification des équipes...</p>
+                        </div>
+                    </div>
+                     <div id="manual-time" class="mt-4 bg-gray-100 rounded-full px-4 py-2"><p class="text-sm font-medium text-gray-700">Temps de coordination : <span class="font-bold text-red-500">des heures</span></p></div>
+                </div>
+
+                <!-- ÉTAPE 2: L'Orchestration Intelligente -->
+                <div id="state-2" class="demo-state flex flex-col items-center justify-center p-4">
+                    <h3 id="state2-title" class="text-base font-semibold text-gray-800 mb-4">L'Orchestration Intelligente</h3>
+                    <div class="w-full max-w-md bg-gray-50 p-4 rounded-lg border">
+                        <div id="task-1" class="flex items-center text-sm mb-2">
+                            <svg class="w-5 h-5 text-gray-300 mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <span class="text-gray-400">Avis 1-étoile détecté</span>
+                        </div>
+                        <div id="task-2" class="flex items-center text-sm mb-2">
+                             <svg class="w-5 h-5 text-gray-300 mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <span class="text-gray-400">Analyse de la cause (POS + Planning)</span>
+                        </div>
+                        <div id="task-3" class="flex items-center text-sm mb-2">
+                            <svg class="w-5 h-5 text-gray-300 mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <span class="text-gray-400">Alerte ciblée de l'équipe sur WhatsApp</span>
+                        </div>
+                        <div id="task-4" class="flex items-center text-sm">
+                            <svg class="w-5 h-5 text-gray-300 mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <span class="text-gray-400">Préparation du brouillon de réponse</span>
+                        </div>
+                    </div>
+                     <div id="state2-caption" class="mt-4 text-sm font-medium text-gray-600 opacity-0">L'IA connecte les points et prépare l'action.</div>
+                </div>
+
+                <!-- ÉTAPE 3: De la Réaction à la Proaction -->
+                <div id="state-3" class="demo-state flex flex-col items-center justify-center p-2">
+                     <h3 id="state3-title" class="text-base font-semibold text-gray-800 mb-2">De la Réaction à la Proaction</h3>
+                     <div class="w-full max-w-[280px] h-[300px] bg-gray-200 rounded-2xl p-2 flex flex-col shadow-inner">
+                        <div id="chat-container" class="flex-grow flex flex-col space-y-2 overflow-hidden p-2">
+                            <!-- Les bulles de chat seront injectées ici par GSAP -->
+                        </div>
+                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const ACT_DURATION = 7; // Durée de chaque acte en secondes
+
+        // --- GSAP Timeline ---
+        const mainTimeline = gsap.timeline({
+            repeat: -1,
+            defaults: { duration: 0.8, ease: "power2.out" }
+        });
+
+        // --- Fonctions d'animation des scènes ---
+
+        function animateState1() {
+            const tl = gsap.timeline();
+            tl.to("#state-1", { autoAlpha: 1 })
+              .from(["#manual-card-1", "#manual-card-2", "#manual-card-3"], {
+                  stagger: 0.2,
+                  opacity: 0,
+                  y: 20,
+                  scale: 0.95
+              })
+              .from("#manual-time", { opacity: 0, y: 10 }, "+=0.5")
+              .to("#state-1", { autoAlpha: 0, delay: ACT_DURATION - 3 });
+            return tl;
+        }
+
+        function animateState2() {
+            const tl = gsap.timeline();
+            const tasks = ["#task-1", "#task-2", "#task-3", "#task-4"];
+
+            tl.to("#state-2", { autoAlpha: 1 })
+              .from("#state2-title", { opacity: 0, y: -15 });
+
+            tasks.forEach(task => {
+                const icon = `${task} svg`;
+                const text = `${task} span`;
+                tl.to(icon, { color: '#3B82F6', scale: 1.1, duration: 0.3 })
+                  .to(icon, { scale: 1, duration: 0.2 })
+                  .to(text, { color: '#1F2937', duration: 0.2 }, "<")
+                  .to(icon, { color: '#10B981', duration: 0.3 }, "+=0.2");
+            });
+
+            tl.from("#state2-caption", { opacity: 0, y: 10 }, "-=0.5")
+              .to("#state-2", { autoAlpha: 0, delay: ACT_DURATION - 5 });
+            return tl;
+        }
+
+        function animateState3() {
+            const tl = gsap.timeline();
+            const chatContainer = document.getElementById('chat-container');
+            const bubblesHTML = [
+                `<div class="whatsapp-bubble bubble-in text-sm">🚨 <span class="font-bold">Avis 1-étoile :</span> Rupture de stock & service lent. Cause : 1 serveur absent.</div>`,
+                `<div class="whatsapp-bubble bubble-out text-sm">Ok, prépare une réponse pro et offre un apéritif.</div>`,
+                `<div class="whatsapp-bubble bubble-in text-sm">📈 <span class="font-bold">Tendance Positive :</span> "Cocktails sans alcool" mentionnés dans 30% des avis 5 étoiles.</div>`,
+                `<div class="whatsapp-bubble bubble-in text-sm">💡 <span class="font-bold">Suggestion :</span> Lancer une pub ciblée ce week-end ? Je peux préparer un visuel.</div>`
+            ];
+
+            tl.call(() => { chatContainer.innerHTML = ''; }) // Nettoie le conteneur au début
+              .to("#state-3", { autoAlpha: 1 })
+              .from("#state3-title", { opacity: 0, y: -15 });
+
+            bubblesHTML.forEach((bubbleHTML, i) => {
+                tl.call(() => {
+                    const bubble = document.createElement('div');
+                    bubble.innerHTML = bubbleHTML;
+                    chatContainer.appendChild(bubble.firstChild);
+                    gsap.from(chatContainer.lastChild, {
+                        opacity: 0,
+                        y: 20,
+                        scale: 0.95,
+                        duration: 0.6,
+                        ease: "elastic.out(1, 0.8)"
+                    });
+                    chatContainer.scrollTop = chatContainer.scrollHeight;
+                }, [], `>${i === 0 ? 0 : 0.8}`); // Délai entre les bulles
+            });
+
+            tl.to("#state-3", { autoAlpha: 0, delay: ACT_DURATION - 5 });
+            return tl;
+        }
+
+        // --- Construction de la timeline principale ---
+        mainTimeline.add(animateState1())
+                    .add(animateState2())
+                    .add(animateState3());
+    </script>
+</body>
+</html>

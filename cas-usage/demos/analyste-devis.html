@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Démo Analyste Devis IA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- GSAP - Librairie d'animation professionnelle -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .demo-state {
+           visibility: hidden; /* Géré par GSAP */
+        }
+        .icon-done {
+            display: none;
+            color: #10B981; /* Vert émeraude */
+        }
+        .icon-pending {
+            color: #3B82F6; /* Bleu */
+        }
+        .orchestration-list li.completed .icon-pending {
+            display: none;
+        }
+        .orchestration-list li.completed .icon-done {
+            display: block;
+        }
+    </style>
+</head>
+<body class="bg-transparent m-0 p-0 w-full h-full overflow-hidden">
+
+    <div class="w-full h-full flex items-center justify-center">
+        <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-200 w-full h-full flex flex-col">
+            <div class="relative flex-1 overflow-hidden">
+
+                <!-- ÉTAPE 1: Le Fardeau Manuel -->
+                <div id="state-1" class="demo-state absolute w-full h-full flex flex-col items-center justify-center text-center p-4">
+                    <h3 class="text-lg font-semibold text-gray-400 mb-4">Le Fardeau Manuel</h3>
+                    <div class="flex space-x-4 items-center text-gray-500" id="manual-process-icons">
+                        <div class="flex flex-col items-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-10 h-10 text-gray-400"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg><span class="text-xs mt-1">Copier</span></div>
+                        <svg class="w-10 h-10 text-gray-300" width="40" height="20" viewBox="0 0 40 20"><path d="M5 10 H35" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 2" fill="none"/></svg>
+                        <div class="flex flex-col items-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-10 h-10 text-gray-400"><path d="M15.5 2H8.6c-.4 0-.8.2-1.1.5-.3.3-.5.7-.5 1.1V21c0 .8.7 1.5 1.5 1.5h8c.8 0 1.5-.7 1.5-1.5V6.4L15.5 2z"></path><path d="M15.5 2v4.4h4.4"></path><path d="M8 13h4"></path><path d="M8 17h8"></path></svg><span class="text-xs mt-1">Calculer</span></div>
+                        <svg class="w-10 h-10 text-gray-300" width="40" height="20" viewBox="0 0 40 20"><path d="M5 10 H35" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 2" fill="none"/></svg>
+                        <div class="flex flex-col items-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-10 h-10 text-gray-400"><path d="m22 2-7 20-4-9-9-4Z"/><path d="m22 2-11 11"/></svg><span class="text-xs mt-1">Rédiger</span></div>
+                    </div>
+                    <div id="manual-time" class="mt-8 bg-gray-100 rounded-full px-4 py-2"><p class="text-sm font-medium text-gray-700">Temps estimé : <span class="font-bold text-red-500">45 minutes</span></p></div>
+                </div>
+
+                <!-- ÉTAPE 2: L'Orchestration IA -->
+                <div id="state-2" class="demo-state absolute w-full h-full flex flex-col items-center justify-center text-center p-4">
+                    <h3 id="state2-title" class="text-lg font-semibold text-gray-800 mb-4">L'Orchestration de l'IA</h3>
+                    <ul class="orchestration-list space-y-2 text-left text-sm w-full max-w-xs">
+                        <li class="flex items-center text-gray-600"><span class="icon-pending mr-3"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line></svg></span><span class="icon-done mr-3"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Analyse de l'email</li>
+                        <li class="flex items-center text-gray-600"><span class="icon-pending mr-3"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line></svg></span><span class="icon-done mr-3"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Matching catalogue (RAG)</li>
+                        <li class="flex items-center text-gray-600"><span class="icon-pending mr-3"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line></svg></span><span class="icon-done mr-3"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Vérification des stocks (API)</li>
+                        <li class="flex items-center text-gray-600"><span class="icon-pending mr-3"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line></svg></span><span class="icon-done mr-3"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Génération du devis</li>
+                    </ul>
+                     <div id="state2-banner" class="mt-6 bg-blue-100 rounded-full px-4 py-2"><p class="text-sm font-medium text-blue-800">En attente de votre validation...</p></div>
+                </div>
+
+                <!-- ÉTAPE 3: La Collaboration Gagnante -->
+                <div id="state-3" class="demo-state absolute w-full h-full flex flex-col items-center justify-center text-center p-4">
+                     <h3 id="state3-title" class="text-lg font-semibold text-gray-800 mb-4">La Collaboration Gagnante</h3>
+                     <div class="flex items-center justify-center space-x-2" id="collab-icons">
+                        <div class="flex flex-col items-center p-2 rounded-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-10 h-10 text-blue-500"><path d="M12 20h9a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H3a2 2 0 0 0-2 2v12c0 1.1.9 2 2 2h9z"></path><path d="M12 16v-4a2 2 0 1 1 4 0v4"></path><path d="M12 12h4"></path><path d="M4 10h2"></path><path d="M4 14h2"></path></svg>
+                            <span class="text-xs text-gray-500 mt-1">Vous validez</span>
+                        </div>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-400"><path d="M13 5L21 12L13 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        <div class="flex flex-col items-center p-2 rounded-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-10 h-10 text-emerald-500"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline><path d="m10 15.5 2 2 4-4"></path></svg>
+                            <span class="text-xs text-gray-500 mt-1">L'IA finalise</span>
+                        </div>
+                     </div>
+                     <div id="final-time" class="mt-8 bg-emerald-100 rounded-full px-4 py-2"><p class="text-sm font-medium text-emerald-800">Processus terminé en <span class="font-bold">5 minutes</span></p></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Configuration ---
+        const STATE_DURATION = 6; // Durée de chaque slide en secondes
+
+        // --- Éléments du DOM ---
+        const state1 = document.getElementById('state-1');
+        const state2 = document.getElementById('state-2');
+        const state3 = document.getElementById('state-3');
+        const orchestrationItems = state2.querySelectorAll('.orchestration-list li');
+
+        // --- Initialisation de GSAP ---
+        gsap.set([state1, state2, state3], { autoAlpha: 0 }); // Cache tous les états au début
+
+        function animateState1() {
+            const tl = gsap.timeline();
+            tl.to(state1, { autoAlpha: 1, scale: 1, duration: 0.5 })
+              .from("#manual-process-icons > *", {
+                  y: 20,
+                  opacity: 0,
+                  duration: 0.5,
+                  stagger: 0.2,
+                  ease: "power2.out"
+              })
+              .from("#manual-time", { scale: 0.8, opacity: 0, duration: 0.5, ease: "back.out(1.7)" }, "-=0.3");
+            return tl;
+        }
+
+        function animateState2() {
+            const tl = gsap.timeline();
+            tl.to(state2, { autoAlpha: 1, scale: 1, duration: 0.5 })
+              .from("#state2-title", { y: -10, opacity: 0, duration: 0.4 });
+
+            orchestrationItems.forEach((item, index) => {
+                const pendingIcon = item.querySelector('.icon-pending svg');
+
+                tl.from(item, { x: -20, opacity: 0, duration: 0.4, ease: "power2.out" }, `-=${index === 0 ? 0.2 : 0.3}`)
+                  .to(pendingIcon, { rotate: 360, duration: 0.8, ease: "none" })
+                  .call(() => item.classList.add('completed'), [], ">-0.2")
+                  .from(item.querySelector('.icon-done'), { scale: 0.5, duration: 0.3, ease: "back.out(1.7)" }, "<");
+            });
+
+            tl.from("#state2-banner", { scale: 0.8, opacity: 0, duration: 0.5, ease: "back.out(1.7)" });
+            return tl;
+        }
+
+        function animateState3() {
+            const tl = gsap.timeline();
+            tl.to(state3, { autoAlpha: 1, scale: 1, duration: 0.5 })
+              .from("#state3-title", { y: -10, opacity: 0, duration: 0.4 })
+              .from("#collab-icons > *", {
+                  scale: 0.7,
+                  opacity: 0,
+                  duration: 0.5,
+                  stagger: 0.2,
+                  ease: "back.out(1.7)"
+              })
+              .from("#final-time", { scale: 0.8, opacity: 0, duration: 0.5, ease: "back.out(1.7)" }, "-=0.3");
+            return tl;
+        }
+
+        // --- Timeline Principale ---
+        const mainTimeline = gsap.timeline({ repeat: -1 });
+
+        mainTimeline.add(animateState1())
+                    .to(state1, { autoAlpha: 0, scale: 0.98, duration: 0.5, delay: STATE_DURATION - 1.5 })
+
+                    .add(animateState2())
+                    .to(state2, { autoAlpha: 0, scale: 0.98, duration: 0.5, delay: STATE_DURATION - 1 })
+
+                    .add(animateState3())
+                    .to(state3, { autoAlpha: 0, scale: 0.98, duration: 0.5, delay: STATE_DURATION - 2 });
+    </script>
+</body>
+</html>
