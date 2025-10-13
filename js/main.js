@@ -824,6 +824,101 @@ class NouvelleRive {
 }
 
 /**
+ * Section Assistants Glass Morphism - Animations GSAP
+ */
+function initAssistantsGlassSection() {
+    if (!document.querySelector('.assistants-glass-section')) {
+        console.log('⚠️ Assistants Glass Section not found');
+        return;
+    }
+
+    console.log('✅ Initializing Assistants Glass Section');
+
+    // 1. Counter Animation pour la statistique
+    const statNumber = document.querySelector('.stat-number');
+    if (!statNumber) {
+        console.warn('⚠️ .stat-number not found - skipping counter animation');
+    } else {
+        const target = parseInt(statNumber.dataset.target);
+
+        gsap.to(statNumber, {
+            innerText: target,
+            duration: 2,
+            ease: 'power2.out',
+            scrollTrigger: {
+                trigger: '.assistants-glass-stat',
+                start: 'top 80%',
+                toggleActions: 'play none none none'
+            },
+            snap: { innerText: 1 },
+            onUpdate: function() {
+                statNumber.innerText = Math.ceil(statNumber.innerText);
+            }
+        });
+    }
+
+    // 2. Cascade d'apparition des cards
+    gsap.from('.glass-card', {
+        scrollTrigger: {
+            trigger: '.assistants-glass-cards',
+            start: 'top 85%',
+            end: 'bottom 20%',
+            toggleActions: 'play none none reverse'
+        },
+        y: 40,
+        opacity: 0,
+        duration: 0.6,
+        stagger: 0.1,
+        ease: 'power2.out',
+        clearProps: 'all'
+    });
+
+    // 3. Animation du contenu gauche
+    gsap.from('.assistants-glass-content > *', {
+        scrollTrigger: {
+            trigger: '.assistants-glass-content',
+            start: 'top 80%',
+            toggleActions: 'play none none none'
+        },
+        y: 30,
+        opacity: 0,
+        duration: 0.6,
+        stagger: 0.1,
+        ease: 'power2.out'
+    });
+
+    // 4. Particules désactivées (enlevées à la demande)
+
+    // 5. Effet parallaxe au mouvement de la souris (desktop only)
+    if (window.innerWidth > 1024) {
+        const cards = document.querySelectorAll('.glass-card');
+        const section = document.querySelector('.assistants-glass-section');
+
+        if (section && cards.length > 0) {
+            section.addEventListener('mousemove', (e) => {
+                const { clientX, clientY } = e;
+                const centerX = window.innerWidth / 2;
+                const centerY = window.innerHeight / 2;
+
+                const moveX = (clientX - centerX) / 50;
+                const moveY = (clientY - centerY) / 50;
+
+                cards.forEach((card, index) => {
+                    gsap.to(card, {
+                        x: moveX * (index + 1) * 0.5,
+                        y: moveY * (index + 1) * 0.5,
+                        duration: 0.5,
+                        ease: 'power2.out'
+                    });
+                });
+            });
+        } else {
+            console.warn('⚠️ .assistants-glass-section or .glass-card not found - skipping parallax effect');
+        }
+    }
+}
+
+/**
  * PAGE APPROCHE - JavaScript avancé
  * Animations et interactions premium pour une expérience immersive
  */
@@ -2262,8 +2357,6 @@ class SolutionsCarousel {
         this.cards = document.querySelectorAll('.solution-card');
         this.prevBtn = document.querySelector('.carousel-btn--prev');
         this.nextBtn = document.querySelector('.carousel-btn--next');
-        this.autoplayInterval = null;
-        this.autoplayDelay = 5000; // 5 secondes
 
         if (this.slides.length === 0) {
             console.log('⚠️ No carousel slides found');
@@ -2281,23 +2374,17 @@ class SolutionsCarousel {
 
         // Event listeners pour les boutons prev/next
         this.prevBtn?.addEventListener('click', () => {
-            this.stopAutoplay();
             this.prev();
-            this.startAutoplay();
         });
 
         this.nextBtn?.addEventListener('click', () => {
-            this.stopAutoplay();
             this.next();
-            this.startAutoplay();
         });
 
         // Event listeners pour les dots
         this.dots.forEach((dot, index) => {
             dot.addEventListener('click', () => {
-                this.stopAutoplay();
                 this.goToSlide(index);
-                this.startAutoplay();
             });
         });
 
@@ -2305,22 +2392,28 @@ class SolutionsCarousel {
         this.cards.forEach((card, index) => {
             // Hover sur card → change le carousel
             card.addEventListener('mouseenter', () => {
-                this.stopAutoplay();
                 this.goToSlide(index);
             });
 
-            card.addEventListener('mouseleave', () => {
-                this.startAutoplay();
-            });
-
-            // Click sur card → scroll vers la section détaillée
-            card.addEventListener('click', () => {
-                this.scrollToSection(card.dataset.solution);
-            });
+            // Click sur la zone clickable → lance la démo (reste sur place)
+            const clickableZone = card.querySelector('.solution-card__clickable');
+            if (clickableZone) {
+                clickableZone.addEventListener('click', () => {
+                    this.goToSlide(index);
+                });
+            }
         });
 
-        // Démarrer l'autoplay
-        this.startAutoplay();
+        // Event listeners pour les boutons "En savoir plus"
+        document.querySelectorAll('.solution-card__learn-btn').forEach((btn) => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation(); // Empêcher le click sur la carte
+                const card = btn.closest('.solution-card');
+                if (card) {
+                    this.scrollToSection(card.dataset.solution);
+                }
+            });
+        });
 
         console.log('✅ Solutions Carousel initialized with', this.slides.length, 'slides');
     }
@@ -2384,22 +2477,6 @@ class SolutionsCarousel {
         this.showSlide(index);
     }
 
-    startAutoplay() {
-        this.stopAutoplay();
-        this.autoplayInterval = setInterval(() => {
-            this.next();
-        }, this.autoplayDelay);
-        console.log('▶️ Autoplay started');
-    }
-
-    stopAutoplay() {
-        if (this.autoplayInterval) {
-            clearInterval(this.autoplayInterval);
-            this.autoplayInterval = null;
-            console.log('⏸️ Autoplay paused');
-        }
-    }
-
     scrollToSection(solutionId) {
         const targetCard = document.querySelector(`article[data-exploration="${solutionId}"]`);
         if (targetCard) {
@@ -2412,7 +2489,6 @@ class SolutionsCarousel {
     }
 
     cleanup() {
-        this.stopAutoplay();
         console.log('🧹 Solutions Carousel cleaned up');
     }
 }
@@ -2436,7 +2512,37 @@ class ExplorationsPage {
             preview.addEventListener('click', () => this.toggleCard(card));
         });
 
+        // Gérer le hash fragment dans l'URL pour ouvrir automatiquement une section
+        this.handleHashNavigation();
+
         console.log('🔍 ExplorationsPage initialized');
+    }
+
+    handleHashNavigation() {
+        const hash = window.location.hash;
+        if (hash) {
+            // Retirer le # du hash
+            const explorationId = hash.substring(1);
+            const targetCard = document.querySelector(`article[data-exploration="${explorationId}"]`);
+
+            if (targetCard) {
+                console.log(`📍 Navigating to ${explorationId} from hash`);
+
+                // Petit délai pour laisser la page se charger
+                setTimeout(() => {
+                    // Scroll vers la carte
+                    targetCard.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+
+                    // Ouvrir la carte automatiquement
+                    setTimeout(() => {
+                        this.openCard(targetCard);
+                    }, 600);
+                }, 300);
+            }
+        }
     }
 
     toggleCard(card) {
@@ -3525,6 +3631,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initMobileMenu();
 
     const path = document.location.pathname;
+    console.log('📍 Current path:', path);
 
     if (path.includes('/approche')) {
         new ApprochePage();
@@ -3551,6 +3658,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (document.getElementById('enterKeyCanvas')) {
             new EnterKeyHero();
         }
+
+        // Initialiser la section Assistants Glass Morphism
+        initAssistantsGlassSection();
     }
 });
 
