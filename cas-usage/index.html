@@ -23,7 +23,7 @@
     </script>
 
     <!-- Styles -->
-    <link rel="stylesheet" href="../css/base.css?v=2.5">
+    <link rel="stylesheet" href="../css/base.css?v=2.6">
 
     <!-- GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -66,7 +66,20 @@
     </nav>
 
     <main>
-        <section class="hero-solutions-bento">
+        <section class="hero-solutions-bento section--dark">
+            <!-- Background animé -->
+            <div class="animated-background">
+                <div class="grid-lines"></div>
+                <div class="floating-particles">
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                </div>
+            </div>
+
             <div class="container">
                 <!-- Header -->
                 <div class="bento-header">
@@ -83,108 +96,166 @@
                     <div class="bento-showcase">
                         <div class="showcase-carousel" id="solutionsCarousel">
 
-                            <!-- Slide 1: Fiscal -->
-                            <div class="carousel-slide active" data-solution="fiscalite">
+                            <!-- Slide 1: Assistant Fiscal IA -->
+                            <div class="carousel-slide active" data-solution="assistant-fiscal">
                                 <div class="mockup-container">
-                                    <!-- Placeholder - À remplacer par votre vidéo/image -->
-                                    <div class="mockup-placeholder">
-                                        <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                            <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                                        </svg>
-                                        <p>Démo Copilote Fiscal</p>
-                                        <small>Vidéo ou Image à intégrer</small>
-                                    </div>
+                                    <iframe
+                                        src="demos/assistant-fiscal.html"
+                                        style="width: 100%; height: 100%; border: none; border-radius: 12px; background: transparent;"
+                                        scrolling="no"
+                                        loading="eager"
+                                        allow="autoplay"
+                                        title="Démo Assistant Fiscal IA">
+                                    </iframe>
                                 </div>
                             </div>
 
-                            <!-- Slide 2: Tourism -->
-                            <div class="carousel-slide" data-solution="tourisme">
+                            <!-- Slide 2: Agent Assurance IA -->
+                            <div class="carousel-slide" data-solution="agent-assurance">
                                 <div class="mockup-container">
-                                    <div class="mockup-placeholder">
-                                        <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                            <path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                            <path d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"/>
-                                        </svg>
-                                        <p>Démo Guide Intelligent</p>
-                                        <small>Vidéo ou Image à intégrer</small>
-                                    </div>
+                                    <iframe
+                                        src="demos/agent-assurance.html"
+                                        style="width: 100%; height: 100%; border: none; border-radius: 12px; background: transparent;"
+                                        scrolling="no"
+                                        loading="eager"
+                                        allow="autoplay"
+                                        title="Démo Agent Assurance IA">
+                                    </iframe>
                                 </div>
                             </div>
 
-                            <!-- Slide 3: Reporting -->
-                            <div class="carousel-slide" data-solution="reporting">
+                            <!-- Slide 3: Agent Réputation IA -->
+                            <div class="carousel-slide" data-solution="agent-reputation">
                                 <div class="mockup-container">
-                                    <div class="mockup-placeholder">
-                                        <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                            <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-                                        </svg>
-                                        <p>Démo Analyste Auto</p>
-                                        <small>Vidéo ou Image à intégrer</small>
-                                    </div>
+                                    <iframe
+                                        src="demos/agent-reputation.html"
+                                        style="width: 100%; height: 100%; border: none; border-radius: 12px; background: transparent;"
+                                        scrolling="no"
+                                        loading="eager"
+                                        allow="autoplay"
+                                        title="Démo Agent Réputation IA">
+                                    </iframe>
                                 </div>
                             </div>
 
                         </div>
 
-                        <!-- Navigation -->
+                        <!-- Navigation Carousel -->
                         <div class="carousel-nav">
-                            <button class="carousel-btn carousel-btn--prev" aria-label="Slide précédent">‹</button>
+                            <button class="carousel-btn carousel-btn--prev" aria-label="Démo précédente">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M15 18l-6-6 6-6"/>
+                                </svg>
+                            </button>
                             <div class="carousel-dots">
-                                <span class="dot active" data-slide="0" aria-label="Slide 1"></span>
-                                <span class="dot" data-slide="1" aria-label="Slide 2"></span>
-                                <span class="dot" data-slide="2" aria-label="Slide 3"></span>
+                                <button class="dot active" aria-label="Démo 1"></button>
+                                <button class="dot" aria-label="Démo 2"></button>
+                                <button class="dot" aria-label="Démo 3"></button>
                             </div>
-                            <button class="carousel-btn carousel-btn--next" aria-label="Slide suivant">›</button>
+                            <button class="carousel-btn carousel-btn--next" aria-label="Démo suivante">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M9 18l6-6-6-6"/>
+                                </svg>
+                            </button>
                         </div>
+
                     </div>
 
                     <!-- Solution Cards (Zone droite) -->
                     <div class="bento-cards">
 
-                        <!-- Card 1: Fiscal -->
-                        <div class="solution-card active" data-solution="fiscalite">
-                            <div class="solution-card__header">
-                                <div class="solution-card__icon">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                                    </svg>
+                        <!-- Card 1: Assistant Fiscal -->
+                        <div class="solution-card active" data-solution="assistant-fiscal">
+                            <div class="solution-card__clickable">
+                                <div class="solution-card__header">
+                                    <div class="solution-card__icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                            <path d="m10 15.5 2 2 4-4"/>
+                                        </svg>
+                                    </div>
+                                    <h3 class="solution-card__title">Assistant Fiscal</h3>
                                 </div>
-                                <h3 class="solution-card__title">Copilote Fiscal</h3>
+                                <p class="solution-card__description">
+                                    <strong>De 18 documents non structurés au dossier complet : 2h au lieu de 8h.</strong><br><br>
+
+                                    Votre assistant ingère le ZIP du client (relevés bancaires, factures scannées, photos, emails), analyse chaque document visuellement, extrait et classifie automatiquement les données (revenus fonciers, charges déductibles, comptes étrangers), et détecte les risques de non-conformité en croisant avec les années précédentes.<br><br>
+
+                                    Vous recevez un dossier complet : formulaires 2044 et 3916-bis pré-remplis, annexe de calcul traçable, et alertes proactives (ex : "Compte Kraken non déclaré N-1/N-2, risque d'amende 3 000€"). Vous validez, ajustez si besoin, et conseillez votre client en toute sérénité.<br><br>
+
+                                    <strong>Résultat :</strong> 75% de temps économisé sur la préparation, zéro oubli réglementaire, traçabilité totale, et vos experts libérés pour le conseil stratégique.
+                                </p>
                             </div>
-                            <p class="solution-card__description">Préparation automatique des déclarations fiscales</p>
-                            <span class="solution-card__badge">Droit & Comptabilité</span>
-                            <div class="solution-card__arrow">→</div>
+                            <div class="solution-card__cta-section">
+                                <button class="solution-card__learn-btn">
+                                    En savoir plus
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
 
-                        <!-- Card 2: Tourism -->
-                        <div class="solution-card" data-solution="tourisme">
-                            <div class="solution-card__header">
-                                <div class="solution-card__icon">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                        <path d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"/>
-                                    </svg>
+                        <!-- Card 2: Assistant Sinistres -->
+                        <div class="solution-card" data-solution="agent-assurance">
+                            <div class="solution-card__clickable">
+                                <div class="solution-card__header">
+                                    <div class="solution-card__icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
+                                    </div>
+                                    <h3 class="solution-card__title">Assistant Sinistres</h3>
                                 </div>
-                                <h3 class="solution-card__title">Guide Intelligent</h3>
+                                <p class="solution-card__description">
+                                    <strong>De la déclaration de sinistre au dossier complet : 6 minutes au lieu de 2 heures.</strong><br><br>
+
+                                    Votre assistant reçoit la déclaration du client (photos, constat, description), analyse automatiquement l'étendue des dégâts, vérifie la couverture d'assurance, détecte les anomalies éventuelles, et interroge les réparateurs partenaires pour obtenir une estimation de coût.<br><br>
+
+                                    Vous recevez un dossier complet synthétisé : toutes les données sont déjà collectées, vérifiées et analysées. Vous prenez la décision finale en connaissance de cause, et l'assistant finalise la communication avec le client et les partenaires.<br><br>
+
+                                    <strong>Résultat :</strong> 95% de temps économisé sur la préparation, zéro risque d'oubli, et vos experts libérés pour les dossiers complexes et la relation client.
+                                </p>
                             </div>
-                            <p class="solution-card__description">Recommandations personnalisées en temps réel</p>
-                            <span class="solution-card__badge">Expérience Client</span>
-                            <div class="solution-card__arrow">→</div>
+                            <div class="solution-card__cta-section">
+                                <button class="solution-card__learn-btn">
+                                    En savoir plus
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
 
-                        <!-- Card 3: Reporting -->
-                        <div class="solution-card" data-solution="reporting">
-                            <div class="solution-card__header">
-                                <div class="solution-card__icon">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-                                    </svg>
+                        <!-- Card 3: Agent Réputation IA -->
+                        <div class="solution-card" data-solution="agent-reputation">
+                            <div class="solution-card__clickable">
+                                <div class="solution-card__header">
+                                    <div class="solution-card__icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/>
+                                        </svg>
+                                    </div>
+                                    <h3 class="solution-card__title">Assistant Réputation</h3>
                                 </div>
-                                <h3 class="solution-card__title">Analyste Auto</h3>
+                                <p class="solution-card__description">
+                                    <strong>De l'avis négatif à l'action corrective : en temps réel, directement sur WhatsApp.</strong><br><br>
+
+                                    Votre assistant surveille en continu vos avis en ligne (Google, TheFork, TripAdvisor), détecte les problèmes, croise les données avec votre logiciel de caisse et votre planning, identifie la cause racine, et alerte votre équipe sur WhatsApp avec un plan d'action ciblé.<br><br>
+
+                                    Vous recevez une analyse complète : le problème, sa cause opérationnelle, et un brouillon de réponse client. Vous validez, et l'assistant publie. Mieux encore : il détecte les tendances positives et vous suggère des opportunités marketing concrètes.<br><br>
+
+                                    <strong>Résultat :</strong> De la réaction à la proaction, résolution des causes racines, et transformation des feedbacks en améliorations continues.
+                                </p>
                             </div>
-                            <p class="solution-card__description">Rapports intelligents multi-sources</p>
-                            <span class="solution-card__badge">Pilotage & Décision</span>
-                            <div class="solution-card__arrow">→</div>
+                            <div class="solution-card__cta-section">
+                                <button class="solution-card__learn-btn">
+                                    En savoir plus
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
 
                     </div>
@@ -196,55 +267,78 @@
             <div class="container">
                 <div class="explorations">
 
-                    <!-- Carte 1: Fiscalité -->
-                    <article class="exploration-card" data-exploration="fiscalite">
+                    <!-- Carte 1: Assistant Fiscal Unifié -->
+                    <article class="exploration-card" data-exploration="assistant-fiscal">
                         <header class="exploration-card__preview">
                             <div class="exploration-card__header">
-                                <span class="exploration-card__badge">Droit Fiscal</span>
-                                <h3 class="exploration-card__title">L'Assistant Fiscal & Comptable</h3>
+                                <span class="exploration-card__badge">Fiscalité & Conformité</span>
+                                <h3 class="exploration-card__title">L'Assistant Unifié d'Audit et de Déclaration</h3>
                             </div>
-                            <p class="exploration-card__teaser">Il prépare les déclarations, extrait les données des factures et rapproche les informations. Il gère la préparation, vous gardez la validation stratégique.</p>
+                            <p class="exploration-card__teaser">De 18 documents non structurés (relevés, factures, photos, emails) au dossier complet (2044, 3916-bis, annexe traçable) : comment transformer 8h de compilation en 2h de validation stratégique.</p>
                             <div class="exploration-card__cta">
-                                <span>Voir la démonstration</span>
+                                <span>Découvrir le workflow</span>
                                 <svg class="icon" width="24" height="24" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                             </div>
                         </header>
 
                         <div class="exploration-card__content" style="display: none;">
                             <div class="article-content">
-                                <h3>Le Défi : Libérer l'Expert de la Tâche de Fond</h3>
-                                <p>Pour un cabinet fiscaliste, la valeur se crée dans le conseil, pas dans la compilation de chiffres. Pourtant, une part significative du temps des experts est consacrée à des tâches préparatoires indispensables mais à faible valeur ajoutée :</p>
+                                <h3>Le Défi : La Compilation Fastidieuse de Documents Hétérogènes</h3>
+                                <p>Pour un avocat fiscaliste, gérer une déclaration de revenus complexe (investissements immobiliers, actifs numériques) est un processus chronophage et sujet aux oublis. Chaque dossier client nécessite :</p>
                                 <ul>
-                                    <li>La lecture et l'extraction de données depuis une multitude de documents hétérogènes.</li>
-                                    <li>Le rapprochement et la classification de ces données selon les règles fiscales.</li>
-                                    <li>Le risque permanent d'erreur manuelle, qui impose des doubles vérifications chronophages.</li>
+                                    <li>L'analyse manuelle de dizaines de documents non structurés : relevés bancaires PDF, factures scannées, photos de mauvaise qualité, emails transférés.</li>
+                                    <li>L'extraction et la classification des données selon les règles fiscales (revenus fonciers, charges déductibles, comptes étrangers).</li>
+                                    <li>Le croisement avec les déclarations des années précédentes pour détecter les incohérences.</li>
+                                    <li>Le remplissage manuel des formulaires Cerfa (2044, 3916-bis) avec risque d'erreur et d'oubli réglementaire.</li>
                                 </ul>
+                                <p>Résultat : <strong>8 heures en moyenne</strong> par dossier complexe, avec un risque permanent d'oubli réglementaire coûteux (amendes de 1 500€ à 3 000€).</p>
 
-                                <h3>Notre Vision d'un Outil d'Augmentation</h3>
-                                <p>Nous n'imaginons pas un logiciel qui "fait la déclaration à la place de l'avocat". Nous imaginons un <strong>copilote</strong> qui prépare le terrain de la manière la plus intelligente possible. L'objectif est de permettre à l'expert de commencer son travail avec un dossier déjà pré-analysé, synthétisé et fiabilisé.</p>
+                                <h3>Notre Vision : Un Assistant Unifié qui Orchestre Tout</h3>
+                                <p>Nous imaginons un <strong>assistant unifié</strong> qui prend en charge l'intégralité du processus : de l'ingestion du ZIP client jusqu'à la livraison des formulaires pré-remplis, de la note d'audit, et des alertes proactives.</p>
 
                                 <div class="workflow-highlight">
-                                    <h4>Les Capacités d'un tel Copilote :</h4>
+                                    <h4>Le Workflow Orchestré en 5 Phases :</h4>
                                     <ol>
-                                        <li><strong>Lecture Intelligente :</strong> Il serait capable d'ingérer tous les documents d'un dossier client et d'en extraire les informations pertinentes, en comprenant le contexte de chaque chiffre.</li>
-                                        <li><strong>Pré-Classification :</strong> Il proposerait une classification de chaque revenu et chaque charge selon les catégories fiscales, en citant ses sources pour chaque proposition.</li>
-                                        <li><strong>Levée d'Alertes :</strong> Il ne prendrait pas de décision, mais signalerait les incohérences, les données manquantes ou les cas ambigus qui nécessitent l'arbitrage de l'expert.</li>
-                                        <li><strong>Préparation du Brouillon :</strong> Il générerait un projet de déclaration, non pas comme un document final, mais comme un support de travail clair et vérifiable pour l'expert.</li>
+                                        <li><strong>Phase 1 - Déclenchement :</strong> L'avocat envoie par email le dossier ZIP du client (Martin Dupont). L'assistant ingère automatiquement les 18 fichiers dans un environnement sécurisé et notifie sur WhatsApp le démarrage de l'analyse.</li>
+                                        <li><strong>Phase 2 - Audit Automatisé :</strong> L'assistant analyse visuellement chaque document (relevés bancaires, factures scannées, photo de taxe foncière, email Kraken). Il extrait automatiquement : 24 000€ de loyers, 850€ d'assurance, 3 050€ de travaux, 1 200€ de taxe foncière, et détecte un compte Kraken ouvert depuis 2 ans.</li>
+                                        <li><strong>Phase 3 - Analyse de Risque Proactive :</strong> L'assistant croise avec le dossier N-1 et détecte qu'aucune déclaration 3916-bis n'a été déposée les années précédentes. Il envoie sur WhatsApp : "🚨 Compte Kraken non déclaré N-1/N-2. Risque d'amende 3 000€. Recommande régularisation."</li>
+                                        <li><strong>Phase 4 - Préparation des Formulaires :</strong> L'assistant pré-remplit le formulaire 2044 (revenus fonciers : loyers, charges, travaux) et le 3916-bis (compte Kraken avec adresse complète de Payward Inc.). Chaque montant est lié à sa source dans l'annexe Excel traçable.</li>
+                                        <li><strong>Phase 5 - Livraison Complète :</strong> L'avocat reçoit par email : Note d'audit PDF (synthèse + alerte risque), Projets 2044 et 3916-bis pré-remplis, Annexe de calcul Excel (traçabilité totale). Il valide, ajuste si besoin, et conseille sereinement son client.</li>
                                     </ol>
                                 </div>
 
-                                <h3>L'Impact : d'Opérateur à Superviseur</h3>
-                                <p>Un tel outil ne change pas la nature du métier d'expert, mais il en change radicalement l'exercice. Le temps n'est plus consacré à "chercher et copier", mais à "analyser et valider". La valeur ajoutée est immense :</p>
+                                <h3>L'Impact : De 8h à 2h</h3>
+                                <p>L'assistant ne prend pas la décision fiscale : il prépare le terrain pour que l'avocat puisse se concentrer sur le conseil stratégique et la validation finale.</p>
                                 <ul>
-                                    <li><strong>Gain de Sérénité :</strong> Moins de stress lié aux erreurs et aux oublis.</li>
-                                    <li><strong>Gain de Temps :</strong> Des heures libérées pour le conseil client et le développement.</li>
-                                    <li><strong>Montée en Compétence :</strong> Les collaborateurs juniors apprennent plus vite en analysant les propositions de l'IA sous la supervision d'un senior.</li>
+                                    <li><strong>75% de Temps Économisé :</strong> De 8h de compilation à 2h de validation et conseil.</li>
+                                    <li><strong>Zéro Oubli Réglementaire :</strong> Détection proactive des risques de non-conformité (comptes étrangers, déclarations manquantes).</li>
+                                    <li><strong>Traçabilité Totale :</strong> Chaque montant est lié à son document source dans l'annexe Excel.</li>
+                                    <li><strong>Experts Libérés :</strong> Plus de temps pour le conseil client à haute valeur ajoutée, moins de temps sur la saisie.</li>
+                                </ul>
+
+                                <h3>Exemple Concret : Le Cas Martin Dupont</h3>
+                                <p>Client type : Particulier avec investissements immobiliers + actifs numériques.</p>
+                                <ul>
+                                    <li><strong>Déclenchement :</strong> ZIP de 18 documents (relevés PDF, factures scannées, photo taxe foncière, email Kraken, dossier N-1).</li>
+                                    <li><strong>Analyse visuelle :</strong> Extraction automatique : 12 virements "Loyer Apt Paris" = 24 000€, facture plombier 850€, peintre 2 200€, taxe foncière (hors TEOM).</li>
+                                    <li><strong>Détection risque :</strong> Compte Kraken ouvert depuis 2 ans, aucune 3916-bis dans dossier N-1. Alerte immédiate sur WhatsApp.</li>
+                                    <li><strong>Livraison :</strong> 2044 pré-remplie (ligne 211, 223, 224, 227, cadre 400), 3916-bis pré-remplie (email client, adresse Payward Inc.), annexe traçable.</li>
+                                    <li><strong>Résultat :</strong> Avocat valide en 2h au lieu de 8h, client conseillé sur régularisation, zéro risque d'amende.</li>
+                                </ul>
+
+                                <h3>Humain et IA : L'Avocat Reste aux Commandes</h3>
+                                <p>Cette approche illustre notre philosophie du "Human-in-the-Loop" :</p>
+                                <ul>
+                                    <li>L'IA extrait, classifie, croise, alerte.</li>
+                                    <li>L'avocat valide, ajuste, conseille, décide.</li>
+                                    <li>Traçabilité totale pour audit et vérification.</li>
+                                    <li>Résultat : <strong>Zéro oubli, 75% de temps économisé</strong>, et experts libérés pour le conseil stratégique.</li>
                                 </ul>
 
                                 <div class="call-to-action-box">
-                                    <h4>Vos processus ressemblent à ce défi ?</h4>
-                                    <p>Cette approche de "copilote IA" pourrait s'appliquer à votre métier. Si vous êtes prêt à explorer comment un outil sur-mesure pourrait augmenter la puissance de vos équipes, nous serions ravis d'en discuter.</p>
-                                    <a href="../contact/" class="btn btn--primary">Planifier une session d'exploration</a>
+                                    <h4>Vous gérez des dossiers fiscaux complexes ?</h4>
+                                    <p>Si la compilation de documents hétérogènes vous fait perdre des heures précieuses, explorons ensemble comment un assistant unifié pourrait transformer votre pratique.</p>
+                                    <a href="../contact/" class="btn btn--primary">Discuter de votre processus</a>
                                 </div>
 
                                 <div class="article-footer">
@@ -259,49 +353,68 @@
                         </div>
                     </article>
 
-                    <!-- Carte 2: Tourisme -->
-                    <article class="exploration-card" data-exploration="tourisme">
+                    <!-- Carte 2: Assistant Réputation Restaurant -->
+                    <article class="exploration-card" data-exploration="agent-reputation">
                         <header class="exploration-card__preview">
                             <div class="exploration-card__header">
-                                <span class="exploration-card__badge">Tourisme</span>
-                                <h3 class="exploration-card__title">Réinventer la Personnalisation dans le Voyage</h3>
+                                <span class="exploration-card__badge">Restauration</span>
+                                <h3 class="exploration-card__title">L'Agent de Réputation et d'Opérations Proactif</h3>
                             </div>
-                            <p class="exploration-card__teaser">Comment transformer l'expérience client en alliant l'analyse comportementale à l'expertise humaine ? Notre réflexion sur un assistant qui comprend avant de proposer.</p>
+                            <p class="exploration-card__teaser">Connecter en temps réel les retours clients aux actions opérationnelles. Un superviseur virtuel qui détecte les problèmes, alerte votre équipe sur WhatsApp, et transforme les feedbacks en améliorations continues.</p>
                             <div class="exploration-card__cta">
-                                <span>Découvrir l'approche</span>
+                                <span>Découvrir le workflow</span>
                                 <svg class="icon" width="24" height="24" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                             </div>
                         </header>
 
                         <div class="exploration-card__content" style="display: none;">
                             <div class="article-content">
-                                <h3>Le Paradoxe de l'Offre Touristique Moderne</h3>
-                                <p>Les clients d'aujourd'hui ont accès à une infinité d'options de voyage, mais paradoxalement, ils se retrouvent souvent avec des expériences standardisées. Les algorithmes actuels recommandent ce qui se vend, pas nécessairement ce qui correspond à la personnalité unique du voyageur.</p>
+                                <h3>Le Défi : Le Fossé entre Avis en Ligne et Action Terrain</h3>
+                                <p>Pour un restaurant, les avis en ligne sont cruciaux mais souvent détectés trop tard. Le processus manuel actuel crée plusieurs problèmes :</p>
+                                <ul>
+                                    <li>Les avis négatifs sont découverts plusieurs heures (voire jours) après publication.</li>
+                                    <li>Aucun lien n'est fait avec les données opérationnelles : logiciel de caisse, planning du personnel.</li>
+                                    <li>Les réponses sont génériques, sans résolution du problème racine.</li>
+                                    <li>Les tendances positives ne sont jamais exploitées pour le marketing.</li>
+                                </ul>
+                                <p>Résultat : Un système purement <strong>réactif</strong> qui traite les symptômes, jamais les causes.</p>
 
-                                <h3>Notre Vision : Un Conseiller Augmenté</h3>
-                                <p>Nous imaginons un système qui ne remplace pas le conseiller voyage, mais qui le transforme en expert ultra-informé. Cet outil analyserait les préférences non-dites du client - celles qu'il n'arrive pas toujours à exprimer - pour permettre au conseiller de proposer des expériences vraiment sur-mesure.</p>
+                                <h3>Notre Vision : Un Superviseur Virtuel Connecté</h3>
+                                <p>Nous imaginons un <strong>assistant qui connecte tout</strong> : surveillance continue des avis en ligne, analyse croisée avec les données internes (caisse, planning), et communication directe via WhatsApp avec l'équipe terrain.</p>
 
                                 <div class="workflow-highlight">
-                                    <h4>Les Dimensions d'Analyse :</h4>
+                                    <h4>Le Workflow Orchestré en 5 Étapes :</h4>
                                     <ol>
-                                        <li><strong>Profil Comportemental :</strong> Analyse des interactions passées, rythmes préférés, types d'activités recherchées.</li>
-                                        <li><strong>Contexte Situationnel :</strong> Comprendre s'il s'agit d'un voyage de détente, d'aventure, en famille ou professionnel.</li>
-                                        <li><strong>Contraintes Personnelles :</strong> Budget, dates, contraintes logistiques ou accessibilité.</li>
-                                        <li><strong>Inspiration Latente :</strong> Détecter les envies non exprimées à travers les hésitations et questions.</li>
+                                        <li><strong>Détection d'un Avis Important :</strong> L'agent surveille en continu Google Reviews, TheFork, TripAdvisor. Dès qu'un avis 1 étoile apparaît ("Plat du jour en rupture, service très lent"), le workflow démarre.</li>
+                                        <li><strong>Analyse & Alerte Instantanée sur WhatsApp :</strong> L'agent analyse le sentiment et envoie une alerte au groupe WhatsApp de l'équipe : "🚨 Avis 1 étoile détecté. Problèmes identifiés : rupture de stock + lenteur service. Analyse en cours..."</li>
+                                        <li><strong>Investigation Opérationnelle Automatique :</strong> L'agent se connecte au logiciel de caisse et découvre que 100% des portions du plat du jour ont été vendues à 12h28. Il consulte le planning RH et constate qu'un serveur était absent sans remplacement.</li>
+                                        <li><strong>Communication Ciblée sur WhatsApp :</strong> L'agent envoie un message détaillé au groupe : "@ChefCuisine : C'est la 3ème rupture ce mois. Suggère d'augmenter la production de 20% les vendredis. @ManagerSalle : Planning confirme sous-effectif de 1 personne au service midi."</li>
+                                        <li><strong>Gestion de la Réponse Client :</strong> Le manager répond dans le groupe : "Prépare une réponse pro, excuse-toi et offre un apéritif." L'agent rédige un brouillon personnalisé et l'envoie en privé au manager pour validation finale.</li>
+                                        <li><strong>Proactivité Marketing :</strong> Bonus : L'agent détecte que 30% des avis 5 étoiles mentionnent "cocktails sans alcool" et suggère au propriétaire : "Tendance positive forte. Lancer une pub ciblée ce week-end ? Je peux préparer un visuel."</li>
                                     </ol>
                                 </div>
 
-                                <h3>L'Augmentation de l'Expertise Humaine</h3>
-                                <p>Le conseiller devient alors capable de :</p>
+                                <h3>L'Impact : De la Réaction à la Proaction</h3>
+                                <p>L'assistant ne remplace pas le jugement humain : il prépare, alerte, suggère. Le manager garde le contrôle total mais avec une information complète et instantanée.</p>
                                 <ul>
-                                    <li><strong>Anticiper les Besoins :</strong> Proposer des options auxquelles le client n'aurait pas pensé mais qui correspondent parfaitement à son profil.</li>
-                                    <li><strong>Optimiser le Temps :</strong> Passer moins de temps sur la recherche d'options et plus sur la création d'expériences mémorables.</li>
-                                    <li><strong>Créer de la Différenciation :</strong> Offrir un niveau de service que les plateformes automatisées ne peuvent pas égaler.</li>
+                                    <li><strong>Temps de Réponse Divisé par 10 :</strong> De plusieurs heures à quelques minutes.</li>
+                                    <li><strong>Résolution des Causes Racines :</strong> Pas juste une réponse polie, mais une correction opérationnelle réelle.</li>
+                                    <li><strong>Transformation des Feedbacks :</strong> Les retours clients deviennent des leviers d'amélioration continue.</li>
+                                    <li><strong>Valorisation Marketing :</strong> Les points forts détectés automatiquement et transformés en campagnes.</li>
+                                </ul>
+
+                                <h3>Humain et IA : Le Manager Reste aux Commandes</h3>
+                                <p>Cette approche illustre notre philosophie du "Human-in-the-Loop" appliquée au terrain :</p>
+                                <ul>
+                                    <li>L'IA prépare l'information, croise les données, alerte au bon moment.</li>
+                                    <li>Le manager valide la réponse client, décide des actions correctives.</li>
+                                    <li>La communication se fait sur WhatsApp, l'outil naturel de l'équipe.</li>
+                                    <li>Résultat : <strong>Plus de temps pour manager</strong>, moins de temps à chercher l'information.</li>
                                 </ul>
 
                                 <div class="call-to-action-box">
-                                    <h4>Vous travaillez dans l'expérience client ?</h4>
-                                    <p>Les principes de cette approche s'appliquent à de nombreux secteurs où la personnalisation fait la différence. Explorons ensemble comment augmenter l'impact de vos équipes.</p>
+                                    <h4>Vous gérez une équipe terrain dispersée ?</h4>
+                                    <p>Le principe de cet agent s'applique à tout secteur où la réputation en ligne impacte directement les opérations quotidiennes. Explorons ensemble comment connecter vos retours clients à vos actions terrain.</p>
                                     <a href="../contact/" class="btn btn--primary">Discuter de votre contexte</a>
                                 </div>
 
@@ -317,45 +430,145 @@
                         </div>
                     </article>
 
-                    <!-- Carte 3: Reporting -->
-                    <article class="exploration-card" data-exploration="reporting">
+                    <!-- Carte 3: Analyste Devis IA -->
+                    <article class="exploration-card" data-exploration="analyste-devis">
                         <header class="exploration-card__preview">
                             <div class="exploration-card__header">
-                                <span class="exploration-card__badge">Pilotage & Décision</span>
-                                <h3 class="exploration-card__title">L'Analyste de Données Automatisé</h3>
+                                <span class="exploration-card__badge">Automatisation Commerciale</span>
+                                <h3 class="exploration-card__title">L'Assistant Commercial</h3>
                             </div>
-                            <p class="exploration-card__teaser">Il se connecte à vos outils (CRM, ERP, etc.), collecte les données et génère vos rapports de performance personnalisés. Vous n'analysez plus que le résultat final.</p>
+                            <p class="exploration-card__teaser">Il reçoit un email client, analyse la demande, consulte votre catalogue via RAG, vérifie les stocks en temps réel et génère un devis personnalisé. Vous validez, il finalise.</p>
                             <div class="exploration-card__cta">
-                                <span>Explorer cette réflexion</span>
+                                <span>Voir la démonstration</span>
                                 <svg class="icon" width="24" height="24" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                             </div>
                         </header>
 
                         <div class="exploration-card__content" style="display: none;">
                             <div class="article-content">
-                                <h3>Le Piège du Reporting Décoratif</h3>
-                                <p>Beaucoup d'entreprises croulent sous les tableaux de bord colorés qui donnent l'impression de maîtriser la performance. Mais combien de ces indicateurs mènent réellement à des actions concrètes ? Souvent, le reporting devient un rituel plutôt qu'un outil de pilotage.</p>
+                                <h3>Le Défi : Transformer la Demande Client en Devis Précis</h3>
+                                <p>Pour les entreprises commerciales, la génération de devis est une tâche critique mais chronophage. Chaque demande nécessite :</p>
+                                <ul>
+                                    <li>La lecture et compréhension de l'email client avec ses besoins spécifiques.</li>
+                                    <li>La recherche manuelle dans le catalogue produit pour identifier les références exactes.</li>
+                                    <li>La vérification de disponibilité en stock pour garantir les délais.</li>
+                                    <li>Le calcul des prix, remises et conditions selon le profil client.</li>
+                                    <li>La rédaction d'un devis professionnel et personnalisé.</li>
+                                </ul>
+                                <p>Résultat : <strong>45 minutes en moyenne</strong> par devis, avec des risques d'erreurs de saisie et de retard dans les réponses.</p>
 
-                                <h3>Notre Approche : L'Intelligence Contextuelle</h3>
-                                <p>Nous envisageons des systèmes qui ne se contentent pas d'afficher des chiffres, mais qui comprennent le contexte métier et alertent sur ce qui mérite vraiment l'attention des décideurs.</p>
+                                <h3>Notre Vision : Un Copilote Commercial Intelligent</h3>
+                                <p>Nous imaginons un <strong>assistant IA orchestré</strong> qui automatise l'intégralité du processus de préparation du devis, tout en gardant l'humain au centre de la validation finale.</p>
 
                                 <div class="workflow-highlight">
-                                    <h4>Les Principes d'un Reporting Intelligent :</h4>
+                                    <h4>Les Capacités de l'Analyste Devis :</h4>
                                     <ol>
-                                        <li><strong>Détection d'Anomalies :</strong> Signaler les écarts significatifs par rapport aux tendances normales.</li>
-                                        <li><strong>Mise en Perspective :</strong> Contextualiser chaque métrique par rapport aux enjeux business actuels.</li>
-                                        <li><strong>Prédiction d'Impact :</strong> Estimer les conséquences des tendances observées.</li>
-                                        <li><strong>Recommandations Actionnables :</strong> Suggérer des pistes d'action concrètes.</li>
+                                        <li><strong>Analyse Intelligente de l'Email :</strong> Extraction automatique des besoins, quantités, contraintes et contexte du client.</li>
+                                        <li><strong>Matching Catalogue via RAG :</strong> Recherche sémantique dans votre base produit pour identifier les meilleures correspondances, même avec des descriptions approximatives.</li>
+                                        <li><strong>Vérification en Temps Réel :</strong> Connexion API à votre système de gestion de stock pour garantir la disponibilité immédiate.</li>
+                                        <li><strong>Génération du Devis :</strong> Création d'un document professionnel pré-rempli, avec tarifs, conditions et personnalisation selon le profil client.</li>
                                     </ol>
                                 </div>
 
-                                <h3>Vers une Prise de Décision Augmentée</h3>
-                                <p>L'objectif n'est pas de remplacer le jugement managérial, mais de l'armer avec une compréhension plus fine et plus rapide des dynamiques en cours. Le dirigeant peut ainsi concentrer son attention sur la stratégie plutôt que sur le décryptage de données.</p>
+                                <h3>L'Impact : De 45 Minutes à 5 Minutes</h3>
+                                <p>L'assistant ne remplace pas votre équipe commerciale, il la libère des tâches répétitives. Vos commerciaux deviennent des superviseurs qui :</p>
+                                <ul>
+                                    <li><strong>Valident en quelques clics</strong> le devis proposé par l'IA.</li>
+                                    <li><strong>Se concentrent sur la relation client</strong> plutôt que sur la saisie.</li>
+                                    <li><strong>Répondent plus rapidement</strong> aux demandes, augmentant le taux de conversion.</li>
+                                    <li><strong>Évitent les erreurs</strong> de référencement ou de calcul grâce à l'automatisation.</li>
+                                </ul>
+
+                                <h3>Les Technologies au Service de Votre Efficacité</h3>
+                                <p>Cette solution repose sur une orchestration intelligente de plusieurs technologies IA :</p>
+                                <ul>
+                                    <li><strong>LLM</strong> pour l'analyse sémantique des demandes clients</li>
+                                    <li><strong>RAG (Retrieval-Augmented Generation)</strong> pour la recherche dans votre catalogue</li>
+                                    <li><strong>API natives</strong> pour la vérification en temps réel des stocks</li>
+                                    <li><strong>LangGraph</strong> pour l'orchestration du workflow multi-étapes</li>
+                                </ul>
 
                                 <div class="call-to-action-box">
-                                    <h4>Vos équipes passent trop de temps à "faire du reporting" ?</h4>
-                                    <p>Si vous ressentez que vos outils actuels vous font perdre du temps au lieu de vous en faire gagner, explorons ensemble une approche plus intelligente du pilotage.</p>
-                                    <a href="../contact/" class="btn btn--primary">Échanger sur vos enjeux</a>
+                                    <h4>Vos équipes perdent du temps sur la génération de devis ?</h4>
+                                    <p>Si la génération de devis est un goulot d'étranglement dans votre processus commercial, explorons ensemble comment un assistant IA pourrait multiplier votre réactivité.</p>
+                                    <a href="../contact/" class="btn btn--primary">Planifier une démonstration personnalisée</a>
+                                </div>
+
+                                <div class="article-footer">
+                                    <button class="btn-close-article" onclick="window.explorationsPage && window.explorationsPage.closeCurrentCard(this)">
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M15 5L10 10L5 5" />
+                                        </svg>
+                                        <span>Fermer l'article</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Carte 4: Assistant Sinistres -->
+                    <article class="exploration-card" data-exploration="agent-assurance">
+                        <header class="exploration-card__preview">
+                            <div class="exploration-card__header">
+                                <span class="exploration-card__badge">Assurance</span>
+                                <h3 class="exploration-card__title">L'Assistant Sinistres Automobile</h3>
+                            </div>
+                            <p class="exploration-card__teaser">De la déclaration du sinistre au dossier complet d'indemnisation : comment transformer 2 heures de travail manuel en 6 minutes de validation stratégique.</p>
+                            <div class="exploration-card__cta">
+                                <span>Découvrir le workflow</span>
+                                <svg class="icon" width="24" height="24" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </div>
+                        </header>
+
+                        <div class="exploration-card__content" style="display: none;">
+                            <div class="article-content">
+                                <h3>Le Défi : Transformer le Traitement des Sinistres</h3>
+                                <p>Le traitement d'un sinistre automobile est un processus critique où chaque minute compte pour la satisfaction client. Pourtant, aujourd'hui, chaque dossier exige :</p>
+                                <ul>
+                                    <li>L'analyse manuelle de dizaines de photos pour évaluer l'étendue des dégâts.</li>
+                                    <li>La vérification de la couverture d'assurance dans les systèmes de gestion.</li>
+                                    <li>La détection des incohérences ou des signes de fraude potentielle.</li>
+                                    <li>La sollicitation de plusieurs réparateurs pour obtenir des estimations de coût.</li>
+                                    <li>La compilation de toutes ces informations dans un dossier cohérent.</li>
+                                </ul>
+                                <p>Résultat : <strong>2 heures en moyenne</strong> par dossier, avec un risque d'erreur et un client qui attend une réponse rapide.</p>
+
+                                <h3>Notre Vision : Un Assistant de Préparation Intelligent</h3>
+                                <p>Nous imaginons un <strong>assistant orchestré</strong> qui prend en charge l'intégralité de la phase de collecte et d'analyse, permettant à l'expert de se concentrer sur la décision finale et la relation client.</p>
+
+                                <div class="workflow-highlight">
+                                    <h4>Le Workflow Orchestré de l'Assistant Sinistres :</h4>
+                                    <ol>
+                                        <li><strong>Réception de la Déclaration :</strong> Le client envoie sa déclaration (photos, constat amiable, description) directement via l'application ou par email.</li>
+                                        <li><strong>Analyse Visuelle des Dégâts :</strong> L'assistant examine automatiquement les images pour identifier les pièces endommagées, évaluer la gravité, et détecter d'éventuelles incohérences visuelles.</li>
+                                        <li><strong>Vérification de Couverture :</strong> Consultation de la base de données pour confirmer que le sinistre est bien couvert par la police d'assurance du client.</li>
+                                        <li><strong>Détection de Fraude :</strong> Analyse croisée des éléments déclarés, des images et de l'historique du client pour signaler les anomalies éventuelles.</li>
+                                        <li><strong>Estimation de Coût :</strong> Interrogation automatique des partenaires réparateurs agréés pour obtenir des estimations de réparation en temps réel.</li>
+                                        <li><strong>Synthèse du Dossier :</strong> L'assistant compile toutes les informations dans un dossier structuré et préparé pour validation.</li>
+                                    </ol>
+                                </div>
+
+                                <h3>L'Impact : De 2 Heures à 6 Minutes</h3>
+                                <p>L'assistant ne prend pas la décision d'indemnisation : il prépare le terrain pour que l'expert humain puisse décider en toute connaissance de cause. Vos experts deviennent des superviseurs stratégiques qui :</p>
+                                <ul>
+                                    <li><strong>Reçoivent des Dossiers Complets :</strong> Toutes les données sont déjà collectées, vérifiées et structurées.</li>
+                                    <li><strong>Se Concentrent sur la Décision :</strong> Plus de temps perdu en collecte, tout le temps consacré à l'analyse et à la validation.</li>
+                                    <li><strong>Répondent Plus Vite aux Clients :</strong> Délai de traitement divisé par 20, satisfaction client multipliée.</li>
+                                    <li><strong>Évitent les Oublis et Erreurs :</strong> Chaque étape est tracée, chaque donnée vérifiée automatiquement.</li>
+                                </ul>
+
+                                <h3>Humain et IA : Une Complémentarité Naturelle</h3>
+                                <p>Cette approche illustre parfaitement notre philosophie du "Human-in-the-Loop" :</p>
+                                <ul>
+                                    <li>L'IA excelle dans la <strong>collecte exhaustive</strong> et l'<strong>analyse structurée</strong>.</li>
+                                    <li>L'humain conserve la <strong>décision finale</strong> et la <strong>relation client</strong>.</li>
+                                    <li>Le résultat : <strong>95% de temps économisé</strong> sur la préparation, et vos experts libérés pour les dossiers complexes.</li>
+                                </ul>
+
+                                <div class="call-to-action-box">
+                                    <h4>Vous gérez des processus de validation complexes ?</h4>
+                                    <p>Le principe de cet assistant s'applique à tout métier où la préparation de dossiers est chronophage. Explorons ensemble comment libérer vos experts des tâches répétitives.</p>
+                                    <a href="../contact/" class="btn btn--primary">Discuter de votre processus</a>
                                 </div>
 
                                 <div class="article-footer">
