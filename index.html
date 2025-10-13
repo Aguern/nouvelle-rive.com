@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Styles -->
-    <link rel="stylesheet" href="css/base.css?v=2.5">
+    <link rel="stylesheet" href="css/base.css?v=3.0">
 
     <!-- GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -256,9 +256,12 @@
                         </div>
                     </div>
                     <div class="hero__alpine-container">
-                        <div id="enterKeyCanvas" class="enter-key-canvas">
-                            <!-- Animation sera générée par JavaScript -->
-                        </div>
+                        <iframe
+                            src="demos/hero-ai-agent.html"
+                            class="enter-key-canvas"
+                            title="Démo Agent IA Collaborateur"
+                            style="width: 100%; height: 100%; border: none;">
+                        </iframe>
                     </div>
                 </div>
             </div>
@@ -268,7 +271,7 @@
         <section id="defis" class="section section--alt">
             <div class="container">
                 <header class="section__header">
-                    <h2 class="section__title">Votre quotidien est freiné par </h2>
+                    <h2 class="section__title">Votre quotidien est freiné par :</h2>
                 </header>
 
                 <div class="challenges">
@@ -292,7 +295,7 @@
                         </div>
                         <h3 class="challenge-card__title">Le risque d'erreur ?</h3>
                         <p class="challenge-card__description">
-                            Une coquille dans une facture, une mauvaise donnée dans un rapport... Chaque erreur manuelle coûte du temps en correction et de la crédibilité.
+                            Une coquille dans une facture, une mauvaise donnée dans un rapport... Chaque erreur manuelle coûte du temps en correction et fait perdre en crédibilité.
                         </p>
                     </article>
 
@@ -311,34 +314,90 @@
             </div>
         </section>
 
-        <!-- Le Potentiel Section -->
-        <section id="potentiel" class="section section--accent">
+        <!-- Section Assistants IA - Glass Morphism -->
+        <section id="assistants" class="section section--accent assistants-glass-section">
             <div class="container">
-                <header class="section__header">
-                    <h2 class="section__title">Un assistant dédié pour chaque besoin</h2>
-                </header>
+                <div class="assistants-glass-grid">
 
-                <div class="potential-grid">
-                    <a href="cas-usage/" class="potential-card potential-card--featured">
-                        <div class="potential-card__content">
-                            <span class="potential-card__badge">Vision Pilote</span>
-                            <h3 class="potential-card__title">Le Copilote de l'Expert Fiscal</h3>
-                            <p>Transformer la contrainte de la déclaration en un avantage stratégique.</p>
+                    <!-- Zone Gauche : Contenu -->
+                    <div class="assistants-glass-content">
+                        <h2 class="section__title">Vos assistants IA, sur-mesure</h2>
+                        <p class="assistants-glass-baseline">
+                            De l'expert fiscal au manager de restaurant, chaque métier mérite son copilote intelligent.
+                        </p>
+
+                        <!-- Statistique animée -->
+                        <div class="assistants-glass-stat">
+                            <div class="stat-number" data-target="75">0</div>
+                            <div class="stat-label">de temps économisé en moyenne</div>
                         </div>
-                        <div class="potential-card__arrow">→</div>
-                    </a>
-                    <a href="cas-usage/" class="potential-card">
-                        <h3 class="potential-card__title">Le Guide touristique intelligent</h3>
-                        <p>Il vérifie la cohérence de vos informations clients entre toutes vos plateformes pour garantir des données fiables à vos équipes.</p>
-                    </a>
-                    <a href="cas-usage/" class="potential-card">
-                        <h3 class="potential-card__title">Le préparateur de reporting</h3>
-                        <p>Il collecte les données de vos outils et prépare votre rapport hebdomadaire, vous laissant plus de temps pour l'analyse.</p>
-                    </a>
+
+                        <a href="cas-usage/" class="btn btn--primary assistants-glass-cta">
+                            Découvrir tous les assistants
+                            <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </a>
+                    </div>
+
+                    <!-- Zone Droite : Cards en Glass -->
+                    <div class="assistants-glass-cards">
+
+                        <!-- Card 1 : Assistant Fiscal -->
+                        <a href="cas-usage/#assistant-fiscal" class="glass-card glass-card--1" data-card="fiscal">
+                            <div class="glass-card__icon">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                    <path d="m10 15.5 2 2 4-4"/>
+                                </svg>
+                            </div>
+                            <h3 class="glass-card__title">Assistant Fiscal</h3>
+                            <p class="glass-card__metric">8h → 2h</p>
+                            <p class="glass-card__description">Dossier complet automatisé</p>
+                        </a>
+
+                        <!-- Card 2 : Assistant Sinistres -->
+                        <a href="cas-usage/#agent-assurance" class="glass-card glass-card--2" data-card="sinistres">
+                            <div class="glass-card__icon">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </div>
+                            <h3 class="glass-card__title">Assistant Sinistres</h3>
+                            <p class="glass-card__metric">2h → 6min</p>
+                            <p class="glass-card__description">Analyse augmentée</p>
+                        </a>
+
+                        <!-- Card 3 : Agent Réputation -->
+                        <a href="cas-usage/#agent-reputation" class="glass-card glass-card--3" data-card="reputation">
+                            <div class="glass-card__icon">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/>
+                                </svg>
+                            </div>
+                            <h3 class="glass-card__title">Agent Réputation</h3>
+                            <p class="glass-card__metric">Réactif → Proactif</p>
+                            <p class="glass-card__description">WhatsApp intégré 24/7</p>
+                        </a>
+
+                        <!-- Card 4 : Assistant Commercial -->
+                        <a href="cas-usage/#analyste-devis" class="glass-card glass-card--4" data-card="commercial">
+                            <div class="glass-card__icon">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20 7h-4m4 6h-4m4 6h-4M4 7h8M4 13h8M4 19h8M2 3h16a2 2 0 012 2v14a2 2 0 01-2 2H2a2 2 0 01-2-2V5a2 2 0 012-2z"/>
+                                </svg>
+                            </div>
+                            <h3 class="glass-card__title">Assistant Commercial</h3>
+                            <p class="glass-card__metric">45min → 5min</p>
+                            <p class="glass-card__description">Devis automatisés</p>
+                        </a>
+
+                    </div>
+
                 </div>
-                <div class="section__cta">
-                    <a href="cas-usage/" class="btn btn--secondary">Voir toutes les démonstrations</a>
-                </div>
+
+                <!-- Background particles (généré par JS) -->
+                <div class="assistants-glass-particles" id="glassParticles"></div>
             </div>
         </section>
 
@@ -513,6 +572,6 @@
     </footer>
 
     <!-- Scripts -->
-    <script src="js/main.js"></script>
+    <script src="js/main.js?v=3.1"></script>
 </body>
 </html>
