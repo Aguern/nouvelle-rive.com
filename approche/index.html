@@ -156,6 +156,13 @@
                                     <clipPath id="progress-clip">
                                         <rect class="progress-clip-rect" x="120" y="280" width="0" height="15"/>
                                     </clipPath>
+
+                                    <!-- Gradient pour l'ombre du robot sous la table -->
+                                    <linearGradient id="robot-shadow-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                        <stop offset="0%" style="stop-color:rgba(20, 30, 50, 0.1);stop-opacity:1" />
+                                        <stop offset="50%" style="stop-color:rgba(20, 30, 50, 0.5);stop-opacity:1" />
+                                        <stop offset="100%" style="stop-color:rgba(10, 15, 25, 0.85);stop-opacity:1" />
+                                    </linearGradient>
                                 </defs>
 
                                 <!-- Groupe Étape 1 : L'Entretien d'Embauche -->
@@ -297,68 +304,169 @@
                                     </g>
                                 </g>
 
-                                <!-- Groupe Étape 3 : La Période d'Essai -->
+                                <!-- Groupe Étape 3 : La Période d'Essai - L'Équipe Augmentée -->
                                 <g id="step3-visual" style="opacity: 0;">
-                                    <!-- Dashboard frame animé -->
-                                    <rect class="dashboard-frame" x="60" y="80" width="280" height="240" rx="12" fill="#1a1a2e" stroke="#3898FF" stroke-width="3"
-                                          stroke-dasharray="1040" stroke-dashoffset="1040"/>
+                                    <!-- Espace de travail / Table (centrée) -->
+                                    <ellipse class="workspace-table" cx="200" cy="200" rx="110" ry="45"
+                                             fill="rgba(56, 152, 255, 0.1)" stroke="#3898FF" stroke-width="3"
+                                             stroke-dasharray="490" stroke-dashoffset="490"/>
 
-                                    <!-- Titre dashboard (typing effect) -->
-                                    <rect class="dashboard-title" x="80" y="100" width="0" height="12" rx="4" fill="rgba(56, 152, 255, 0.3)"/>
-                                    <text class="dashboard-title-text" x="85" y="110" text-anchor="start" fill="rgba(255,255,255,0.9)" font-size="11" font-weight="600" opacity="0">Tableau de bord</text>
+                                    <!-- Humain 1 (GAUCHE de la table) -->
+                                    <!-- Tête -->
+                                    <circle class="human-part human-1-head" cx="60" cy="200" r="18" fill="none" stroke="#3898FF" stroke-width="2"
+                                            stroke-dasharray="113" stroke-dashoffset="113"/>
+                                    <!-- Corps -->
+                                    <rect class="human-part human-1-body" x="45" y="225" width="30" height="35" rx="5" fill="none" stroke="#3898FF" stroke-width="2"
+                                          stroke-dasharray="140" stroke-dashoffset="140"/>
+                                    <!-- Bras gauche -->
+                                    <line class="human-part human-1-arm-left" x1="45" y1="235" x2="35" y2="250" stroke="#3898FF" stroke-width="2" stroke-linecap="round"
+                                          stroke-dasharray="18" stroke-dashoffset="18"/>
+                                    <!-- Bras droit vers la table -->
+                                    <line class="human-part human-1-arm-right" x1="75" y1="235" x2="95" y2="215" stroke="#3898FF" stroke-width="2" stroke-linecap="round"
+                                          stroke-dasharray="25" stroke-dashoffset="25"/>
 
-                                    <!-- Indicateurs LIVE -->
-                                    <g class="live-indicators">
-                                        <circle class="live-dot" cx="220" cy="106" r="3" fill="#00CC66" opacity="0"/>
-                                        <circle class="live-dot" cx="230" cy="106" r="3" fill="#00CC66" opacity="0"/>
-                                        <circle class="live-dot" cx="240" cy="106" r="3" fill="#00CC66" opacity="0"/>
+                                    <!-- Humain 2 (DROITE de la table) -->
+                                    <!-- Tête -->
+                                    <circle class="human-part human-2-head" cx="340" cy="200" r="18" fill="none" stroke="#3898FF" stroke-width="2"
+                                            stroke-dasharray="113" stroke-dashoffset="113"/>
+                                    <!-- Corps -->
+                                    <rect class="human-part human-2-body" x="325" y="225" width="30" height="35" rx="5" fill="none" stroke="#3898FF" stroke-width="2"
+                                          stroke-dasharray="140" stroke-dashoffset="140"/>
+                                    <!-- Bras gauche vers la table -->
+                                    <line class="human-part human-2-arm-left" x1="325" y1="235" x2="305" y2="215" stroke="#3898FF" stroke-width="2" stroke-linecap="round"
+                                          stroke-dasharray="25" stroke-dashoffset="25"/>
+                                    <!-- Bras droit -->
+                                    <line class="human-part human-2-arm-right" x1="355" y1="235" x2="365" y2="250" stroke="#3898FF" stroke-width="2" stroke-linecap="round"
+                                          stroke-dasharray="18" stroke-dashoffset="18"/>
+
+                                    <!-- Humain 3 (BAS, sous la table) -->
+                                    <!-- Tête -->
+                                    <circle class="human-part human-3-head" cx="200" cy="290" r="18" fill="none" stroke="#3898FF" stroke-width="2"
+                                            stroke-dasharray="113" stroke-dashoffset="113"/>
+                                    <!-- Corps -->
+                                    <rect class="human-part human-3-body" x="185" y="315" width="30" height="35" rx="5" fill="none" stroke="#3898FF" stroke-width="2"
+                                          stroke-dasharray="140" stroke-dashoffset="140"/>
+                                    <!-- Bras gauche -->
+                                    <line class="human-part human-3-arm-left" x1="185" y1="325" x2="170" y2="335" stroke="#3898FF" stroke-width="2" stroke-linecap="round"
+                                          stroke-dasharray="20" stroke-dashoffset="20"/>
+                                    <!-- Bras droit -->
+                                    <line class="human-part human-3-arm-right" x1="215" y1="325" x2="230" y2="335" stroke="#3898FF" stroke-width="2" stroke-linecap="round"
+                                          stroke-dasharray="20" stroke-dashoffset="20"/>
+
+                                    <!-- Robot IA Collègue (HAUT, au-dessus de la table) -->
+                                    <!-- Tête -->
+                                    <circle class="robot-part robot-head" cx="200" cy="110" r="20" fill="rgba(56, 152, 255, 0.1)" stroke="#00BBFF" stroke-width="2"
+                                            stroke-dasharray="126" stroke-dashoffset="126"/>
+                                    <!-- Antenne gauche -->
+                                    <line class="robot-part robot-antenna-left" x1="192" y1="90" x2="192" y2="80" stroke="#00BBFF" stroke-width="2"
+                                          stroke-dasharray="10" stroke-dashoffset="10"/>
+                                    <circle cx="192" cy="80" r="3" fill="#00BBFF" opacity="0" class="antenna-pulse-left"/>
+                                    <!-- Antenne droite -->
+                                    <line class="robot-part robot-antenna-right" x1="208" y1="90" x2="208" y2="80" stroke="#00BBFF" stroke-width="2"
+                                          stroke-dasharray="10" stroke-dashoffset="10"/>
+                                    <circle cx="208" cy="80" r="3" fill="#00BBFF" opacity="0" class="antenna-pulse-right"/>
+                                    <!-- Yeux -->
+                                    <circle cx="193" cy="106" r="3.5" fill="#00BBFF" opacity="0" class="robot-eye-left"/>
+                                    <circle cx="207" cy="106" r="3.5" fill="#00BBFF" opacity="0" class="robot-eye-right"/>
+                                    <!-- Sourire -->
+                                    <path class="robot-part robot-smile" d="M 192 117 Q 200 123 208 117" stroke="#00BBFF" stroke-width="2" fill="none"
+                                          stroke-dasharray="22" stroke-dashoffset="22"/>
+                                    <!-- Corps -->
+                                    <rect class="robot-part robot-body" x="184" y="135" width="32" height="38" rx="5" fill="rgba(56, 152, 255, 0.1)" stroke="#00BBFF" stroke-width="2"
+                                          stroke-dasharray="166" stroke-dashoffset="166"/>
+                                    <!-- Partie basse du corps (effet sous la table - ombre progressive) -->
+                                    <rect class="robot-lower-body" x="184" y="155" width="32" height="18" rx="0" fill="url(#robot-shadow-gradient)" opacity="0"/>
+                                    <!-- Écran sur le corps -->
+                                    <rect x="190" y="143" width="20" height="12" rx="2" fill="rgba(0, 187, 255, 0.2)" stroke="#00BBFF" stroke-width="1" opacity="0" class="robot-screen"/>
+                                    <line x1="193" y1="147" x2="207" y2="147" stroke="#00BBFF" stroke-width="1" opacity="0" class="robot-activity-1"/>
+                                    <line x1="193" y1="151" x2="204" y2="151" stroke="#00BBFF" stroke-width="1" opacity="0" class="robot-activity-2"/>
+                                    <!-- Bras gauche vers la table -->
+                                    <line class="robot-part robot-arm-left" x1="184" y1="145" x2="170" y2="165" stroke="#00BBFF" stroke-width="2" stroke-linecap="round"
+                                          stroke-dasharray="25" stroke-dashoffset="25"/>
+                                    <circle cx="170" cy="165" r="4" fill="rgba(56, 152, 255, 0.2)" stroke="#00BBFF" stroke-width="1.5" opacity="0" class="robot-hand-left"/>
+                                    <!-- Bras droit vers la table -->
+                                    <line class="robot-part robot-arm-right" x1="216" y1="145" x2="230" y2="165" stroke="#00BBFF" stroke-width="2" stroke-linecap="round"
+                                          stroke-dasharray="25" stroke-dashoffset="25"/>
+                                    <circle cx="230" cy="165" r="4" fill="rgba(56, 152, 255, 0.2)" stroke="#00BBFF" stroke-width="1.5" opacity="0" class="robot-hand-right"/>
+
+                                    <!-- Connexions de données entre membres (lignes de flux) -->
+                                    <!-- Humain gauche vers robot (passant au-dessus des tâches) -->
+                                    <path class="data-flow data-flow-1" d="M 95 215 Q 130 170 170 165"
+                                          stroke="#00BBFF" stroke-width="1.5" fill="none" stroke-dasharray="85" stroke-dashoffset="85"/>
+                                    <!-- Humain droite vers robot (passant au-dessus des tâches) -->
+                                    <path class="data-flow data-flow-2" d="M 305 215 Q 270 170 230 165"
+                                          stroke="#00BBFF" stroke-width="1.5" fill="none" stroke-dasharray="85" stroke-dashoffset="85"/>
+                                    <!-- Humain bas vers robot -->
+                                    <line class="data-flow data-flow-3" x1="200" y1="270" x2="200" y2="220"
+                                          stroke="#00BBFF" stroke-width="1.5" stroke-dasharray="50" stroke-dashoffset="50"/>
+
+                                    <!-- Tâches sur la table (progression visible) -->
+                                    <!-- Tâche 1 -->
+                                    <g class="task-item task-1" opacity="0">
+                                        <rect x="140" y="185" width="30" height="8" rx="2" fill="rgba(56, 152, 255, 0.2)" stroke="#3898FF" stroke-width="1"/>
+                                        <circle cx="148" cy="189" r="2.5" fill="none" stroke="#00BBFF" stroke-width="1" class="task-check-circle"/>
+                                        <polyline points="146.5,189 147.5,190 149.5,188" stroke="#00BBFF" stroke-width="1" fill="none" opacity="0" class="task-checkmark"/>
+                                    </g>
+                                    <!-- Tâche 2 -->
+                                    <g class="task-item task-2" opacity="0">
+                                        <rect x="180" y="185" width="40" height="8" rx="2" fill="rgba(56, 152, 255, 0.2)" stroke="#3898FF" stroke-width="1"/>
+                                        <circle cx="188" cy="189" r="2.5" fill="none" stroke="#00BBFF" stroke-width="1" class="task-check-circle"/>
+                                        <polyline points="186.5,189 187.5,190 189.5,188" stroke="#00BBFF" stroke-width="1" fill="none" opacity="0" class="task-checkmark"/>
+                                    </g>
+                                    <!-- Tâche 3 -->
+                                    <g class="task-item task-3" opacity="0">
+                                        <rect x="230" y="185" width="35" height="8" rx="2" fill="rgba(56, 152, 255, 0.2)" stroke="#3898FF" stroke-width="1"/>
+                                        <circle cx="238" cy="189" r="2.5" fill="none" stroke="#00BBFF" stroke-width="1" class="task-check-circle"/>
+                                        <polyline points="236.5,189 237.5,190 239.5,188" stroke="#00BBFF" stroke-width="1" fill="none" opacity="0" class="task-checkmark"/>
+                                    </g>
+                                    <!-- Tâche 4 -->
+                                    <g class="task-item task-4" opacity="0">
+                                        <rect x="155" y="205" width="45" height="8" rx="2" fill="rgba(56, 152, 255, 0.2)" stroke="#3898FF" stroke-width="1"/>
+                                        <circle cx="163" cy="209" r="2.5" fill="none" stroke="#00BBFF" stroke-width="1" class="task-check-circle"/>
+                                        <polyline points="161.5,209 162.5,210 164.5,208" stroke="#00BBFF" stroke-width="1" fill="none" opacity="0" class="task-checkmark"/>
+                                    </g>
+                                    <!-- Tâche 5 -->
+                                    <g class="task-item task-5" opacity="0">
+                                        <rect x="210" y="205" width="38" height="8" rx="2" fill="rgba(56, 152, 255, 0.2)" stroke="#3898FF" stroke-width="1"/>
+                                        <circle cx="218" cy="209" r="2.5" fill="none" stroke="#00BBFF" stroke-width="1" class="task-check-circle"/>
+                                        <polyline points="216.5,209 217.5,210 219.5,208" stroke="#00BBFF" stroke-width="1" fill="none" opacity="0" class="task-checkmark"/>
                                     </g>
 
-                                    <!-- Gauge 1 : Performance -->
-                                    <g class="gauge" transform="translate(130, 180)">
-                                        <circle class="gauge-bg" cx="0" cy="0" r="35" fill="none" stroke="rgba(56, 152, 255, 0.2)" stroke-width="8"/>
-                                        <circle class="gauge-progress" cx="0" cy="0" r="35" fill="none" stroke="#3898FF" stroke-width="8"
-                                                stroke-dasharray="220" stroke-dashoffset="220" transform="rotate(-90)"/>
-                                        <text class="gauge-value" x="0" y="5" text-anchor="middle" fill="#00BBFF" font-size="16" font-weight="bold">0%</text>
-                                        <text x="0" y="-50" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="9" opacity="0" class="gauge-label">Performance</text>
-                                    </g>
+                                    <!-- Bulles de communication repositionnées -->
+                                    <!-- Bulle humain gauche -->
+                                    <rect x="12" y="155" width="40" height="28" rx="12" fill="rgba(0, 187, 255, 0.15)" stroke="#00BBFF" stroke-width="1.5" opacity="0" class="bubble-1"/>
+                                    <circle cx="32" cy="169" r="2" fill="#00BBFF" opacity="0" class="bubble-1-dot-1"/>
+                                    <circle cx="25" cy="169" r="2" fill="#00BBFF" opacity="0" class="bubble-1-dot-2"/>
+                                    <circle cx="39" cy="169" r="2" fill="#00BBFF" opacity="0" class="bubble-1-dot-3"/>
 
-                                    <!-- Gauge 2 : Efficacité -->
-                                    <g class="gauge" transform="translate(270, 180)">
-                                        <circle class="gauge-bg" cx="0" cy="0" r="35" fill="none" stroke="rgba(56, 152, 255, 0.2)" stroke-width="8"/>
-                                        <circle class="gauge-progress" cx="0" cy="0" r="35" fill="none" stroke="#00A8FF" stroke-width="8"
-                                                stroke-dasharray="220" stroke-dashoffset="220" transform="rotate(-90)"/>
-                                        <text class="gauge-value" x="0" y="5" text-anchor="middle" fill="#00BBFF" font-size="16" font-weight="bold">0%</text>
-                                        <text x="0" y="-50" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="9" opacity="0" class="gauge-label">Efficacité</text>
-                                    </g>
+                                    <!-- Bulle humain droite avec checkmark -->
+                                    <rect x="348" y="155" width="40" height="28" rx="12" fill="rgba(0, 187, 255, 0.15)" stroke="#00BBFF" stroke-width="1.5" opacity="0" class="bubble-2"/>
+                                    <polyline points="360,169 365,174 374,164" stroke="#00BBFF" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0" class="bubble-2-check"/>
 
-                                    <!-- Barres de progression avec labels -->
-                                    <g class="progress-bars">
-                                        <!-- Barre 1 -->
-                                        <text x="80" y="245" text-anchor="start" fill="rgba(255,255,255,0.6)" font-size="9" opacity="0" class="bar-label">Temps de réponse</text>
-                                        <rect x="80" y="250" width="240" height="8" rx="4" fill="rgba(56, 152, 255, 0.2)"/>
-                                        <rect class="bar-fill" x="80" y="250" width="0" height="8" rx="4" fill="#3898FF"/>
+                                    <!-- Indicateur de performance (simplifié et repositionné) -->
+                                    <rect x="295" y="265" width="50" height="30" rx="5" fill="rgba(56, 152, 255, 0.1)" stroke="#3898FF" stroke-width="1" opacity="0" class="performance-indicator"/>
+                                    <text x="320" y="277" text-anchor="middle" fill="#00BBFF" font-size="10" font-weight="bold" opacity="0" class="performance-text-value">+45%</text>
+                                    <text x="320" y="288" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="7" opacity="0" class="performance-text-label">Efficacité</text>
 
-                                        <!-- Barre 2 -->
-                                        <text x="80" y="270" text-anchor="start" fill="rgba(255,255,255,0.6)" font-size="9" opacity="0" class="bar-label">Précision</text>
-                                        <rect x="80" y="275" width="240" height="8" rx="4" fill="rgba(56, 152, 255, 0.2)"/>
-                                        <rect class="bar-fill" x="80" y="275" width="0" height="8" rx="4" fill="#00A8FF"/>
-                                    </g>
-
-                                    <!-- Checkmark de succès avec rayons -->
-                                    <g class="success-badge">
-                                        <!-- Rayons lumineux -->
-                                        <line class="success-ray" x1="310" y1="100" x2="310" y2="70" stroke="#00CC66" stroke-width="2" opacity="0"/>
-                                        <line class="success-ray" x1="310" y1="100" x2="335" y2="85" stroke="#00CC66" stroke-width="2" opacity="0"/>
-                                        <line class="success-ray" x1="310" y1="100" x2="335" y2="115" stroke="#00CC66" stroke-width="2" opacity="0"/>
-                                        <line class="success-ray" x1="310" y1="100" x2="310" y2="130" stroke="#00CC66" stroke-width="2" opacity="0"/>
-                                        <line class="success-ray" x1="310" y1="100" x2="285" y2="85" stroke="#00CC66" stroke-width="2" opacity="0"/>
-                                        <line class="success-ray" x1="310" y1="100" x2="285" y2="115" stroke="#00CC66" stroke-width="2" opacity="0"/>
-
-                                        <!-- Cercle badge -->
-                                        <circle class="success-circle" cx="312" cy="104" r="20" fill="#00CC66" opacity="0"/>
-                                        <polyline class="success-checkmark" points="302,100 308,106 318,94" stroke="white" stroke-width="3" fill="none"
-                                                  stroke-dasharray="20" stroke-dashoffset="20"/>
+                                    <!-- Bulle humain 3 avec clé anglaise (ajustement technique) -->
+                                    <g class="bubble-3-wrench" opacity="0">
+                                        <rect x="215" y="255" width="40" height="28" rx="12" fill="rgba(56, 152, 255, 0.15)" stroke="#3898FF" stroke-width="1.5"/>
+                                        <!-- Icône clé anglaise détaillée (centrée) -->
+                                        <!-- Manche de la clé -->
+                                        <rect x="231" y="267" width="16" height="3" rx="1.5" fill="#00BBFF"/>
+                                        <!-- Corps de la tête fixe -->
+                                        <rect x="227" y="265" width="5" height="7" rx="1" fill="#00BBFF"/>
+                                        <!-- Mâchoire mobile (partie supérieure) -->
+                                        <path d="M 227 265 L 227 267 L 224 267 L 224 265 Z" fill="#3898FF"/>
+                                        <!-- Mâchoire fixe (partie inférieure) -->
+                                        <path d="M 227 270 L 227 272 L 224 272 L 224 270 Z" fill="#00BBFF"/>
+                                        <!-- Vis d'ajustement circulaire -->
+                                        <g class="wrench-screw">
+                                            <circle cx="229" cy="268.5" r="1.2" fill="none" stroke="#3898FF" stroke-width="0.8"/>
+                                            <!-- Crénelage de la vis -->
+                                            <line x1="228" y1="268.5" x2="230" y2="268.5" stroke="#3898FF" stroke-width="0.6"/>
+                                            <line x1="229" y1="267.5" x2="229" y2="269.5" stroke="#3898FF" stroke-width="0.6"/>
+                                        </g>
                                     </g>
                                 </g>
                             </svg>
@@ -434,10 +542,13 @@
                     <a href="mailto:contact@nouvelle-rive.com" class="footer__link">Nous écrire</a>
                 </div>
                 <div class="footer__nav-col">
-                    <h4 class="footer__nav-title">Démonstrations</h4>
-                    <a href="../cas-usage/" class="footer__link">Copilote Fiscal</a>
-                    <a href="../cas-usage/" class="footer__link">Guide Intelligent</a>
-                    <a href="../cas-usage/" class="footer__link">Reporting Contextuel</a>
+                    <h4 class="footer__nav-title">Solutions</h4>
+                    <a href="../cas-usage/#assistant-fiscal" class="footer__link">Assistant Fiscal</a>
+                    <a href="../cas-usage/#agent-assurance" class="footer__link">Assistant Sinistres</a>
+                    <a href="../cas-usage/#agent-reputation" class="footer__link">Agent Satisfaction Client</a>
+                    <a href="../cas-usage/#assistant-agricole" class="footer__link">Assistant Agricole</a>
+                    <a href="../cas-usage/#analyste-devis" class="footer__link">Assistant Commercial</a>
+                    <a href="../cas-usage/#assistant-urbanisme" class="footer__link">Assistant Urbanisme</a>
                 </div>
             </div>
         </div>
