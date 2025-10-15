@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usine IA - Scène 1 : La Recette</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            overflow: hidden;
+            background: #F3F5F9;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .factory-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        svg {
+            width: 100%;
+            height: 100%;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        /* ============================================ */
+        /* STYLES - TAPIS ROULANT */
+        /* ============================================ */
+        .conveyor-belt {
+            fill: #2a2a2a;
+            stroke: #1a1a1a;
+            stroke-width: 2;
+        }
+
+        .belt-surface {
+            fill: url(#beltPattern);
+            stroke: none;
+        }
+
+        .belt-wheel {
+            fill: #3a3a3a;
+            stroke: #2a2a2a;
+            stroke-width: 1.5;
+        }
+
+        .belt-wheel-spoke {
+            stroke: #4a4a4a;
+            stroke-width: 1;
+            stroke-linecap: round;
+        }
+
+        /* ============================================ */
+        /* STYLES - PANNEAU LUMINEUX */
+        /* ============================================ */
+        .panel-frame {
+            fill: #2d3748;
+            stroke: #4a5568;
+            stroke-width: 3;
+            filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+        }
+
+        .panel-screen {
+            fill: #1a202c;
+            stroke: none;
+        }
+
+        .panel-indicator {
+            fill: #FF6B35;
+            filter: drop-shadow(0 0 6px rgba(255, 107, 53, 0.8));
+        }
+
+        .panel-indicator.active {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* ============================================ */
+        /* STYLES - BLUEPRINT */
+        /* ============================================ */
+        .blueprint-grid {
+            stroke: rgba(56, 152, 255, 0.15);
+            stroke-width: 0.5;
+            fill: none;
+        }
+
+        .blueprint-line {
+            stroke: #3898FF;
+            stroke-width: 2;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .blueprint-line-thin {
+            stroke: #3898FF;
+            stroke-width: 1;
+            fill: none;
+            opacity: 0.6;
+        }
+
+        .blueprint-dot {
+            fill: #3898FF;
+            filter: drop-shadow(0 0 4px rgba(56, 152, 255, 0.8));
+        }
+
+        .blueprint-annotation {
+            fill: #3898FF;
+            font-family: 'Inter', monospace;
+            font-size: 8px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .blueprint-measure {
+            stroke: #FF6B35;
+            stroke-width: 1;
+            fill: none;
+            stroke-linecap: round;
+        }
+
+        .blueprint-measure-text {
+            fill: #FF6B35;
+            font-family: 'Inter', monospace;
+            font-size: 7px;
+            font-weight: 600;
+        }
+
+        /* ============================================ */
+        /* STYLES - PLATEFORME */
+        /* ============================================ */
+        .platform {
+            fill: #3a4556;
+            stroke: #4a5568;
+            stroke-width: 2;
+            filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
+        }
+
+        .platform-grid {
+            stroke: #4a5568;
+            stroke-width: 0.8;
+            opacity: 0.4;
+        }
+
+        /* ============================================ */
+        /* STYLES - TEXTE */
+        /* ============================================ */
+        .text-title {
+            fill: #1D2B48;
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            font-size: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .text-description {
+            fill: #4A5568;
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+            font-size: 14px;
+        }
+
+        /* ============================================ */
+        /* STYLES - PARTICULES */
+        /* ============================================ */
+        .particle-light {
+            fill: #3898FF;
+            filter: drop-shadow(0 0 4px rgba(56, 152, 255, 1));
+        }
+
+        .particle-spark {
+            fill: #FF6B35;
+            filter: drop-shadow(0 0 3px rgba(255, 107, 53, 1));
+        }
+    </style>
+</head>
+<body>
+    <div class="factory-container">
+        <svg viewBox="0 0 600 333" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <!-- Pattern pour le tapis roulant -->
+                <pattern id="beltPattern" x="0" y="0" width="20" height="10" patternUnits="userSpaceOnUse">
+                    <rect x="0" y="0" width="20" height="10" fill="#2a2a2a"/>
+                    <line x1="0" y1="5" x2="20" y2="5" stroke="#3a3a3a" stroke-width="1.5"/>
+                    <line x1="5" y1="0" x2="5" y2="10" stroke="#3a3a3a" stroke-width="0.5"/>
+                    <line x1="15" y1="0" x2="15" y2="10" stroke="#3a3a3a" stroke-width="0.5"/>
+                </pattern>
+
+                <!-- Pattern animé pour le tapis (mouvement) -->
+                <pattern id="beltPatternAnimated" x="0" y="0" width="20" height="10" patternUnits="userSpaceOnUse">
+                    <animateTransform
+                        attributeName="patternTransform"
+                        type="translate"
+                        from="0 0"
+                        to="20 0"
+                        dur="2s"
+                        repeatCount="indefinite"/>
+                    <rect x="0" y="0" width="20" height="10" fill="#2a2a2a"/>
+                    <line x1="0" y1="5" x2="20" y2="5" stroke="#3a3a3a" stroke-width="1.5"/>
+                    <line x1="5" y1="0" x2="5" y2="10" stroke="#3a3a3a" stroke-width="0.5"/>
+                    <line x1="15" y1="0" x2="15" y2="10" stroke="#3a3a3a" stroke-width="0.5"/>
+                </pattern>
+
+                <!-- Gradient pour l'écran du panneau -->
+                <linearGradient id="screenGlow" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:#1a202c;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#0f1419;stop-opacity:1" />
+                </linearGradient>
+
+                <!-- Filtre glow bleu -->
+                <filter id="glow-blue">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+
+                <!-- Filtre glow orange -->
+                <filter id="glow-orange">
+                    <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+
+            <!-- ============================================ -->
+            <!-- ARRIÈRE-PLAN INDUSTRIEL -->
+            <!-- ============================================ -->
+            <g id="background">
+                <!-- Sol de l'usine -->
+                <rect x="0" y="250" width="600" height="83" fill="#F3F5F9" opacity="1"/>
+                <line x1="0" y1="250" x2="600" y2="250" stroke="#CDD5E7" stroke-width="2"/>
+            </g>
+
+            <!-- ============================================ -->
+            <!-- TAPIS ROULANT -->
+            <!-- ============================================ -->
+            <g id="conveyor">
+                <!-- Support du tapis -->
+                <rect class="conveyor-belt" x="50" y="235" width="500" height="6" rx="2"/>
+
+                <!-- Roue gauche -->
+                <g id="wheel-left" transform="translate(70, 238)">
+                    <circle class="belt-wheel" cx="0" cy="0" r="12"/>
+                    <circle cx="0" cy="0" r="3" fill="#2a2a2a"/>
+                    <line class="belt-wheel-spoke" x1="-8" y1="0" x2="8" y2="0"/>
+                    <line class="belt-wheel-spoke" x1="0" y1="-8" x2="0" y2="8"/>
+                    <line class="belt-wheel-spoke" x1="-6" y1="-6" x2="6" y2="6"/>
+                    <line class="belt-wheel-spoke" x1="-6" y1="6" x2="6" y2="-6"/>
+                </g>
+
+                <!-- Roue droite -->
+                <g id="wheel-right" transform="translate(530, 238)">
+                    <circle class="belt-wheel" cx="0" cy="0" r="12"/>
+                    <circle cx="0" cy="0" r="3" fill="#2a2a2a"/>
+                    <line class="belt-wheel-spoke" x1="-8" y1="0" x2="8" y2="0"/>
+                    <line class="belt-wheel-spoke" x1="0" y1="-8" x2="0" y2="8"/>
+                    <line class="belt-wheel-spoke" x1="-6" y1="-6" x2="6" y2="6"/>
+                    <line class="belt-wheel-spoke" x1="-6" y1="6" x2="6" y2="-6"/>
+                </g>
+
+                <!-- Surface du tapis (animée) -->
+                <rect class="belt-surface" x="82" y="232" width="436" height="12" rx="1"/>
+            </g>
+
+            <!-- ============================================ -->
+            <!-- PLATEFORME SUR LE TAPIS -->
+            <!-- ============================================ -->
+            <g id="platform" transform="translate(100, 200)" opacity="0">
+                <rect class="platform" x="0" y="0" width="60" height="32" rx="2"/>
+                <!-- Grille sur la plateforme -->
+                <line class="platform-grid" x1="15" y1="2" x2="15" y2="30"/>
+                <line class="platform-grid" x1="30" y1="2" x2="30" y2="30"/>
+                <line class="platform-grid" x1="45" y1="2" x2="45" y2="30"/>
+                <line class="platform-grid" x1="2" y1="10" x2="58" y2="10"/>
+                <line class="platform-grid" x1="2" y1="20" x2="58" y2="20"/>
+            </g>
+
+            <!-- ============================================ -->
+            <!-- PANNEAU LUMINEUX - STATION 1 -->
+            <!-- ============================================ -->
+            <g id="panel-station" transform="translate(320, 40)">
+                <!-- Cadre métallique -->
+                <rect class="panel-frame" x="0" y="0" width="240" height="180" rx="8"/>
+
+                <!-- Bande supérieure avec indicateurs -->
+                <rect x="8" y="8" width="224" height="20" fill="#1a202c" rx="4"/>
+                <circle class="panel-indicator active" cx="20" cy="18" r="4"/>
+                <circle class="panel-indicator" cx="36" cy="18" r="4" opacity="0.3"/>
+                <circle class="panel-indicator" cx="52" cy="18" r="4" opacity="0.3"/>
+
+                <!-- Label de la station -->
+                <text x="120" y="22" text-anchor="middle" font-size="10" fill="#3898FF" font-family="'Inter', monospace" font-weight="600">ANALYSE</text>
+
+                <!-- Écran du blueprint -->
+                <rect class="panel-screen" x="12" y="36" width="216" height="132" rx="4" fill="url(#screenGlow)"/>
+
+                <!-- BLUEPRINT - Contenu de l'écran -->
+                <g id="blueprint-content" clip-path="url(#screenClip)">
+                    <!-- Grille de fond -->
+                    <g id="blueprint-grid" opacity="0">
+                        <!-- Lignes verticales -->
+                        <line class="blueprint-grid" x1="40" y1="50" x2="40" y2="154"/>
+                        <line class="blueprint-grid" x1="70" y1="50" x2="70" y2="154"/>
+                        <line class="blueprint-grid" x1="100" y1="50" x2="100" y2="154"/>
+                        <line class="blueprint-grid" x1="130" y1="50" x2="130" y2="154"/>
+                        <line class="blueprint-grid" x1="160" y1="50" x2="160" y2="154"/>
+                        <line class="blueprint-grid" x1="190" y1="50" x2="190" y2="154"/>
+                        <line class="blueprint-grid" x1="220" y1="50" x2="220" y2="154"/>
+                        <!-- Lignes horizontales -->
+                        <line class="blueprint-grid" x1="25" y1="60" x2="215" y2="60"/>
+                        <line class="blueprint-grid" x1="25" y1="80" x2="215" y2="80"/>
+                        <line class="blueprint-grid" x1="25" y1="100" x2="215" y2="100"/>
+                        <line class="blueprint-grid" x1="25" y1="120" x2="215" y2="120"/>
+                        <line class="blueprint-grid" x1="25" y1="140" x2="215" y2="140"/>
+                    </g>
+
+                    <!-- Silhouette du robot IA (wireframe) -->
+                    <g id="robot-wireframe" opacity="0">
+                        <!-- Tête -->
+                        <rect class="blueprint-line" x="100" y="60" width="40" height="35" rx="4"
+                              stroke-dasharray="150" stroke-dashoffset="150"/>
+                        <!-- Antennes -->
+                        <line class="blueprint-line-thin" x1="110" y1="60" x2="110" y2="52"/>
+                        <line class="blueprint-line-thin" x1="130" y1="60" x2="130" y2="52"/>
+                        <circle class="blueprint-dot" cx="110" cy="52" r="2" opacity="0"/>
+                        <circle class="blueprint-dot" cx="130" cy="52" r="2" opacity="0"/>
+
+                        <!-- Yeux -->
+                        <circle class="blueprint-line" cx="110" cy="75" r="5" opacity="0"/>
+                        <circle class="blueprint-line" cx="130" cy="75" r="5" opacity="0"/>
+
+                        <!-- Corps -->
+                        <rect class="blueprint-line" x="95" y="95" width="50" height="40" rx="6"
+                              stroke-dasharray="180" stroke-dashoffset="180"/>
+
+                        <!-- Bras gauche -->
+                        <line class="blueprint-line" x1="95" y1="105" x2="75" y2="105" opacity="0"/>
+                        <line class="blueprint-line-thin" x1="75" y1="105" x2="70" y2="120" opacity="0"/>
+
+                        <!-- Bras droit -->
+                        <line class="blueprint-line" x1="145" y1="105" x2="165" y2="105" opacity="0"/>
+                        <line class="blueprint-line-thin" x1="165" y1="105" x2="170" y2="120" opacity="0"/>
+
+                        <!-- Base -->
+                        <path class="blueprint-line" d="M 105,135 L 105,145 L 100,150 L 140,150 L 135,145 L 135,135"
+                              stroke-dasharray="100" stroke-dashoffset="100"/>
+                    </g>
+
+                    <!-- Annotations techniques -->
+                    <g id="annotations" opacity="0">
+                        <!-- CPU / IA -->
+                        <line class="blueprint-line-thin" x1="140" y1="60" x2="180" y2="48"/>
+                        <text class="blueprint-annotation" x="182" y="50">IA</text>
+
+                        <!-- Vision -->
+                        <line class="blueprint-line-thin" x1="105" y1="75" x2="65" y2="75"/>
+                        <text class="blueprint-annotation" x="30" y="77">VISION</text>
+
+                        <!-- Mémoire -->
+                        <line class="blueprint-line-thin" x1="95" y1="125" x2="65" y2="125"/>
+                        <text class="blueprint-annotation" x="25" y="128">MÉMOIRE</text>
+                    </g>
+
+                    <!-- Mesures et côtes -->
+                    <g id="measurements" opacity="0">
+                        <!-- Hauteur totale -->
+                        <line class="blueprint-measure" x1="200" y1="60" x2="200" y2="150"/>
+                        <line class="blueprint-measure" x1="195" y1="60" x2="205" y2="60"/>
+                        <line class="blueprint-measure" x1="195" y1="150" x2="205" y2="150"/>
+                        <text class="blueprint-measure-text" x="208" y="108">90mm</text>
+
+                        <!-- Largeur -->
+                        <line class="blueprint-measure" x1="95" y1="155" x2="145" y2="155"/>
+                        <line class="blueprint-measure" x1="95" y1="152" x2="95" y2="158"/>
+                        <line class="blueprint-measure" x1="145" y1="152" x2="145" y2="158"/>
+                        <text class="blueprint-measure-text" x="110" y="164">50mm</text>
+                    </g>
+                </g>
+
+                <!-- Clip path pour l'écran -->
+                <clipPath id="screenClip">
+                    <rect x="12" y="36" width="216" height="132" rx="4"/>
+                </clipPath>
+            </g>
+
+            <!-- ============================================ -->
+            <!-- PARTICULES LUMINEUSES (analyse en cours) -->
+            <!-- ============================================ -->
+            <g id="analysis-particles" opacity="0">
+                <circle class="particle-light" cx="340" cy="100" r="2"/>
+                <circle class="particle-light" cx="380" cy="120" r="1.5"/>
+                <circle class="particle-light" cx="420" cy="90" r="2"/>
+                <circle class="particle-light" cx="460" cy="110" r="1.5"/>
+                <circle class="particle-light" cx="500" cy="95" r="2"/>
+                <circle class="particle-spark" cx="360" cy="140" r="1.5"/>
+                <circle class="particle-spark" cx="440" cy="130" r="1"/>
+                <circle class="particle-spark" cx="520" cy="105" r="1.5"/>
+            </g>
+
+            <!-- ============================================ -->
+            <!-- TEXTE DE LA SCÈNE -->
+            <!-- ============================================ -->
+            <g id="scene-text" opacity="0">
+                <text class="text-title" x="300" y="290" text-anchor="middle">ENTRETIEN D'EMBAUCHE</text>
+                <text class="text-description" x="300" y="310" text-anchor="middle">Analyse de vos besoins et conception du prototype</text>
+            </g>
+        </svg>
+    </div>
+
+    <script>
+        // ============================================
+        // ANIMATIONS GSAP - SCÈNE 1 : LA RECETTE
+        // ============================================
+
+        const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
+
+        // ============================================
+        // PHASE 1 : Démarrage du tapis roulant (0-1s)
+        // ============================================
+        tl.to("#wheel-left, #wheel-right", {
+            rotation: 360,
+            duration: 2,
+            repeat: -1,
+            ease: "none",
+            transformOrigin: "center"
+        }, 0);
+
+        // Apparition de la plateforme
+        tl.to("#platform", {
+            opacity: 1,
+            duration: 0.3
+        }, 0);
+
+        // Plateforme se déplace sur le tapis
+        tl.to("#platform", {
+            x: 250,
+            duration: 1.5,
+            ease: "none"
+        }, 0.3);
+
+        // ============================================
+        // PHASE 2 : Activation du panneau (1.5-3s)
+        // ============================================
+
+        // Panneau s'illumine
+        tl.to("#panel-station", {
+            opacity: 1,
+            duration: 0.4
+        }, 1.5);
+
+        // Grille du blueprint apparaît
+        tl.to("#blueprint-grid", {
+            opacity: 1,
+            duration: 0.6
+        }, 2);
+
+        // ============================================
+        // PHASE 3 : Dessin du blueprint (2-5s)
+        // ============================================
+
+        // Wireframe du robot se dessine
+        tl.to("#robot-wireframe", {
+            opacity: 1,
+            duration: 0.3
+        }, 2);
+
+        // Animation stroke-dashoffset pour dessiner le contour
+        tl.to("#robot-wireframe rect.blueprint-line, #robot-wireframe path.blueprint-line", {
+            strokeDashoffset: 0,
+            duration: 1.5,
+            stagger: 0.2,
+            ease: "power1.inOut"
+        }, 2.2);
+
+        // Yeux s'allument
+        tl.to("#robot-wireframe circle.blueprint-line", {
+            opacity: 1,
+            duration: 0.4,
+            stagger: 0.1
+        }, 3.2);
+
+        // Points des antennes apparaissent
+        tl.to(".blueprint-dot", {
+            opacity: 1,
+            scale: 1.2,
+            duration: 0.3,
+            stagger: 0.1,
+            transformOrigin: "center"
+        }, 3.5);
+
+        // Bras apparaissent
+        tl.to("#robot-wireframe line.blueprint-line, #robot-wireframe line.blueprint-line-thin", {
+            opacity: 1,
+            duration: 0.5,
+            stagger: 0.1
+        }, 3.8);
+
+        // ============================================
+        // PHASE 4 : Annotations techniques (5-7s)
+        // ============================================
+
+        tl.to("#annotations", {
+            opacity: 1,
+            duration: 0.8
+        }, 5);
+
+        tl.to("#measurements", {
+            opacity: 1,
+            duration: 0.8
+        }, 5.5);
+
+        // ============================================
+        // PHASE 5 : Particules d'analyse (6-8s)
+        // ============================================
+
+        tl.to("#analysis-particles", {
+            opacity: 1,
+            duration: 0.5
+        }, 6);
+
+        // Animation flottante des particules
+        tl.add(() => {
+            gsap.to(".particle-light", {
+                y: "random(-10, 10)",
+                x: "random(-5, 5)",
+                duration: "random(1.5, 2.5)",
+                repeat: -1,
+                yoyo: true,
+                ease: "sine.inOut",
+                stagger: {
+                    each: 0.2,
+                    from: "random"
+                }
+            });
+
+            gsap.to(".particle-spark", {
+                scale: "random(0.8, 1.3)",
+                duration: "random(0.8, 1.2)",
+                repeat: -1,
+                yoyo: true,
+                ease: "sine.inOut",
+                stagger: {
+                    each: 0.15,
+                    from: "random"
+                }
+            });
+        }, 6.5);
+
+        // ============================================
+        // PHASE 6 : Texte de la scène (4s)
+        // ============================================
+
+        tl.to("#scene-text", {
+            opacity: 1,
+            y: -5,
+            duration: 0.8
+        }, 4);
+
+        // ============================================
+        // BOUCLE : Tapis continue à tourner
+        // ============================================
+
+        // Le tapis roulant continue indéfiniment (déjà configuré avec repeat: -1)
+    </script>
+</body>
+</html>

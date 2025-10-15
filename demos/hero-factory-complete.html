@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usine IA - Animation Complète</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #F3F5F9;
+        }
+        .scene-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        iframe.active {
+            opacity: 1;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="scene-container">
+        <iframe id="scene1" class="active"></iframe>
+        <iframe id="scene2"></iframe>
+        <iframe id="scene3"></iframe>
+        <iframe id="scene4"></iframe>
+    </div>
+
+    <script>
+        // Durées des scènes (en millisecondes)
+        const sceneDurations = {
+            scene1: 8000,  // 8 secondes
+            scene2: 10000, // 10 secondes
+            scene3: 10000, // 10 secondes
+            scene4: 10000  // 10 secondes
+        };
+
+        let currentScene = 1;
+        const totalScenes = 4;
+
+        function switchToScene(sceneNumber) {
+            // Masquer toutes les scènes
+            document.querySelectorAll('iframe').forEach(iframe => {
+                iframe.classList.remove('active');
+                iframe.style.display = 'none';
+            });
+
+            // Afficher la scène demandée
+            const sceneId = `scene${sceneNumber}`;
+            const iframe = document.getElementById(sceneId);
+            iframe.style.display = 'block';
+            iframe.classList.add('active');
+
+            // Charger l'iframe (elle va démarrer l'animation automatiquement)
+            iframe.src = `hero-factory-scene${sceneNumber}.html`;
+
+            currentScene = sceneNumber;
+        }
+
+        function startSequence() {
+            let totalTime = 0;
+
+            // Scene 1
+            setTimeout(() => switchToScene(1), totalTime);
+            totalTime += sceneDurations.scene1;
+
+            // Scene 2
+            setTimeout(() => switchToScene(2), totalTime);
+            totalTime += sceneDurations.scene2;
+
+            // Scene 3
+            setTimeout(() => switchToScene(3), totalTime);
+            totalTime += sceneDurations.scene3;
+
+            // Scene 4
+            setTimeout(() => switchToScene(4), totalTime);
+            totalTime += sceneDurations.scene4;
+
+            // Boucle - recommencer à la scene 1
+            setTimeout(() => startSequence(), totalTime);
+        }
+
+        // Démarrer la séquence au chargement
+        window.addEventListener('load', () => {
+            // Cacher toutes les iframes au départ
+            document.querySelectorAll('iframe').forEach(iframe => {
+                iframe.style.display = 'none';
+            });
+
+            // Démarrer avec la scene 1
+            setTimeout(() => startSequence(), 100);
+        });
+    </script>
+</body>
+</html>

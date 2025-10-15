@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usine IA - Scène 4 : Téléportation Digitale</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/MotionPathPlugin.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            overflow: hidden;
+            background: #F3F5F9;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .factory-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        svg {
+            width: 100%;
+            height: 100%;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        /* Tapis roulant */
+        .conveyor-belt {
+            fill: #2a2a2a;
+            stroke: #1a1a1a;
+            stroke-width: 2;
+        }
+
+        .belt-surface {
+            fill: url(#beltPattern);
+        }
+
+        .belt-wheel {
+            fill: #3a3a3a;
+            stroke: #2a2a2a;
+            stroke-width: 1.5;
+        }
+
+        .belt-wheel-spoke {
+            stroke: #4a4a4a;
+            stroke-width: 1;
+        }
+
+        /* Plateforme & Robot */
+        .platform {
+            fill: #3a4556;
+            stroke: #4a5568;
+            stroke-width: 2;
+        }
+
+        .platform-grid {
+            stroke: #4a5568;
+            stroke-width: 0.8;
+            opacity: 0.4;
+        }
+
+        .robot-body {
+            fill: #5a6c7d;
+            stroke: #4a5568;
+            stroke-width: 2;
+        }
+
+        .robot-part {
+            fill: #3898FF;
+            stroke: #2196F3;
+            stroke-width: 1.5;
+            filter: drop-shadow(0 0 6px rgba(56, 152, 255, 0.8));
+        }
+
+        .robot-circuit {
+            stroke: #3898FF;
+            stroke-width: 1.5;
+            fill: none;
+            stroke-linecap: round;
+            filter: drop-shadow(0 0 3px rgba(56, 152, 255, 1));
+        }
+
+        .robot-eye {
+            fill: #3898FF;
+            filter: drop-shadow(0 0 8px rgba(56, 152, 255, 1));
+        }
+
+        /* Icônes d'outils */
+        .tool-icon-bg {
+            fill: #2d3748;
+            stroke: #4a5568;
+            stroke-width: 2;
+        }
+
+        .tool-icon {
+            fill: none;
+            stroke: #3898FF;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .tool-icon-fill {
+            fill: #3898FF;
+        }
+
+        /* Particules */
+        .particle {
+            fill: #3898FF;
+            filter: drop-shadow(0 0 3px rgba(56, 152, 255, 1));
+        }
+
+        .particle-green {
+            fill: #10B981;
+            filter: drop-shadow(0 0 3px rgba(16, 185, 129, 1));
+        }
+
+        /* Connexions */
+        .connection-line {
+            stroke: url(#connectionGradient);
+            stroke-width: 1.5;
+            fill: none;
+            stroke-linecap: round;
+            opacity: 0;
+            filter: drop-shadow(0 0 3px rgba(16, 185, 129, 0.5));
+        }
+
+        /* Texte */
+        .text-title {
+            fill: #1D2B48;
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            font-size: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .text-description {
+            fill: #4A5568;
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+            font-size: 14px;
+        }
+
+        .tool-label {
+            fill: #4A5568;
+            font-family: 'Inter', sans-serif;
+            font-size: 9px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="factory-container">
+        <svg viewBox="0 0 600 333" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <!-- Pattern tapis roulant -->
+                <pattern id="beltPattern" x="0" y="0" width="20" height="10" patternUnits="userSpaceOnUse">
+                    <animateTransform
+                        attributeName="patternTransform"
+                        type="translate"
+                        from="0 0"
+                        to="20 0"
+                        dur="2s"
+                        repeatCount="indefinite"/>
+                    <rect x="0" y="0" width="20" height="10" fill="#2a2a2a"/>
+                    <line x1="0" y1="5" x2="20" y2="5" stroke="#3a3a3a" stroke-width="1.5"/>
+                    <line x1="5" y1="0" x2="5" y2="10" stroke="#3a3a3a" stroke-width="0.5"/>
+                    <line x1="15" y1="0" x2="15" y2="10" stroke="#3a3a3a" stroke-width="0.5"/>
+                </pattern>
+
+                <!-- Gradient pour connexions -->
+                <linearGradient id="connectionGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color:#3898FF;stop-opacity:0.6" />
+                    <stop offset="50%" style="stop-color:#10B981;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#10B981;stop-opacity:0.6" />
+                </linearGradient>
+
+                <!-- Filtres glow -->
+                <filter id="glow-intense">
+                    <feGaussianBlur stdDeviation="5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+
+            <!-- ============================================ -->
+            <!-- ARRIÈRE-PLAN -->
+            <!-- ============================================ -->
+            <g id="background">
+                <rect x="0" y="250" width="600" height="83" fill="#F3F5F9" opacity="1"/>
+                <line x1="0" y1="250" x2="600" y2="250" stroke="#CDD5E7" stroke-width="2"/>
+            </g>
+
+            <!-- ============================================ -->
+            <!-- TAPIS ROULANT (PARTIEL) -->
+            <!-- ============================================ -->
+            <g id="conveyor">
+                <rect class="conveyor-belt" x="50" y="235" width="220" height="6" rx="2"/>
+
+                <!-- Roue gauche -->
+                <g id="wheel-left" transform="translate(70, 238)">
+                    <circle class="belt-wheel" cx="0" cy="0" r="12"/>
+                    <circle cx="0" cy="0" r="3" fill="#2a2a2a"/>
+                    <line class="belt-wheel-spoke" x1="-8" y1="0" x2="8" y2="0"/>
+                    <line class="belt-wheel-spoke" x1="0" y1="-8" x2="0" y2="8"/>
+                    <line class="belt-wheel-spoke" x1="-6" y1="-6" x2="6" y2="6"/>
+                    <line class="belt-wheel-spoke" x1="-6" y1="6" x2="6" y2="-6"/>
+                </g>
+
+                <!-- Roue droite (fin du tapis) -->
+                <g id="wheel-right" transform="translate(250, 238)">
+                    <circle class="belt-wheel" cx="0" cy="0" r="12"/>
+                    <circle cx="0" cy="0" r="3" fill="#2a2a2a"/>
+                    <line class="belt-wheel-spoke" x1="-8" y1="0" x2="8" y2="0"/>
+                    <line class="belt-wheel-spoke" x1="0" y1="-8" x2="0" y2="8"/>
+                    <line class="belt-wheel-spoke" x1="-6" y1="-6" x2="6" y2="6"/>
+                    <line class="belt-wheel-spoke" x1="-6" y1="6" x2="6" y2="-6"/>
+                </g>
+
+                <rect class="belt-surface" x="82" y="232" width="156" height="12" rx="1"/>
+            </g>
+
+            <!-- ============================================ -->
+            <!-- ROBOT -->
+            <!-- ============================================ -->
+            <g id="platform" transform="translate(100, 200)">
+                <!-- Robot complet -->
+                <g id="robot-complete" transform="translate(30, -70) scale(1.8)">
+                    <!-- Base -->
+                    <rect class="robot-body" x="-18" y="50" width="36" height="8" rx="2" fill="#5a6c7d"/>
+                    <!-- Corps -->
+                    <rect class="robot-body" x="-16" y="28" width="32" height="22" rx="3" fill="#5a6c7d"/>
+                    <!-- Tête -->
+                    <rect class="robot-body" x="-14" y="10" width="28" height="18" rx="2" fill="#5a6c7d"/>
+                    <rect x="-14" y="10" width="28" height="18" rx="2" fill="none" stroke="#3898FF" stroke-width="1" opacity="0.3"/>
+                    <!-- CPU -->
+                    <g id="cpu-part" transform="translate(0, 4)">
+                        <rect class="robot-part" x="-8" y="-2" width="16" height="4" rx="1"/>
+                        <line class="robot-circuit" x1="-6" y1="0" x2="6" y2="0" stroke-width="1"/>
+                        <circle class="robot-part" cx="-4" cy="0" r="1"/>
+                        <circle class="robot-part" cx="4" cy="0" r="1"/>
+                    </g>
+                    <!-- Yeux -->
+                    <circle class="robot-eye" cx="-7" cy="18" r="2.5" fill="#1a202c"/>
+                    <circle class="robot-eye" cx="7" cy="18" r="2.5" fill="#1a202c"/>
+                    <circle class="robot-eye" cx="-7" cy="18" r="1.5"/>
+                    <circle class="robot-eye" cx="7" cy="18" r="1.5"/>
+                    <!-- Circuits neuronaux -->
+                    <g id="neural-circuits">
+                        <path class="robot-circuit" d="M -12,35 L 12,35"/>
+                        <path class="robot-circuit" d="M -12,43 L 12,43"/>
+                        <circle class="robot-part" cx="-12" cy="35" r="1.5"/>
+                        <circle class="robot-part" cx="12" cy="35" r="1.5"/>
+                    </g>
+                    <!-- Bras -->
+                    <g id="left-arm">
+                        <line class="robot-body" x1="-16" y1="32" x2="-22" y2="32" stroke-width="3" stroke-linecap="round"/>
+                        <line class="robot-body" x1="-22" y1="32" x2="-25" y2="40" stroke-width="2.5" stroke-linecap="round"/>
+                        <circle fill="#4a5568" cx="-22" cy="32" r="2"/>
+                    </g>
+                    <g id="right-arm">
+                        <line class="robot-body" x1="16" y1="32" x2="22" y2="32" stroke-width="3" stroke-linecap="round"/>
+                        <line class="robot-body" x1="22" y1="32" x2="25" y2="40" stroke-width="2.5" stroke-linecap="round"/>
+                        <circle fill="#4a5568" cx="22" cy="32" r="2"/>
+                    </g>
+                </g>
+            </g>
+
+            <!-- ============================================ -->
+            <!-- PARTICULES DE DÉSINTÉGRATION (60 particules) -->
+            <!-- ============================================ -->
+            <g id="particles" opacity="0">
+                <!-- Générées dynamiquement par JavaScript -->
+            </g>
+
+            <!-- ============================================ -->
+            <!-- OUTILS & MINI ROBOTS (8 positions) -->
+            <!-- ============================================ -->
+
+            <!-- Outil 1: Email (haut gauche) -->
+            <g id="tool-email" transform="translate(220, 50)" opacity="0">
+                <circle class="tool-icon-bg" cx="0" cy="0" r="30"/>
+                <rect class="tool-icon" x="-12" y="-8" width="24" height="16" rx="2"/>
+                <path class="tool-icon" d="M -12,-8 L 0,2 L 12,-8"/>
+                <text class="tool-label" x="0" y="45" text-anchor="middle">Email</text>
+            </g>
+
+            <!-- Outil 2: Teams/Chat (haut centre-gauche) -->
+            <g id="tool-chat" transform="translate(320, 40)" opacity="0">
+                <circle class="tool-icon-bg" cx="0" cy="0" r="30"/>
+                <rect class="tool-icon" x="-14" y="-10" width="28" height="18" rx="3"/>
+                <path class="tool-icon" d="M -14,8 L -8,14 L -8,8"/>
+                <circle class="tool-icon-fill" cx="-6" cy="-2" r="2"/>
+                <circle class="tool-icon-fill" cx="2" cy="-2" r="2"/>
+                <circle class="tool-icon-fill" cx="10" cy="-2" r="2"/>
+                <text class="tool-label" x="0" y="45" text-anchor="middle">Teams</text>
+            </g>
+
+            <!-- Outil 3: Mobile (haut centre-droite) -->
+            <g id="tool-mobile" transform="translate(420, 40)" opacity="0">
+                <circle class="tool-icon-bg" cx="0" cy="0" r="30"/>
+                <rect class="tool-icon" x="-8" y="-14" width="16" height="28" rx="2"/>
+                <circle class="tool-icon" cx="0" cy="10" r="2"/>
+                <text class="tool-label" x="0" y="45" text-anchor="middle">Mobile</text>
+            </g>
+
+            <!-- Outil 4: Web App (haut droite) -->
+            <g id="tool-web" transform="translate(500, 50)" opacity="0">
+                <circle class="tool-icon-bg" cx="0" cy="0" r="30"/>
+                <rect class="tool-icon" x="-14" y="-12" width="28" height="24" rx="2"/>
+                <line class="tool-icon" x1="-14" y1="-6" x2="14" y2="-6"/>
+                <circle class="tool-icon-fill" cx="-10" cy="-9" r="1.5"/>
+                <circle class="tool-icon-fill" cx="-5" cy="-9" r="1.5"/>
+                <text class="tool-label" x="0" y="45" text-anchor="middle">Web</text>
+            </g>
+
+            <!-- Outil 5: CRM (droite) -->
+            <g id="tool-crm" transform="translate(500, 140)" opacity="0">
+                <circle class="tool-icon-bg" cx="0" cy="0" r="30"/>
+                <rect class="tool-icon" x="-12" y="-10" width="24" height="20" rx="2"/>
+                <line class="tool-icon" x1="-8" y1="-5" x2="8" y2="-5"/>
+                <line class="tool-icon" x1="-8" y1="0" x2="8" y2="0"/>
+                <line class="tool-icon" x1="-8" y1="5" x2="4" y2="5"/>
+                <text class="tool-label" x="0" y="45" text-anchor="middle">CRM</text>
+            </g>
+
+            <!-- Outil 6: Documents (bas droite) -->
+            <g id="tool-docs" transform="translate(420, 150)" opacity="0">
+                <circle class="tool-icon-bg" cx="0" cy="0" r="30"/>
+                <path class="tool-icon" d="M -10,-12 L 4,-12 L 10,-6 L 10,12 L -10,12 Z"/>
+                <polyline class="tool-icon" points="4,-12 4,-6 10,-6"/>
+                <line class="tool-icon" x1="-6" y1="0" x2="6" y2="0"/>
+                <line class="tool-icon" x1="-6" y1="4" x2="6" y2="4"/>
+                <text class="tool-label" x="0" y="45" text-anchor="middle">Documents</text>
+            </g>
+
+            <!-- Outil 7: Calendrier (bas centre) -->
+            <g id="tool-calendar" transform="translate(320, 150)" opacity="0">
+                <circle class="tool-icon-bg" cx="0" cy="0" r="30"/>
+                <rect class="tool-icon" x="-12" y="-10" width="24" height="22" rx="2"/>
+                <line class="tool-icon" x1="-12" y1="-4" x2="12" y2="-4"/>
+                <line class="tool-icon" x1="-8" y1="-10" x2="-8" y2="-6"/>
+                <line class="tool-icon" x1="8" y1="-10" x2="8" y2="-6"/>
+                <circle class="tool-icon-fill" cx="0" cy="2" r="3"/>
+                <text class="tool-label" x="0" y="45" text-anchor="middle">Calendrier</text>
+            </g>
+
+            <!-- Outil 8: Assistant vocal (gauche) -->
+            <g id="tool-voice" transform="translate(220, 140)" opacity="0">
+                <circle class="tool-icon-bg" cx="0" cy="0" r="30"/>
+                <ellipse class="tool-icon" cx="0" cy="0" rx="6" ry="10"/>
+                <path class="tool-icon" d="M -12,0 Q -12,10 0,14 Q 12,10 12,0"/>
+                <line class="tool-icon" x1="0" y1="14" x2="0" y2="20"/>
+                <line class="tool-icon" x1="-4" y1="20" x2="4" y2="20"/>
+                <text class="tool-label" x="0" y="45" text-anchor="middle">Voix</text>
+            </g>
+
+            <!-- ============================================ -->
+            <!-- TEXTE DE LA SCÈNE -->
+            <!-- ============================================ -->
+            <g id="scene-text" opacity="0">
+                <text class="text-title" x="300" y="290" text-anchor="middle">DÉPLOIEMENT</text>
+                <text class="text-description" x="300" y="310" text-anchor="middle">Intégré dans tous vos outils quotidiens</text>
+            </g>
+        </svg>
+    </div>
+
+    <script>
+        gsap.registerPlugin(MotionPathPlugin);
+
+        const tl = gsap.timeline({ defaults: { ease: "power2.inOut" } });
+
+        // Roues tournent en continu
+        gsap.to("#wheel-left, #wheel-right", {
+            rotation: 360,
+            duration: 2,
+            repeat: -1,
+            ease: "none",
+            transformOrigin: "center"
+        });
+
+        // ============================================
+        // PHASE 1 : Robot avance (0-2s)
+        // ============================================
+        tl.to("#platform", {
+            x: 170,
+            duration: 2,
+            ease: "power2.in"
+        }, 0);
+
+        // ============================================
+        // PHASE 2 : Pré-téléportation - Robot brille (2-3s)
+        // ============================================
+        tl.to("#robot-complete", {
+            filter: "drop-shadow(0 0 20px rgba(56, 152, 255, 1)) drop-shadow(0 0 40px rgba(56, 152, 255, 0.8))",
+            duration: 0.5,
+            yoyo: true,
+            repeat: 1,
+            ease: "sine.inOut"
+        }, 2);
+
+        // ============================================
+        // PHASE 3 : Désintégration (3-5s)
+        // ============================================
+
+        // Créer les particules qui formeront les bulles
+        const particlesGroup = document.getElementById('particles');
+        const robotCenter = { x: 200, y: 130 };
+        const particlesPerBubble = 8;
+        const bubbleRadius = 28;
+
+        const toolPositions = [
+            { x: 220, y: 50 },   // Email
+            { x: 320, y: 40 },   // Teams
+            { x: 420, y: 40 },   // Mobile
+            { x: 500, y: 50 },   // Web
+            { x: 500, y: 140 },  // CRM
+            { x: 420, y: 150 },  // Docs
+            { x: 320, y: 150 },  // Calendar
+            { x: 220, y: 140 }   // Voice
+        ];
+
+        const particles = [];
+
+        // Créer 8 groupes de particules (une par bulle)
+        toolPositions.forEach((bubbleCenter, bubbleIndex) => {
+            for (let i = 0; i < particlesPerBubble; i++) {
+                const particle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                const isGreen = i % 3 === 0;
+                particle.setAttribute("class", isGreen ? "particle-green" : "particle");
+                particle.setAttribute("cx", robotCenter.x);
+                particle.setAttribute("cy", robotCenter.y);
+                particle.setAttribute("r", 2.5);
+                particlesGroup.appendChild(particle);
+
+                // Calculer la position finale en cercle
+                const angle = (360 / particlesPerBubble) * i;
+                const angleRad = (angle * Math.PI) / 180;
+                const finalX = bubbleCenter.x + bubbleRadius * Math.cos(angleRad);
+                const finalY = bubbleCenter.y + bubbleRadius * Math.sin(angleRad);
+
+                particles.push({
+                    element: particle,
+                    finalX: finalX,
+                    finalY: finalY,
+                    bubbleIndex: bubbleIndex
+                });
+            }
+        });
+
+        // Faire apparaître les particules
+        tl.to("#particles", {
+            opacity: 1,
+            duration: 0.2
+        }, 3);
+
+        // Faire disparaître le robot progressivement pendant la désintégration
+        tl.to("#robot-complete", {
+            opacity: 0,
+            duration: 3
+        }, 3);
+
+        // ============================================
+        // PHASE 4 : Particules forment les bulles (3.5-6.5s)
+        // ============================================
+        particles.forEach((particle, i) => {
+            const bubbleCenter = toolPositions[particle.bubbleIndex];
+            const controlX = (robotCenter.x + bubbleCenter.x) / 2 + (Math.random() - 0.5) * 80;
+            const controlY = (robotCenter.y + bubbleCenter.y) / 2 + (Math.random() - 0.5) * 60;
+
+            // Créer un chemin courbe via keyframes
+            tl.to(particle.element, {
+                keyframes: [
+                    {
+                        attr: { cx: controlX, cy: controlY },
+                        duration: 1.25,
+                        ease: "power1.out"
+                    },
+                    {
+                        attr: { cx: particle.finalX, cy: particle.finalY },
+                        duration: 1.25,
+                        ease: "power1.in"
+                    }
+                ]
+            }, 3.5 + particle.bubbleIndex * 0.1 + (i % particlesPerBubble) * 0.02);
+        });
+
+        // ============================================
+        // PHASE 5 : Apparition des icônes et mini robots (7-8.5s)
+        // ============================================
+        const tools = [
+            "#tool-email", "#tool-chat", "#tool-mobile", "#tool-web",
+            "#tool-crm", "#tool-docs", "#tool-calendar", "#tool-voice"
+        ];
+
+        tools.forEach((tool, i) => {
+            tl.to(tool, {
+                opacity: 1,
+                scale: 1.1,
+                duration: 0.4,
+                ease: "back.out(1.7)"
+            }, 7 + i * 0.15);
+
+            tl.to(tool, {
+                scale: 1,
+                duration: 0.2
+            }, 7.4 + i * 0.15);
+        });
+
+        // Les particules restent visibles (formant les bulles)
+
+        // ============================================
+        // PHASE 6 : Texte final (5s)
+        // ============================================
+        tl.to("#scene-text", {
+            opacity: 1,
+            y: -5,
+            duration: 1
+        }, 5);
+    </script>
+</body>
+</html>

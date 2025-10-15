@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usine IA - Scène 2 : L'Assemblage</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            overflow: hidden;
+            background: #F3F5F9;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .factory-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        svg {
+            width: 100%;
+            height: 100%;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        /* Tapis roulant */
+        .conveyor-belt {
+            fill: #2a2a2a;
+            stroke: #1a1a1a;
+            stroke-width: 2;
+        }
+
+        .belt-surface {
+            fill: url(#beltPattern);
+        }
+
+        .belt-wheel {
+            fill: #3a3a3a;
+            stroke: #2a2a2a;
+            stroke-width: 1.5;
+        }
+
+        .belt-wheel-spoke {
+            stroke: #4a4a4a;
+            stroke-width: 1;
+        }
+
+        /* Bras robotique */
+        .robot-arm-segment {
+            fill: #4a5568;
+            stroke: #2d3748;
+            stroke-width: 2;
+        }
+
+        .robot-arm-joint {
+            fill: #FF6B35;
+            stroke: #d55a2a;
+            stroke-width: 1.5;
+            filter: drop-shadow(0 0 4px rgba(255, 107, 53, 0.6));
+        }
+
+        .robot-arm-claw {
+            fill: #5a6c7d;
+            stroke: #4a5568;
+            stroke-width: 1.5;
+        }
+
+        /* Plateforme */
+        .platform {
+            fill: #3a4556;
+            stroke: #4a5568;
+            stroke-width: 2;
+        }
+
+        .platform-grid {
+            stroke: #4a5568;
+            stroke-width: 0.8;
+            opacity: 0.4;
+        }
+
+        /* Robot en construction */
+        .robot-body {
+            fill: #2d3748;
+            stroke: #4a5568;
+            stroke-width: 2;
+        }
+
+        .robot-part {
+            fill: #3898FF;
+            stroke: #2196F3;
+            stroke-width: 1.5;
+            filter: drop-shadow(0 0 6px rgba(56, 152, 255, 0.8));
+        }
+
+        .robot-circuit {
+            stroke: #3898FF;
+            stroke-width: 1.5;
+            fill: none;
+            stroke-linecap: round;
+            filter: drop-shadow(0 0 3px rgba(56, 152, 255, 1));
+        }
+
+        .robot-eye {
+            fill: #3898FF;
+            filter: drop-shadow(0 0 8px rgba(56, 152, 255, 1));
+        }
+
+        /* Station de contrôle */
+        .control-panel {
+            fill: #2d3748;
+            stroke: #4a5568;
+            stroke-width: 2;
+        }
+
+        .control-screen {
+            fill: #1a202c;
+        }
+
+        .progress-bar-bg {
+            fill: #2d3748;
+            stroke: #4a5568;
+            stroke-width: 1;
+        }
+
+        .progress-bar-fill {
+            fill: url(#progressGradient);
+        }
+
+        .status-led {
+            fill: #4a5568;
+        }
+
+        .status-led.active {
+            fill: #10B981;
+            filter: drop-shadow(0 0 4px rgba(16, 185, 129, 0.8));
+        }
+
+        /* Rack de pièces */
+        .parts-rack {
+            fill: #3a4556;
+            stroke: #4a5568;
+            stroke-width: 1.5;
+        }
+
+        .part-slot {
+            fill: #2d3748;
+            stroke: #4a5568;
+            stroke-width: 1;
+        }
+
+        /* Particules */
+        .spark {
+            fill: #3898FF;
+            filter: drop-shadow(0 0 3px rgba(56, 152, 255, 1));
+        }
+
+        .spark-weld {
+            fill: #FFD700;
+            filter: drop-shadow(0 0 4px rgba(255, 215, 0, 1));
+        }
+
+        .particle-swirl {
+            fill: #FF6B35;
+            filter: drop-shadow(0 0 2px rgba(255, 107, 53, 0.8));
+        }
+
+        /* Texte */
+        .text-title {
+            fill: #1D2B48;
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            font-size: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .text-description {
+            fill: #4A5568;
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+            font-size: 14px;
+        }
+
+        .text-label {
+            fill: #3898FF;
+            font-family: 'Inter', monospace;
+            font-size: 9px;
+            font-weight: 600;
+        }
+
+        .text-progress {
+            fill: #10B981;
+            font-family: 'Inter', monospace;
+            font-size: 12px;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <div class="factory-container">
+        <svg viewBox="0 0 600 333" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <!-- Pattern tapis roulant -->
+                <pattern id="beltPattern" x="0" y="0" width="20" height="10" patternUnits="userSpaceOnUse">
+                    <animateTransform
+                        attributeName="patternTransform"
+                        type="translate"
+                        from="0 0"
+                        to="20 0"
+                        dur="2s"
+                        repeatCount="indefinite"/>
+                    <rect x="0" y="0" width="20" height="10" fill="#2a2a2a"/>
+                    <line x1="0" y1="5" x2="20" y2="5" stroke="#3a3a3a" stroke-width="1.5"/>
+                    <line x1="5" y1="0" x2="5" y2="10" stroke="#3a3a3a" stroke-width="0.5"/>
+                    <line x1="15" y1="0" x2="15" y2="10" stroke="#3a3a3a" stroke-width="0.5"/>
+                </pattern>
+
+                <!-- Gradient barre de progression -->
+                <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color:#3898FF;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#10B981;stop-opacity:1" />
+                </linearGradient>
+
+                <!-- Gradient circuit -->
+                <linearGradient id="circuitGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#3898FF;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#00BBFF;stop-opacity:1" />
+                </linearGradient>
+
+                <!-- Filtre glow bleu -->
+                <filter id="glow-blue">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+
+            <!-- Arrière-plan -->
+            <g id="background">
+                <rect x="0" y="250" width="600" height="83" fill="#F3F5F9" opacity="1"/>
+                <line x1="0" y1="250" x2="600" y2="250" stroke="#CDD5E7" stroke-width="2"/>
+            </g>
+
+            <!-- Tapis roulant -->
+            <g id="conveyor">
+                <rect class="conveyor-belt" x="50" y="235" width="500" height="6" rx="2"/>
+
+                <!-- Roue gauche -->
+                <g id="wheel-left" transform="translate(70, 238)">
+                    <circle class="belt-wheel" cx="0" cy="0" r="12"/>
+                    <circle cx="0" cy="0" r="3" fill="#2a2a2a"/>
+                    <line class="belt-wheel-spoke" x1="-8" y1="0" x2="8" y2="0"/>
+                    <line class="belt-wheel-spoke" x1="0" y1="-8" x2="0" y2="8"/>
+                    <line class="belt-wheel-spoke" x1="-6" y1="-6" x2="6" y2="6"/>
+                    <line class="belt-wheel-spoke" x1="-6" y1="6" x2="6" y2="-6"/>
+                </g>
+
+                <!-- Roue droite -->
+                <g id="wheel-right" transform="translate(530, 238)">
+                    <circle class="belt-wheel" cx="0" cy="0" r="12"/>
+                    <circle cx="0" cy="0" r="3" fill="#2a2a2a"/>
+                    <line class="belt-wheel-spoke" x1="-8" y1="0" x2="8" y2="0"/>
+                    <line class="belt-wheel-spoke" x1="0" y1="-8" x2="0" y2="8"/>
+                    <line class="belt-wheel-spoke" x1="-6" y1="-6" x2="6" y2="6"/>
+                    <line class="belt-wheel-spoke" x1="-6" y1="6" x2="6" y2="-6"/>
+                </g>
+
+                <rect class="belt-surface" x="82" y="232" width="436" height="12" rx="1"/>
+            </g>
+
+            <!-- Plateforme avec robot -->
+            <g id="platform" transform="translate(100, 200)">
+                <rect class="platform" x="0" y="0" width="60" height="32" rx="2"/>
+                <line class="platform-grid" x1="15" y1="2" x2="15" y2="30"/>
+                <line class="platform-grid" x1="30" y1="2" x2="30" y2="30"/>
+                <line class="platform-grid" x1="45" y1="2" x2="45" y2="30"/>
+                <line class="platform-grid" x1="2" y1="10" x2="58" y2="10"/>
+                <line class="platform-grid" x1="2" y1="20" x2="58" y2="20"/>
+
+                <!-- Robot en construction (REDESIGN COMPLET - reconnaissable + AGRANDI) -->
+                <g id="robot-under-construction" transform="translate(30, -70) scale(1.8)">
+                    <!-- Base du robot (stable et visible) -->
+                    <rect class="robot-body" x="-18" y="50" width="36" height="8" rx="2" fill="#5a6c7d"/>
+
+                    <!-- Corps principal (large et clair) -->
+                    <rect class="robot-body" x="-16" y="28" width="32" height="22" rx="3" fill="#5a6c7d"/>
+
+                    <!-- Tête (bien distincte) -->
+                    <rect class="robot-body" x="-14" y="10" width="28" height="18" rx="2" fill="#5a6c7d"/>
+                    <!-- Bordure tête pour la rendre visible -->
+                    <rect x="-14" y="10" width="28" height="18" rx="2" fill="none" stroke="#3898FF" stroke-width="1" opacity="0.3"/>
+
+                    <!-- Cerveau/CPU (sera ajouté AU-DESSUS de la tête) -->
+                    <g id="cpu-part" opacity="0" transform="translate(0, 4)">
+                        <rect class="robot-part" x="-8" y="-2" width="16" height="4" rx="1"/>
+                        <line class="robot-circuit" x1="-6" y1="0" x2="6" y2="0" stroke-width="1"/>
+                        <circle class="robot-part" cx="-4" cy="0" r="1"/>
+                        <circle class="robot-part" cx="4" cy="0" r="1"/>
+                        <!-- Connexions vers la tête -->
+                        <line class="robot-circuit" x1="-5" y1="2" x2="-5" y2="6" stroke-width="0.8"/>
+                        <line class="robot-circuit" x1="0" y1="2" x2="0" y2="6" stroke-width="0.8"/>
+                        <line class="robot-circuit" x1="5" y1="2" x2="5" y2="6" stroke-width="0.8"/>
+                    </g>
+
+                    <!-- Yeux/Capteurs (taille réduite) -->
+                    <g id="robot-eyes">
+                        <circle class="robot-eye" cx="-7" cy="18" r="2.5" opacity="0" fill="#1a202c"/>
+                        <circle class="robot-eye" cx="7" cy="18" r="2.5" opacity="0" fill="#1a202c"/>
+                        <!-- Pupilles lumineuses -->
+                        <circle class="robot-eye" cx="-7" cy="18" r="1.5" opacity="0" id="eye-left-glow"/>
+                        <circle class="robot-eye" cx="7" cy="18" r="1.5" opacity="0" id="eye-right-glow"/>
+                    </g>
+
+                    <!-- Circuits neuronaux SIMPLIFIÉS (2 circuits horizontaux seulement) -->
+                    <g id="neural-circuits" opacity="0">
+                        <!-- Seulement 2 circuits horizontaux -->
+                        <path class="robot-circuit" d="M -12,35 L 12,35" stroke-dasharray="24" stroke-dashoffset="24"/>
+                        <path class="robot-circuit" d="M -12,43 L 12,43" stroke-dasharray="24" stroke-dashoffset="24"/>
+                        <!-- Seulement 2 nodes (aux extrémités du premier circuit) -->
+                        <circle class="robot-part" cx="-12" cy="35" r="1.5" opacity="0" id="node1"/>
+                        <circle class="robot-part" cx="12" cy="35" r="1.5" opacity="0" id="node2"/>
+                    </g>
+
+                </g>
+            </g>
+
+            <!-- Rack de pièces (en haut à gauche) -->
+            <g id="parts-rack" transform="translate(80, 40)">
+                <rect class="parts-rack" x="0" y="0" width="80" height="50" rx="3"/>
+                <text class="text-label" x="40" y="12" text-anchor="middle">PIÈCES</text>
+
+                <!-- Slots -->
+                <rect class="part-slot" x="5" y="18" width="22" height="12" rx="2"/>
+                <rect class="part-slot" x="29" y="18" width="22" height="12" rx="2"/>
+                <rect class="part-slot" x="53" y="18" width="22" height="12" rx="2"/>
+                <rect class="part-slot" x="5" y="33" width="22" height="12" rx="2"/>
+                <rect class="part-slot" x="29" y="33" width="22" height="12" rx="2"/>
+                <rect class="part-slot" x="53" y="33" width="22" height="12" rx="2"/>
+
+                <!-- Pièce CPU (sera prise par le bras) -->
+                <g id="cpu-piece" transform="translate(16, 24)">
+                    <rect class="robot-part" x="-5" y="-3" width="10" height="6" rx="1"/>
+                    <circle class="robot-part" cx="-2" cy="0" r="0.8"/>
+                    <circle class="robot-part" cx="2" cy="0" r="0.8"/>
+                </g>
+            </g>
+
+            <!-- Bras robotique (POSITION AU-DESSUS DU ROBOT) -->
+            <g id="robotic-arm" transform="translate(280, 40)">
+                <!-- Base/Support (fixe en haut) -->
+                <rect class="robot-arm-segment" x="-15" y="0" width="30" height="12" rx="2"/>
+                <circle class="robot-arm-joint" cx="0" cy="12" r="6"/>
+
+                <!-- BRAS COMPLET comme une seule forme articulée -->
+                <!-- Segment 1 (épaule vers coude) - RACCOURCI -->
+                <line id="arm-seg1" x1="0" y1="12" x2="0" y2="45" stroke="#4a5568" stroke-width="8" stroke-linecap="round"/>
+                <circle class="robot-arm-joint" id="joint1" cx="0" cy="45" r="5"/>
+
+                <!-- Groupe du bras inférieur (pivot au niveau du joint1) -->
+                <g id="lower-arm-group" transform-origin="0 45" transform="translate(0, 0)">
+                    <!-- Segment 2 (coude vers poignet) - RACCOURCI -->
+                    <line id="arm-seg2" x1="0" y1="45" x2="0" y2="72" stroke="#4a5568" stroke-width="6" stroke-linecap="round"/>
+                    <circle class="robot-arm-joint" id="joint2" cx="0" cy="72" r="4"/>
+
+                    <!-- Pince (au bout) - RACCOURCIE -->
+                    <g id="arm-claw">
+                        <rect class="robot-arm-claw" id="claw-left" x="-8" y="72" width="5" height="10" rx="1"/>
+                        <rect class="robot-arm-claw" id="claw-right" x="3" y="72" width="5" height="10" rx="1"/>
+                        <circle class="robot-arm-joint" cx="0" cy="72" r="3"/>
+                    </g>
+                </g>
+            </g>
+
+            <!-- Station de contrôle (droite) -->
+            <g id="control-station" transform="translate(480, 80)">
+                <rect class="control-panel" x="0" y="0" width="100" height="140" rx="4"/>
+                <text class="text-label" x="50" y="15" text-anchor="middle">ENTRAÎNEMENT</text>
+
+                <!-- Écran -->
+                <rect class="control-screen" x="8" y="22" width="84" height="60" rx="3"/>
+
+                <!-- Barre de progression -->
+                <rect class="progress-bar-bg" x="15" y="35" width="70" height="8" rx="4"/>
+                <rect class="progress-bar-fill" id="progress-fill" x="15" y="35" width="0" height="8" rx="4"/>
+                <text class="text-progress" id="progress-text" x="50" y="53" text-anchor="middle">0%</text>
+
+                <!-- LEDs de statut -->
+                <circle class="status-led" id="led1" cx="20" cy="65" r="3"/>
+                <circle class="status-led" id="led2" cx="35" cy="65" r="3"/>
+                <circle class="status-led" id="led3" cx="50" cy="65" r="3"/>
+                <circle class="status-led" id="led4" cx="65" cy="65" r="3"/>
+                <circle class="status-led" id="led5" cx="80" cy="65" r="3"/>
+
+                <text class="text-label" x="50" y="77" text-anchor="middle" font-size="7">STATUT</text>
+            </g>
+
+            <!-- Particules d'étincelles (seront animées) -->
+            <g id="welding-sparks" opacity="0">
+                <circle class="spark-weld" cx="280" cy="160" r="1.5"/>
+                <circle class="spark-weld" cx="285" cy="155" r="1"/>
+                <circle class="spark-weld" cx="275" cy="157" r="1.2"/>
+                <circle class="spark-weld" cx="282" cy="163" r="0.8"/>
+                <circle class="spark-weld" cx="278" cy="158" r="1"/>
+            </g>
+
+            <!-- Particules électriques -->
+            <g id="electric-sparks" opacity="0">
+                <circle class="spark" cx="280" cy="170" r="1.5"/>
+                <circle class="spark" cx="288" cy="172" r="1.2"/>
+                <circle class="spark" cx="272" cy="168" r="1"/>
+                <circle class="spark" cx="284" cy="175" r="1.3"/>
+            </g>
+
+            <!-- Particules tourbillon (AU-DESSUS de la tête du robot) -->
+            <g id="swirl-particles" opacity="0">
+                <circle class="particle-swirl" cx="260" cy="100" r="1"/>
+                <circle class="particle-swirl" cx="300" cy="95" r="1.2"/>
+                <circle class="particle-swirl" cx="270" cy="110" r="0.8"/>
+                <circle class="particle-swirl" cx="290" cy="105" r="1"/>
+            </g>
+
+            <!-- Texte de la scène -->
+            <g id="scene-text" opacity="0">
+                <text class="text-title" x="300" y="290" text-anchor="middle">FORMATION</text>
+                <text class="text-description" x="300" y="310" text-anchor="middle">Entraînement de l'IA sur vos données métier</text>
+            </g>
+        </svg>
+    </div>
+
+    <script>
+        const tl = gsap.timeline({ defaults: { ease: "power2.inOut" } });
+
+        // Roues qui tournent
+        gsap.to("#wheel-left, #wheel-right", {
+            rotation: 360,
+            duration: 2,
+            repeat: -1,
+            ease: "none",
+            transformOrigin: "center"
+        });
+
+        // Robot avance sur le tapis (même vitesse que Scene 1)
+        tl.to("#platform", {
+            x: 250,
+            duration: 2,
+            ease: "power2.inOut"
+        }, 0);
+
+        // PHASE 1 : Bras effectue une rotation de 90° (mouvement horaire) pour atteindre le rack (0-1.5s)
+        // Le groupe du bras inférieur pivote de 90° - le haut reste fixe au joint1, le bas (pince) va en arc vers la gauche
+        tl.to("#lower-arm-group", {
+            rotation: 90,
+            duration: 1.5,
+            ease: "power2.inOut",
+            transformOrigin: "0px 0px"  // Pivot au début du groupe (joint1)
+        }, 0.5);
+
+        // PHASE 2 : Bras attrape CPU du rack (2.0-2.5s)
+        // Pince se ferme
+        tl.to("#claw-left", {
+            attr: { x: -5 },
+            duration: 0.3,
+            ease: "power2.in"
+        }, 2.0);
+
+        tl.to("#claw-right", {
+            attr: { x: 1 },
+            duration: 0.3,
+            ease: "power2.in"
+        }, 2.0);
+
+        // CPU disparaît du rack
+        tl.to("#cpu-piece", {
+            scale: 0,
+            opacity: 0,
+            duration: 0.3
+        }, 2.3);
+
+        // PHASE 3 : Bras revient avec rotation inverse (2.5-4.0s)
+        // Rotation inverse (sens anti-horaire) pour ramener à la verticale + compensation du décalage x
+        tl.to("#lower-arm-group", {
+            rotation: 0,
+            x: 3,  // Compensation du décalage horizontal
+            duration: 1.5,
+            ease: "power2.inOut",
+            transformOrigin: "0px 0px"  // Même pivot au début du groupe (joint1)
+        }, 2.5);
+
+        // PHASE 4 : Bras dépose CPU sur robot (4.0-4.5s)
+        // CPU apparaît sur la tête du robot
+        tl.to("#cpu-part", {
+            opacity: 1,
+            scale: 1,
+            duration: 0.3
+        }, 3.7);
+
+        // Étincelles de soudure avec mouvement
+        tl.to("#welding-sparks", {
+            opacity: 1,
+            duration: 0.2
+        }, 3.7);
+
+        // Ajouter mouvement de flottement aux étincelles
+        tl.add(() => {
+            gsap.to("#welding-sparks circle", {
+                y: "random(-8, 8)",
+                x: "random(-5, 5)",
+                duration: "random(0.4, 0.8)",
+                repeat: 3,
+                yoyo: true,
+                ease: "sine.inOut",
+                stagger: {
+                    each: 0.1,
+                    from: "random"
+                }
+            });
+        }, 3.7);
+
+        tl.to("#welding-sparks", {
+            opacity: 0,
+            duration: 0.3
+        }, 4.5);
+
+        // Pince s'ouvre
+        tl.to("#claw-left", {
+            attr: { x: -8 },
+            duration: 0.3,
+            ease: "power2.out"
+        }, 4.0);
+
+        tl.to("#claw-right", {
+            attr: { x: 3 },
+            duration: 0.3,
+            ease: "power2.out"
+        }, 4.0);
+
+        // Phase 5 : Circuits s'illuminent (4-6s)
+        tl.to("#neural-circuits", {
+            opacity: 1,
+            duration: 0.3
+        }, 4);
+
+        tl.to("#neural-circuits path", {
+            strokeDashoffset: 0,
+            duration: 1.5,
+            stagger: 0.2,
+            ease: "power1.inOut"
+        }, 4.2);
+
+        tl.to("#neural-circuits circle", {
+            opacity: 1,
+            scale: 1.2,
+            duration: 0.3,
+            stagger: 0.1,
+            transformOrigin: "center"
+        }, 5);
+
+        tl.to("#electric-sparks", {
+            opacity: 1,
+            duration: 0.2
+        }, 5);
+
+        tl.to("#electric-sparks", {
+            opacity: 0,
+            duration: 0.4
+        }, 5.5);
+
+
+        // Barre de progression
+        tl.to("#progress-fill", {
+            attr: { width: 70 },
+            duration: 2,
+            ease: "power1.inOut",
+            onUpdate: function() {
+                const progress = Math.round((this.progress() * 100));
+                document.getElementById('progress-text').textContent = progress + '%';
+            }
+        }, 5);
+
+        // LEDs s'allument
+        tl.to("#led1", { attr: { class: "status-led active" }, duration: 0.1 }, 5.2);
+        tl.to("#led2", { attr: { class: "status-led active" }, duration: 0.1 }, 5.6);
+        tl.to("#led3", { attr: { class: "status-led active" }, duration: 0.1 }, 6);
+        tl.to("#led4", { attr: { class: "status-led active" }, duration: 0.1 }, 6.4);
+        tl.to("#led5", { attr: { class: "status-led active" }, duration: 0.1 }, 6.8);
+
+        // Phase 6 : Yeux s'allument (7-8s)
+        tl.to("#robot-eyes circle", {
+            opacity: 1,
+            scale: 1.3,
+            duration: 0.5,
+            stagger: 0.2,
+            ease: "elastic.out",
+            transformOrigin: "center"
+        }, 7);
+
+        // Particules tourbillon
+        tl.to("#swirl-particles", {
+            opacity: 1,
+            duration: 0.3
+        }, 7);
+
+        tl.add(() => {
+            gsap.to("#swirl-particles circle", {
+                x: "random(-15, 15)",
+                y: "random(-15, 15)",
+                scale: "random(0.5, 1.5)",
+                duration: "random(1, 2)",
+                repeat: -1,
+                yoyo: true,
+                ease: "sine.inOut",
+                stagger: {
+                    each: 0.2,
+                    from: "random"
+                }
+            });
+        }, 7.5);
+
+        // Phase 7 : Robot continue sa route vers la droite + texte (8-9s)
+        tl.to("#platform", {
+            x: "+=150",
+            duration: 2,
+            ease: "power2.inOut"
+        }, 8);
+
+        tl.to("#scene-text", {
+            opacity: 1,
+            y: -5,
+            duration: 0.8
+        }, 6);
+    </script>
+</body>
+</html>

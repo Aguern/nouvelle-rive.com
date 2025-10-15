@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usine IA - Scène 3 : Test Qualité</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            overflow: hidden;
+            background: #F3F5F9;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .factory-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        svg {
+            width: 100%;
+            height: 100%;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        /* ============================================ */
+        /* STYLES - TAPIS ROULANT */
+        /* ============================================ */
+        .conveyor-belt {
+            fill: #2a2a2a;
+            stroke: #1a1a1a;
+            stroke-width: 2;
+        }
+
+        .belt-surface {
+            fill: url(#beltPattern);
+        }
+
+        .belt-wheel {
+            fill: #3a3a3a;
+            stroke: #2a2a2a;
+            stroke-width: 1.5;
+        }
+
+        .belt-wheel-spoke {
+            stroke: #4a4a4a;
+            stroke-width: 1;
+        }
+
+        /* ============================================ */
+        /* STYLES - PLATEFORME & ROBOT */
+        /* ============================================ */
+        .platform {
+            fill: #3a4556;
+            stroke: #4a5568;
+            stroke-width: 2;
+        }
+
+        .platform-grid {
+            stroke: #4a5568;
+            stroke-width: 0.8;
+            opacity: 0.4;
+        }
+
+        .robot-body {
+            fill: #5a6c7d;
+            stroke: #4a5568;
+            stroke-width: 2;
+        }
+
+        .robot-part {
+            fill: #3898FF;
+            stroke: #2196F3;
+            stroke-width: 1.5;
+            filter: drop-shadow(0 0 6px rgba(56, 152, 255, 0.8));
+        }
+
+        .robot-circuit {
+            stroke: #3898FF;
+            stroke-width: 1.5;
+            fill: none;
+            stroke-linecap: round;
+            filter: drop-shadow(0 0 3px rgba(56, 152, 255, 1));
+        }
+
+        .robot-eye {
+            fill: #3898FF;
+            filter: drop-shadow(0 0 8px rgba(56, 152, 255, 1));
+        }
+
+        /* ============================================ */
+        /* STYLES - STATION DE DIAGNOSTIC */
+        /* ============================================ */
+        .diagnostic-frame {
+            fill: #2d3748;
+            stroke: #4a5568;
+            stroke-width: 3;
+            filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+        }
+
+        .diagnostic-arc {
+            fill: none;
+            stroke: #4a5568;
+            stroke-width: 6;
+            stroke-linecap: round;
+        }
+
+        .scanner-radar {
+            fill: url(#radarGradient);
+            opacity: 0.6;
+        }
+
+        .scan-beam {
+            fill: url(#scanBeamGradient);
+            opacity: 0;
+        }
+
+        .scan-ring {
+            fill: none;
+            stroke: #10B981;
+            stroke-width: 2;
+            opacity: 0;
+        }
+
+        /* ============================================ */
+        /* STYLES - CHECKLIST */
+        /* ============================================ */
+        .checklist-panel {
+            fill: #2d3748;
+            stroke: #4a5568;
+            stroke-width: 2;
+            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.4));
+        }
+
+        .checklist-screen {
+            fill: #1a202c;
+        }
+
+        .checklist-item-bg {
+            fill: #2d3748;
+            stroke: #4a5568;
+            stroke-width: 1;
+        }
+
+        .checklist-item-bg.validated {
+            fill: rgba(16, 185, 129, 0.15);
+            stroke: #10B981;
+        }
+
+        .checkmark-circle {
+            fill: none;
+            stroke: #10B981;
+            stroke-width: 2;
+        }
+
+        .checkmark-path {
+            fill: none;
+            stroke: #10B981;
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .checklist-text {
+            fill: rgba(255, 255, 255, 0.6);
+            font-family: 'Inter', monospace;
+            font-size: 9px;
+            font-weight: 500;
+        }
+
+        .checklist-text.validated {
+            fill: #10B981;
+            font-weight: 600;
+        }
+
+        /* ============================================ */
+        /* STYLES - BADGE DE VALIDATION */
+        /* ============================================ */
+        .badge-container {
+            filter: drop-shadow(0 4px 16px rgba(16, 185, 129, 0.8));
+        }
+
+        .badge-circle {
+            fill: #10B981;
+            stroke: #059669;
+            stroke-width: 3;
+        }
+
+        .badge-star {
+            fill: #ffffff;
+        }
+
+        .badge-text {
+            fill: #1D2B48;
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            font-size: 11px;
+            letter-spacing: 1px;
+        }
+
+        /* ============================================ */
+        /* STYLES - PARTICULES */
+        /* ============================================ */
+        .particle-scan {
+            fill: #3898FF;
+            filter: drop-shadow(0 0 4px rgba(56, 152, 255, 1));
+        }
+
+        .particle-validate {
+            fill: #10B981;
+            filter: drop-shadow(0 0 4px rgba(16, 185, 129, 1));
+        }
+
+        .particle-alert {
+            fill: #FF6B35;
+            filter: drop-shadow(0 0 3px rgba(255, 107, 53, 0.8));
+        }
+
+        /* ============================================ */
+        /* STYLES - TEXTE */
+        /* ============================================ */
+        .text-title {
+            fill: #1D2B48;
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            font-size: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .text-description {
+            fill: #4A5568;
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+            font-size: 14px;
+        }
+
+        .text-label {
+            fill: #3898FF;
+            font-family: 'Inter', monospace;
+            font-size: 9px;
+            font-weight: 600;
+        }
+
+        /* ============================================ */
+        /* ANIMATIONS CSS */
+        /* ============================================ */
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @keyframes rotate-radar {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="factory-container">
+        <svg viewBox="0 0 600 333" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <!-- Pattern tapis roulant -->
+                <pattern id="beltPattern" x="0" y="0" width="20" height="10" patternUnits="userSpaceOnUse">
+                    <animateTransform
+                        attributeName="patternTransform"
+                        type="translate"
+                        from="0 0"
+                        to="20 0"
+                        dur="2s"
+                        repeatCount="indefinite"/>
+                    <rect x="0" y="0" width="20" height="10" fill="#2a2a2a"/>
+                    <line x1="0" y1="5" x2="20" y2="5" stroke="#3a3a3a" stroke-width="1.5"/>
+                    <line x1="5" y1="0" x2="5" y2="10" stroke="#3a3a3a" stroke-width="0.5"/>
+                    <line x1="15" y1="0" x2="15" y2="10" stroke="#3a3a3a" stroke-width="0.5"/>
+                </pattern>
+
+                <!-- Gradient radar (effet conic simulé) -->
+                <radialGradient id="radarGradient">
+                    <stop offset="0%" style="stop-color:#10B981;stop-opacity:0.8" />
+                    <stop offset="100%" style="stop-color:#10B981;stop-opacity:0" />
+                </radialGradient>
+
+                <!-- Gradient rayon de scan -->
+                <linearGradient id="scanBeamGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:#3898FF;stop-opacity:0" />
+                    <stop offset="50%" style="stop-color:#3898FF;stop-opacity:0.6" />
+                    <stop offset="100%" style="stop-color:#3898FF;stop-opacity:0" />
+                </linearGradient>
+
+                <!-- Filtre glow vert -->
+                <filter id="glow-green">
+                    <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+
+                <!-- Filtre glow bleu -->
+                <filter id="glow-blue">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+
+            <!-- ============================================ -->
+            <!-- ARRIÈRE-PLAN -->
+            <!-- ============================================ -->
+            <g id="background">
+                <rect x="0" y="250" width="600" height="83" fill="#F3F5F9" opacity="1"/>
+                <line x1="0" y1="250" x2="600" y2="250" stroke="#CDD5E7" stroke-width="2"/>
+            </g>
+
+            <!-- ============================================ -->
+            <!-- TAPIS ROULANT -->
+            <!-- ============================================ -->
+            <g id="conveyor">
+                <rect class="conveyor-belt" x="50" y="235" width="500" height="6" rx="2"/>
+
+                <!-- Roue gauche -->
+                <g id="wheel-left" transform="translate(70, 238)">
+                    <circle class="belt-wheel" cx="0" cy="0" r="12"/>
+                    <circle cx="0" cy="0" r="3" fill="#2a2a2a"/>
+                    <line class="belt-wheel-spoke" x1="-8" y1="0" x2="8" y2="0"/>
+                    <line class="belt-wheel-spoke" x1="0" y1="-8" x2="0" y2="8"/>
+                    <line class="belt-wheel-spoke" x1="-6" y1="-6" x2="6" y2="6"/>
+                    <line class="belt-wheel-spoke" x1="-6" y1="6" x2="6" y2="-6"/>
+                </g>
+
+                <!-- Roue droite -->
+                <g id="wheel-right" transform="translate(530, 238)">
+                    <circle class="belt-wheel" cx="0" cy="0" r="12"/>
+                    <circle cx="0" cy="0" r="3" fill="#2a2a2a"/>
+                    <line class="belt-wheel-spoke" x1="-8" y1="0" x2="8" y2="0"/>
+                    <line class="belt-wheel-spoke" x1="0" y1="-8" x2="0" y2="8"/>
+                    <line class="belt-wheel-spoke" x1="-6" y1="-6" x2="6" y2="6"/>
+                    <line class="belt-wheel-spoke" x1="-6" y1="6" x2="6" y2="-6"/>
+                </g>
+
+                <rect class="belt-surface" x="82" y="232" width="436" height="12" rx="1"/>
+            </g>
+
+            <!-- ============================================ -->
+            <!-- PLATEFORME AVEC ROBOT -->
+            <!-- ============================================ -->
+            <g id="platform" transform="translate(100, 200)">
+                <rect class="platform" x="0" y="0" width="60" height="32" rx="2"/>
+                <line class="platform-grid" x1="15" y1="2" x2="15" y2="30"/>
+                <line class="platform-grid" x1="30" y1="2" x2="30" y2="30"/>
+                <line class="platform-grid" x1="45" y1="2" x2="45" y2="30"/>
+                <line class="platform-grid" x1="2" y1="10" x2="58" y2="10"/>
+                <line class="platform-grid" x1="2" y1="20" x2="58" y2="20"/>
+
+                <!-- Robot assemblé (identique à la scène 2) -->
+                <g id="robot-complete" transform="translate(30, -70) scale(1.8)">
+                    <!-- Base -->
+                    <rect class="robot-body" x="-18" y="50" width="36" height="8" rx="2" fill="#5a6c7d"/>
+
+                    <!-- Corps -->
+                    <rect class="robot-body" x="-16" y="28" width="32" height="22" rx="3" fill="#5a6c7d"/>
+
+                    <!-- Tête -->
+                    <rect class="robot-body" x="-14" y="10" width="28" height="18" rx="2" fill="#5a6c7d"/>
+                    <rect x="-14" y="10" width="28" height="18" rx="2" fill="none" stroke="#3898FF" stroke-width="1" opacity="0.3"/>
+
+                    <!-- CPU -->
+                    <g id="cpu-part" transform="translate(0, 4)">
+                        <rect class="robot-part" x="-8" y="-2" width="16" height="4" rx="1"/>
+                        <line class="robot-circuit" x1="-6" y1="0" x2="6" y2="0" stroke-width="1"/>
+                        <circle class="robot-part" cx="-4" cy="0" r="1"/>
+                        <circle class="robot-part" cx="4" cy="0" r="1"/>
+                        <line class="robot-circuit" x1="-5" y1="2" x2="-5" y2="6" stroke-width="0.8"/>
+                        <line class="robot-circuit" x1="0" y1="2" x2="0" y2="6" stroke-width="0.8"/>
+                        <line class="robot-circuit" x1="5" y1="2" x2="5" y2="6" stroke-width="0.8"/>
+                    </g>
+
+                    <!-- Yeux -->
+                    <circle class="robot-eye" cx="-7" cy="18" r="2.5" fill="#1a202c"/>
+                    <circle class="robot-eye" cx="7" cy="18" r="2.5" fill="#1a202c"/>
+                    <circle class="robot-eye" cx="-7" cy="18" r="1.5"/>
+                    <circle class="robot-eye" cx="7" cy="18" r="1.5"/>
+
+                    <!-- Circuits neuronaux -->
+                    <g id="neural-circuits">
+                        <path class="robot-circuit" d="M -12,35 L 12,35"/>
+                        <path class="robot-circuit" d="M -12,43 L 12,43"/>
+                        <circle class="robot-part" cx="-12" cy="35" r="1.5"/>
+                        <circle class="robot-part" cx="12" cy="35" r="1.5"/>
+                    </g>
+
+                    <!-- Bras gauche -->
+                    <g id="left-arm">
+                        <line class="robot-body" x1="-16" y1="32" x2="-22" y2="32" stroke-width="3" stroke-linecap="round"/>
+                        <line class="robot-body" x1="-22" y1="32" x2="-25" y2="40" stroke-width="2.5" stroke-linecap="round"/>
+                        <circle fill="#4a5568" cx="-22" cy="32" r="2"/>
+                    </g>
+
+                    <!-- Bras droit -->
+                    <g id="right-arm">
+                        <line class="robot-body" x1="16" y1="32" x2="22" y2="32" stroke-width="3" stroke-linecap="round"/>
+                        <line class="robot-body" x1="22" y1="32" x2="25" y2="40" stroke-width="2.5" stroke-linecap="round"/>
+                        <circle fill="#4a5568" cx="22" cy="32" r="2"/>
+                    </g>
+                </g>
+            </g>
+
+            <!-- ============================================ -->
+            <!-- STATION DE DIAGNOSTIC -->
+            <!-- ============================================ -->
+            <g id="diagnostic-station" transform="translate(300, 80)">
+                <!-- Support vertical gauche -->
+                <rect class="diagnostic-frame" x="-80" y="0" width="10" height="120" rx="2"/>
+
+                <!-- Support vertical droit -->
+                <rect class="diagnostic-frame" x="70" y="0" width="10" height="120" rx="2"/>
+
+                <!-- Arc supérieur -->
+                <path class="diagnostic-arc" d="M -75,20 Q 0,-10 75,20" fill="none"/>
+
+                <!-- Panneau central avec scanner -->
+                <g id="scanner-unit" transform="translate(0, 0)">
+                    <!-- Support du scanner -->
+                    <rect class="diagnostic-frame" x="-30" y="-15" width="60" height="30" rx="4"/>
+
+                    <!-- Écran du scanner -->
+                    <rect class="checklist-screen" x="-24" y="-9" width="48" height="18" rx="2"/>
+
+                    <!-- Scanner radar rotatif (cercle) -->
+                    <g id="radar-scanner" opacity="0">
+                        <circle cx="0" cy="0" r="20" class="scanner-radar"/>
+                        <!-- Ligne de balayage -->
+                        <line x1="0" y1="0" x2="0" y2="-15" stroke="#10B981" stroke-width="2" opacity="0.8"/>
+                    </g>
+
+                    <!-- Anneaux de scan -->
+                    <circle class="scan-ring" cx="0" cy="0" r="15" id="ring1"/>
+                    <circle class="scan-ring" cx="0" cy="0" r="25" id="ring2"/>
+                    <circle class="scan-ring" cx="0" cy="0" r="35" id="ring3"/>
+                </g>
+
+                <!-- Rayon de scan vertical -->
+                <rect class="scan-beam" id="scan-beam" x="-40" y="20" width="80" height="4" opacity="0"/>
+            </g>
+
+            <!-- ============================================ -->
+            <!-- PANNEAU CHECKLIST -->
+            <!-- ============================================ -->
+            <g id="checklist-panel" transform="translate(450, 40)" opacity="0">
+                <rect class="checklist-panel" x="0" y="0" width="130" height="160" rx="4"/>
+                <text class="text-label" x="65" y="15" text-anchor="middle">DIAGNOSTICS</text>
+
+                <!-- Écran -->
+                <rect class="checklist-screen" x="8" y="22" width="114" height="130" rx="3"/>
+
+                <!-- Items de checklist (5 items) -->
+                <!-- Item 1: Capacité d'apprentissage -->
+                <g id="item-1" transform="translate(15, 28)">
+                    <rect class="checklist-item-bg" x="0" y="0" width="100" height="20" rx="2"/>
+                    <circle class="checkmark-circle" cx="10" cy="10" r="6" opacity="0"/>
+                    <path class="checkmark-path" d="M 7,10 L 9,12 L 13,8"
+                          stroke-dasharray="10" stroke-dashoffset="10" opacity="0"/>
+                    <text class="checklist-text" x="22" y="13">Apprentissage</text>
+                </g>
+
+                <!-- Item 2: Compréhension métier -->
+                <g id="item-2" transform="translate(15, 53)">
+                    <rect class="checklist-item-bg" x="0" y="0" width="100" height="20" rx="2"/>
+                    <circle class="checkmark-circle" cx="10" cy="10" r="6" opacity="0"/>
+                    <path class="checkmark-path" d="M 7,10 L 9,12 L 13,8"
+                          stroke-dasharray="10" stroke-dashoffset="10" opacity="0"/>
+                    <text class="checklist-text" x="22" y="13">Compréhension</text>
+                </g>
+
+                <!-- Item 3: Traitement des tâches -->
+                <g id="item-3" transform="translate(15, 78)">
+                    <rect class="checklist-item-bg" x="0" y="0" width="100" height="20" rx="2"/>
+                    <circle class="checkmark-circle" cx="10" cy="10" r="6" opacity="0"/>
+                    <path class="checkmark-path" d="M 7,10 L 9,12 L 13,8"
+                          stroke-dasharray="10" stroke-dashoffset="10" opacity="0"/>
+                    <text class="checklist-text" x="22" y="13">Traitement</text>
+                </g>
+
+                <!-- Item 4: Réactivité -->
+                <g id="item-4" transform="translate(15, 103)">
+                    <rect class="checklist-item-bg" x="0" y="0" width="100" height="20" rx="2"/>
+                    <circle class="checkmark-circle" cx="10" cy="10" r="6" opacity="0"/>
+                    <path class="checkmark-path" d="M 7,10 L 9,12 L 13,8"
+                          stroke-dasharray="10" stroke-dashoffset="10" opacity="0"/>
+                    <text class="checklist-text" x="22" y="13">Réactivité</text>
+                </g>
+
+                <!-- Item 5: Intégration équipe -->
+                <g id="item-5" transform="translate(15, 128)">
+                    <rect class="checklist-item-bg" x="0" y="0" width="100" height="20" rx="2"/>
+                    <circle class="checkmark-circle" cx="10" cy="10" r="6" opacity="0"/>
+                    <path class="checkmark-path" d="M 7,10 L 9,12 L 13,8"
+                          stroke-dasharray="10" stroke-dashoffset="10" opacity="0"/>
+                    <text class="checklist-text" x="22" y="13">Intégration</text>
+                </g>
+            </g>
+
+            <!-- ============================================ -->
+            <!-- BADGE "VALIDÉ" -->
+            <!-- ============================================ -->
+            <g id="validated-badge" class="badge-container" transform="translate(300, 25)" opacity="0">
+                <circle class="badge-circle" cx="0" cy="0" r="25"/>
+                <path class="badge-star" d="M 0,-12 L 3,-4 L 12,-3 L 5,3 L 7,12 L 0,7 L -7,12 L -5,3 L -12,-3 L -3,-4 Z"/>
+                <text class="badge-text" x="0" y="36" text-anchor="middle">VALIDÉ</text>
+            </g>
+
+            <!-- ============================================ -->
+            <!-- PARTICULES -->
+            <!-- ============================================ -->
+            <g id="scan-particles" opacity="0">
+                <circle class="particle-scan" cx="280" cy="140" r="1.5"/>
+                <circle class="particle-scan" cx="320" cy="135" r="1.2"/>
+                <circle class="particle-scan" cx="260" cy="145" r="1"/>
+                <circle class="particle-scan" cx="300" cy="138" r="1.3"/>
+            </g>
+
+            <g id="validate-particles" opacity="0">
+                <circle class="particle-validate" cx="270" cy="120" r="1.5"/>
+                <circle class="particle-validate" cx="290" cy="125" r="1.2"/>
+                <circle class="particle-validate" cx="310" cy="118" r="1"/>
+                <circle class="particle-validate" cx="280" cy="130" r="1.3"/>
+                <circle class="particle-validate" cx="300" cy="115" r="1.1"/>
+            </g>
+
+            <!-- ============================================ -->
+            <!-- TEXTE DE LA SCÈNE -->
+            <!-- ============================================ -->
+            <g id="scene-text" opacity="0">
+                <text class="text-title" x="300" y="290" text-anchor="middle">PÉRIODE D'ESSAI</text>
+                <text class="text-description" x="300" y="310" text-anchor="middle">Validation sur le terrain avant déploiement</text>
+            </g>
+        </svg>
+    </div>
+
+    <script>
+        // ============================================
+        // ANIMATIONS GSAP - SCÈNE 3 : TEST QUALITÉ
+        // ============================================
+
+        const tl = gsap.timeline({ defaults: { ease: "power2.inOut" } });
+
+        // Roues tournent en continu
+        gsap.to("#wheel-left, #wheel-right", {
+            rotation: 360,
+            duration: 2,
+            repeat: -1,
+            ease: "none",
+            transformOrigin: "center"
+        });
+
+        // ============================================
+        // PHASE 1 : Robot avance vers la station (0-1.5s)
+        // ============================================
+        tl.to("#platform", {
+            x: 270,
+            duration: 1.5,
+            ease: "power2.inOut"
+        }, 0);
+
+        // ============================================
+        // PHASE 2 : Scanner radar s'active (1.5-3.5s)
+        // ============================================
+
+        // Panneau checklist apparaît
+        tl.to("#checklist-panel", {
+            opacity: 1,
+            duration: 0.4
+        }, 1.5);
+
+        // Scanner radar apparaît
+        tl.to("#radar-scanner", {
+            opacity: 1,
+            duration: 0.3
+        }, 1.8);
+
+        // Radar tourne
+        tl.to("#radar-scanner", {
+            rotation: 720,
+            duration: 2,
+            ease: "none",
+            transformOrigin: "center"
+        }, 2);
+
+        // Anneaux de scan pulsent
+        tl.to(".scan-ring", {
+            opacity: 1,
+            duration: 0.3,
+            stagger: 0.15
+        }, 2);
+
+        tl.to(".scan-ring", {
+            attr: { r: "+=10" },
+            opacity: 0,
+            duration: 1,
+            stagger: 0.15,
+            ease: "power2.out"
+        }, 2.3);
+
+        // Rayon de scan vertical
+        tl.to("#scan-beam", {
+            opacity: 0.6,
+            duration: 0.2
+        }, 2.5);
+
+        tl.to("#scan-beam", {
+            y: 100,
+            duration: 1,
+            ease: "linear"
+        }, 2.5);
+
+        tl.to("#scan-beam", {
+            opacity: 0,
+            duration: 0.2
+        }, 3.3);
+
+        // Particules de scan
+        tl.to("#scan-particles", {
+            opacity: 1,
+            duration: 0.3
+        }, 2.5);
+
+        tl.add(() => {
+            gsap.to("#scan-particles circle", {
+                y: "random(-10, 10)",
+                x: "random(-8, 8)",
+                duration: "random(0.5, 1)",
+                repeat: 3,
+                yoyo: true,
+                ease: "sine.inOut",
+                stagger: {
+                    each: 0.1,
+                    from: "random"
+                }
+            });
+        }, 2.5);
+
+        tl.to("#scan-particles", {
+            opacity: 0,
+            duration: 0.3
+        }, 3.5);
+
+        // ============================================
+        // PHASE 3 : Validation des items (3.5-7s)
+        // ============================================
+
+        // Fonction pour valider un item
+        function validateItem(itemId, startTime) {
+            // Background devient vert
+            tl.to(`${itemId} .checklist-item-bg`, {
+                attr: { class: "checklist-item-bg validated" },
+                duration: 0.2
+            }, startTime);
+
+            // Cercle du checkmark apparaît
+            tl.to(`${itemId} .checkmark-circle`, {
+                opacity: 1,
+                duration: 0.2
+            }, startTime);
+
+            // Checkmark se dessine
+            tl.to(`${itemId} .checkmark-path`, {
+                opacity: 1,
+                strokeDashoffset: 0,
+                duration: 0.4,
+                ease: "power2.out"
+            }, startTime + 0.1);
+
+            // Texte devient vert
+            tl.to(`${itemId} .checklist-text`, {
+                attr: { class: "checklist-text validated" },
+                duration: 0.2
+            }, startTime + 0.3);
+        }
+
+        // Validation de tous les items avec délai
+        validateItem("#item-1", 3.5);  // Apprentissage
+        validateItem("#item-2", 4.2);  // Compréhension
+        validateItem("#item-3", 4.9);  // Traitement
+        validateItem("#item-4", 5.6);  // Réactivité
+        validateItem("#item-5", 6.3);  // Intégration
+
+        // ============================================
+        // PHASE 4 : Badge "VALIDÉ" (7-8s)
+        // ============================================
+
+        // Particules de validation tourbillonnent
+        tl.to("#validate-particles", {
+            opacity: 1,
+            duration: 0.3
+        }, 7);
+
+        tl.add(() => {
+            gsap.to("#validate-particles circle", {
+                x: "random(-20, 20)",
+                y: "random(-20, 20)",
+                scale: "random(0.5, 1.5)",
+                duration: "random(1, 2)",
+                repeat: -1,
+                yoyo: true,
+                ease: "sine.inOut",
+                stagger: {
+                    each: 0.15,
+                    from: "random"
+                }
+            });
+        }, 7);
+
+        // Badge apparaît avec pulse
+        tl.to("#validated-badge", {
+            opacity: 1,
+            scale: 1.2,
+            duration: 0.5,
+            ease: "back.out"
+        }, 7);
+
+        tl.to("#validated-badge", {
+            scale: 1,
+            duration: 0.3,
+            ease: "power2.out"
+        }, 7.5);
+
+        // Robot pulse en vert
+        tl.to("#robot-complete", {
+            filter: "drop-shadow(0 0 20px rgba(16, 185, 129, 0.8))",
+            duration: 0.4,
+            yoyo: true,
+            repeat: 2,
+            ease: "sine.inOut"
+        }, 7.2);
+
+        // ============================================
+        // PHASE 5 : Texte de la scène (5s)
+        // ============================================
+        tl.to("#scene-text", {
+            opacity: 1,
+            y: -5,
+            duration: 0.8
+        }, 5);
+
+        // ============================================
+        // PHASE 6 : Robot part vers la droite (8s)
+        // ============================================
+        tl.to("#platform", {
+            x: "+=120",
+            duration: 2,
+            ease: "power2.inOut"
+        }, 8);
+
+        // Radar continue de tourner en arrière-plan
+        gsap.to("#radar-scanner", {
+            rotation: "+=360",
+            duration: 3,
+            repeat: -1,
+            ease: "none",
+            transformOrigin: "center"
+        });
+    </script>
+</body>
+</html>

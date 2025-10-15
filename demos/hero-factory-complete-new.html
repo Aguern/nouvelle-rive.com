@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usine IA - Animation Complète</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/MotionPathPlugin.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html, body {
+            width: 100%;
+            height: 100%;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            overflow: hidden;
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+        }
+        .factory-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        svg {
+            width: 100%;
+            height: 100%;
+        }
+        .conveyor-belt { fill: #2a2a2a; stroke: #1a1a1a; stroke-width: 2; }
+        .belt-surface { fill: url(#beltPattern); }
+        .belt-wheel { fill: #3a3a3a; stroke: #2a2a2a; stroke-width: 1.5; }
+        .belt-wheel-spoke { stroke: #4a4a4a; stroke-width: 1; }
+        .platform { fill: #3a4556; stroke: #4a5568; stroke-width: 2; }
+        .platform-grid { stroke: #4a5568; stroke-width: 0.8; opacity: 0.4; }
+        .robot-body { fill: #5a6c7d; stroke: #4a5568; stroke-width: 2; }
+        .robot-part { fill: #3898FF; stroke: #2196F3; stroke-width: 1.5; filter: drop-shadow(0 0 6px rgba(56, 152, 255, 0.8)); }
+        .robot-circuit { stroke: #3898FF; stroke-width: 1.5; fill: none; filter: drop-shadow(0 0 3px rgba(56, 152, 255, 1)); }
+        .robot-eye { fill: #3898FF; filter: drop-shadow(0 0 8px rgba(56, 152, 255, 1)); }
+        .panel-frame { fill: #2d3748; stroke: #4a5568; stroke-width: 3; }
+        .panel-screen { fill: #1a202c; }
+        .blueprint-grid { stroke: rgba(56, 152, 255, 0.15); stroke-width: 0.5; fill: none; }
+        .blueprint-line { stroke: #3898FF; stroke-width: 2; fill: none; stroke-linecap: round; }
+        .blueprint-line-thin { stroke: #3898FF; stroke-width: 1; fill: none; opacity: 0.6; }
+        .blueprint-dot { fill: #3898FF; filter: drop-shadow(0 0 4px rgba(56, 152, 255, 0.8)); }
+        .blueprint-annotation { fill: #3898FF; font-family: 'Inter', monospace; font-size: 8px; font-weight: 500; }
+        .blueprint-measure { stroke: #FF6B35; stroke-width: 1; fill: none; }
+        .blueprint-measure-text { fill: #FF6B35; font-family: 'Inter', monospace; font-size: 7px; font-weight: 600; }
+        .robot-arm-segment { fill: #4a5568; stroke: #2d3748; stroke-width: 2; }
+        .robot-arm-joint { fill: #FF6B35; stroke: #d55a2a; stroke-width: 1.5; filter: drop-shadow(0 0 4px rgba(255, 107, 53, 0.6)); }
+        .robot-arm-claw { fill: #5a6c7d; stroke: #4a5568; stroke-width: 1.5; }
+        .control-panel { fill: #2d3748; stroke: #4a5568; stroke-width: 2; }
+        .control-screen { fill: #1a202c; }
+        .progress-bar-bg { fill: #2d3748; stroke: #4a5568; stroke-width: 1; }
+        .progress-bar-fill { fill: url(#progressGradient); }
+        .status-led { fill: #4a5568; }
+        .status-led.active { fill: #10B981; filter: drop-shadow(0 0 4px rgba(16, 185, 129, 0.8)); }
+        .parts-rack { fill: #3a4556; stroke: #4a5568; stroke-width: 1.5; }
+        .part-slot { fill: #2d3748; stroke: #4a5568; stroke-width: 1; }
+        .spark { fill: #3898FF; filter: drop-shadow(0 0 3px rgba(56, 152, 255, 1)); }
+        .spark-weld { fill: #FFD700; filter: drop-shadow(0 0 4px rgba(255, 215, 0, 1)); }
+        .particle-swirl { fill: #FF6B35; filter: drop-shadow(0 0 2px rgba(255, 107, 53, 0.8)); }
+        .diagnostic-frame { fill: #2d3748; stroke: #4a5568; stroke-width: 3; }
+        .diagnostic-arc { fill: none; stroke: #4a5568; stroke-width: 6; stroke-linecap: round; }
+        .scanner-radar { fill: url(#radarGradient); opacity: 0.6; }
+        .scan-beam { fill: url(#scanBeamGradient); opacity: 0; }
+        .scan-ring { fill: none; stroke: #10B981; stroke-width: 2; opacity: 0; }
+        .checklist-panel { fill: #2d3748; stroke: #4a5568; stroke-width: 2; }
+        .checklist-screen { fill: #1a202c; }
+        .checklist-item-bg { fill: #2d3748; stroke: #4a5568; stroke-width: 1; }
+        .checklist-item-bg.validated { fill: rgba(16, 185, 129, 0.15); stroke: #10B981; }
+        .checkmark-circle { fill: none; stroke: #10B981; stroke-width: 2; }
+        .checkmark-path { fill: none; stroke: #10B981; stroke-width: 2.5; stroke-linecap: round; }
+        .checklist-text { fill: rgba(255, 255, 255, 0.6); font-family: 'Inter', monospace; font-size: 9px; }
+        .checklist-text.validated { fill: #10B981; font-weight: 600; }
+        .badge-circle { fill: #10B981; stroke: #059669; stroke-width: 3; }
+        .badge-star { fill: #ffffff; }
+        .badge-text { fill: #ffffff; font-family: 'Inter', sans-serif; font-weight: 700; font-size: 11px; }
+        .particle-scan { fill: #3898FF; filter: drop-shadow(0 0 4px rgba(56, 152, 255, 1)); }
+        .particle-validate { fill: #10B981; filter: drop-shadow(0 0 4px rgba(16, 185, 129, 1)); }
+        .tool-icon-bg { fill: #2d3748; stroke: #4a5568; stroke-width: 2; }
+        .tool-icon { fill: none; stroke: #3898FF; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+        .tool-icon-fill { fill: #3898FF; }
+        .particle { fill: #3898FF; filter: drop-shadow(0 0 3px rgba(56, 152, 255, 1)); }
+        .particle-green { fill: #10B981; filter: drop-shadow(0 0 3px rgba(16, 185, 129, 1)); }
+        .text-title { fill: #ffffff; font-family: 'Inter', sans-serif; font-weight: 700; font-size: 20px; text-transform: uppercase; letter-spacing: 2px; }
+        .text-description { fill: rgba(255, 255, 255, 0.8); font-family: 'Inter', sans-serif; font-weight: 400; font-size: 14px; }
+        .text-label { fill: #3898FF; font-family: 'Inter', monospace; font-size: 9px; font-weight: 600; }
+        .text-progress { fill: #10B981; font-family: 'Inter', monospace; font-size: 12px; font-weight: 700; }
+        .tool-label { fill: rgba(255, 255, 255, 0.7); font-family: 'Inter', sans-serif; font-size: 9px; font-weight: 500; }
+    </style>
+</head>
+<body>
+    <div class="factory-container">
+        <svg viewBox="0 0 600 333" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
