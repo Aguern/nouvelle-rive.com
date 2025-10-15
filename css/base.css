@@ -644,8 +644,11 @@ h6 { font-size: var(--text-base); }
 .hero__alpine-container {
   position: relative;
   border-radius: var(--radius-xl);
-  overflow: hidden;
+  overflow: visible;
   height: 500px;
+  margin-top: -40px;
+  transform: scale(1.1);
+  transform-origin: center center;
 }
 
 /* Alpine Canvas / Enter Key Canvas - SVG conteneur */
