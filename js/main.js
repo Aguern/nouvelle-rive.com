@@ -1266,24 +1266,27 @@ class ApprochePage {
             });
         });
 
-        // Animer Étape 3 : Dashboard live monitoring
-        const dashboardFrame = document.querySelector('#step3-visual .dashboard-frame');
-        const dashboardTitle = document.querySelector('#step3-visual .dashboard-title');
-        const dashboardTitleText = document.querySelector('#step3-visual .dashboard-title-text');
-        const liveDots = document.querySelectorAll('#step3-visual .live-dot');
-        const gaugeBackgrounds = document.querySelectorAll('#step3-visual .gauge-bg');
-        const gaugeProgressCircles = document.querySelectorAll('#step3-visual .gauge-progress');
-        const gaugeValues = document.querySelectorAll('#step3-visual .gauge-value');
-        const gaugeLabels = document.querySelectorAll('#step3-visual .gauge-label');
-        const barLabels = document.querySelectorAll('#step3-visual .bar-label');
-        const barFills = document.querySelectorAll('#step3-visual .bar-fill');
-        const successCircle = document.querySelector('#step3-visual .success-circle');
-        const successCheckmark = document.querySelector('#step3-visual .success-checkmark');
-        const successRays = document.querySelectorAll('#step3-visual .success-ray');
+        // Animer Étape 3 : L'Équipe Augmentée - Période d'Essai (PATTERN COMME ÉTAPES 1-2)
+        const workspaceTable = document.querySelector('#step3-visual .workspace-table');
+        const humanParts = document.querySelectorAll('#step3-visual .human-part');
+        const step3RobotParts = document.querySelectorAll('#step3-visual .robot-part');
+        const step3RobotEyes = document.querySelectorAll('#step3-visual .robot-eye-left, #step3-visual .robot-eye-right');
+        const step3RobotHands = document.querySelectorAll('#step3-visual .robot-hand-left, #step3-visual .robot-hand-right');
+        const step3RobotScreen = document.querySelector('#step3-visual .robot-screen');
+        const step3RobotActivity = document.querySelectorAll('#step3-visual .robot-activity-1, #step3-visual .robot-activity-2');
+        const step3AntennaePulse = document.querySelectorAll('#step3-visual .antenna-pulse-left, #step3-visual .antenna-pulse-right');
+        const dataFlows = document.querySelectorAll('#step3-visual .data-flow');
+        const sharedDocs = document.querySelectorAll('#step3-visual .doc-shared');
+        const bubbles = document.querySelectorAll('#step3-visual [class^="bubble-"]');
+        const teamBadge = document.querySelector('#step3-visual .team-badge');
+        const step3PerformanceIndicator = document.querySelector('#step3-visual .performance-indicator');
+        const step3PerformanceTexts = document.querySelectorAll('#step3-visual .performance-text-value, #step3-visual .performance-text-label');
+        const robotLowerBody = document.querySelector('#step3-visual .robot-lower-body');
+        const human3Arms = document.querySelectorAll('#step3-visual .human-3-arm-left, #step3-visual .human-3-arm-right');
 
-        // 1. Cadre du dashboard se dessine (boot up)
-        if (dashboardFrame) {
-            gsap.to(dashboardFrame, {
+        // 1. Table de travail se dessine (comme doc-frame étape 1)
+        if (workspaceTable) {
+            gsap.to(workspaceTable, {
                 strokeDashoffset: 0,
                 duration: 0.8,
                 ease: 'power2.out',
@@ -1295,46 +1298,13 @@ class ApprochePage {
             });
         }
 
-        // 2. Titre se remplit (typing effect)
-        if (dashboardTitle) {
-            gsap.to(dashboardTitle, {
-                attr: { width: 120 },
-                duration: 0.6,
-                delay: 0.8,
-                ease: 'power2.out',
-                scrollTrigger: {
-                    trigger: '.timeline-step[data-step="3"]',
-                    start: 'top center',
-                    toggleActions: 'play none none reverse'
-                }
-            });
-        }
-
-        // 2b. Texte "Tableau de bord" apparaît
-        if (dashboardTitleText) {
-            gsap.to(dashboardTitleText, {
-                opacity: 1,
-                duration: 0.4,
-                delay: 1.2,
-                ease: 'power2.out',
-                scrollTrigger: {
-                    trigger: '.timeline-step[data-step="3"]',
-                    start: 'top center',
-                    toggleActions: 'play none none reverse'
-                }
-            });
-        }
-
-        // 3. Indicateurs LIVE clignotent
-        liveDots.forEach((dot, index) => {
-            gsap.to(dot, {
-                opacity: 1,
+        // 2. Membres humains se dessinent (comme robot-part étape 2)
+        humanParts.forEach((part, index) => {
+            gsap.to(part, {
+                strokeDashoffset: 0,
                 duration: 0.5,
-                delay: 1.2 + (index * 0.15),
-                yoyo: true,
-                repeat: -1,
-                repeatDelay: 0.3,
-                ease: 'power2.inOut',
+                delay: 0.8 + (index * 0.08),
+                ease: 'power2.out',
                 scrollTrigger: {
                     trigger: '.timeline-step[data-step="3"]',
                     start: 'top center',
@@ -1343,46 +1313,27 @@ class ApprochePage {
             });
         });
 
-        // 4. Labels des gauges apparaissent
-        gaugeLabels.forEach((label, index) => {
-            gsap.to(label, {
+        // 3. Robot se dessine (comme robot-part étape 2)
+        step3RobotParts.forEach((part, index) => {
+            gsap.to(part, {
+                strokeDashoffset: 0,
+                duration: 0.5,
+                delay: 1.5 + (index * 0.1),
+                ease: 'power2.out',
+                scrollTrigger: {
+                    trigger: '.timeline-step[data-step="3"]',
+                    start: 'top center',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        });
+
+        // 4. Yeux du robot apparaissent (comme robot-eye étape 2)
+        step3RobotEyes.forEach((eye, index) => {
+            gsap.to(eye, {
                 opacity: 1,
                 duration: 0.3,
-                delay: 1.5 + (index * 0.1),
-                scrollTrigger: {
-                    trigger: '.timeline-step[data-step="3"]',
-                    start: 'top center',
-                    toggleActions: 'play none none reverse'
-                }
-            });
-        });
-
-        // 5. Backgrounds des gauges pulsent (calibration)
-        gaugeBackgrounds.forEach((bg, index) => {
-            gsap.to(bg, {
-                opacity: 0.5,
-                duration: 0.5,
-                delay: 1.5 + (index * 0.3),
-                yoyo: true,
-                repeat: 2,
-                ease: 'sine.inOut',
-                scrollTrigger: {
-                    trigger: '.timeline-step[data-step="3"]',
-                    start: 'top center',
-                    toggleActions: 'play none none reverse'
-                }
-            });
-        });
-
-        // 6. Gauges se remplissent + compteur numérique
-        gaugeProgressCircles.forEach((gauge, index) => {
-            const targetValue = index === 0 ? 85 : 92;
-
-            // Gauge progress
-            gsap.to(gauge, {
-                strokeDashoffset: 55,
-                duration: 1.5,
-                delay: 2 + (index * 0.3),
+                delay: 2.2 + (index * 0.1),
                 ease: 'power2.out',
                 scrollTrigger: {
                     trigger: '.timeline-step[data-step="3"]',
@@ -1390,17 +1341,108 @@ class ApprochePage {
                     toggleActions: 'play none none reverse'
                 }
             });
+        });
 
-            // Counter animation
-            if (gaugeValues[index]) {
-                gsap.to({ val: 0 }, {
-                    val: targetValue,
-                    duration: 1.5,
-                    delay: 2 + (index * 0.3),
-                    ease: 'power2.out',
-                    onUpdate: function() {
-                        gaugeValues[index].textContent = Math.round(this.targets()[0].val) + '%';
-                    },
+        // 5. Écran et lignes d'activité apparaissent
+        if (step3RobotScreen) {
+            gsap.to(step3RobotScreen, {
+                opacity: 1,
+                duration: 0.4,
+                delay: 2.4,
+                ease: 'power2.out',
+                scrollTrigger: {
+                    trigger: '.timeline-step[data-step="3"]',
+                    start: 'top center',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        }
+        step3RobotActivity.forEach((line, index) => {
+            gsap.to(line, {
+                opacity: 1,
+                duration: 0.3,
+                delay: 2.5 + (index * 0.1),
+                ease: 'power2.out',
+                scrollTrigger: {
+                    trigger: '.timeline-step[data-step="3"]',
+                    start: 'top center',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        });
+
+        // 6. Mains du robot apparaissent
+        step3RobotHands.forEach((hand, index) => {
+            gsap.to(hand, {
+                opacity: 1,
+                duration: 0.3,
+                delay: 2.3 + (index * 0.1),
+                ease: 'power2.out',
+                scrollTrigger: {
+                    trigger: '.timeline-step[data-step="3"]',
+                    start: 'top center',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        });
+
+        // 7. Antennes pulsent
+        step3AntennaePulse.forEach((antenna, index) => {
+            gsap.to(antenna, {
+                opacity: 1,
+                duration: 0.3,
+                delay: 2.2 + (index * 0.1),
+                ease: 'power2.out',
+                scrollTrigger: {
+                    trigger: '.timeline-step[data-step="3"]',
+                    start: 'top center',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        });
+
+        // 8. Connexions de données se dessinent
+        dataFlows.forEach((flow, index) => {
+            gsap.to(flow, {
+                strokeDashoffset: 0,
+                duration: 0.6,
+                delay: 2.8 + (index * 0.15),
+                ease: 'power2.out',
+                scrollTrigger: {
+                    trigger: '.timeline-step[data-step="3"]',
+                    start: 'top center',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        });
+
+        // 9. Tâches sur la table apparaissent et se cochent progressivement
+        const taskItems = document.querySelectorAll('#step3-visual .task-item');
+        const taskCheckmarks = document.querySelectorAll('#step3-visual .task-checkmark');
+
+        taskItems.forEach((task, index) => {
+            // Tâche apparaît
+            gsap.to(task, {
+                opacity: 1,
+                y: -5,
+                duration: 0.4,
+                delay: 2.8 + (index * 0.3),
+                ease: 'back.out(1.7)',
+                scrollTrigger: {
+                    trigger: '.timeline-step[data-step="3"]',
+                    start: 'top center',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+
+            // Checkmark apparaît après
+            if (taskCheckmarks[index]) {
+                gsap.to(taskCheckmarks[index], {
+                    opacity: 1,
+                    scale: 1.2,
+                    duration: 0.3,
+                    delay: 3.2 + (index * 0.3),
+                    ease: 'back.out(2)',
                     scrollTrigger: {
                         trigger: '.timeline-step[data-step="3"]',
                         start: 'top center',
@@ -1410,12 +1452,14 @@ class ApprochePage {
             }
         });
 
-        // 7. Labels des barres apparaissent
-        barLabels.forEach((label, index) => {
-            gsap.to(label, {
+        // 10. Bulles de communication apparaissent
+        bubbles.forEach((bubble, index) => {
+            gsap.to(bubble, {
                 opacity: 1,
-                duration: 0.3,
-                delay: 3 + (index * 0.2),
+                scale: 1.05,
+                duration: 0.4,
+                delay: 4.5 + (index * 0.15),
+                ease: 'back.out(1.7)',
                 scrollTrigger: {
                     trigger: '.timeline-step[data-step="3"]',
                     start: 'top center',
@@ -1424,14 +1468,14 @@ class ApprochePage {
             });
         });
 
-        // 8. Barres se remplissent avec overshoot
-        barFills.forEach((bar, index) => {
-            const targetWidth = 240 * (0.8 + index * 0.1);
-            gsap.to(bar, {
-                attr: { width: targetWidth },
-                duration: 1.2,
-                delay: 3.2 + (index * 0.3),
-                ease: 'back.out(1.2)',
+        // 11. Flux de données pulsent en continu (effet de communication active)
+        dataFlows.forEach((flow, index) => {
+            gsap.to(flow, {
+                strokeDashoffset: [0, -20],
+                duration: 1.5,
+                delay: 3.5,
+                repeat: -1,
+                ease: 'linear',
                 scrollTrigger: {
                     trigger: '.timeline-step[data-step="3"]',
                     start: 'top center',
@@ -1440,43 +1484,14 @@ class ApprochePage {
             });
         });
 
-        // 9. Rayons lumineux du succès
-        successRays.forEach((ray, index) => {
-            gsap.to(ray, {
-                opacity: 0.8,
-                duration: 0.3,
-                delay: 4.5 + (index * 0.05),
-                scrollTrigger: {
-                    trigger: '.timeline-step[data-step="3"]',
-                    start: 'top center',
-                    toggleActions: 'play none none reverse'
-                }
-            });
-
-            // Fade out rapide
-            gsap.to(ray, {
-                opacity: 0,
+        // 12. Indicateur de performance apparaît avec animation
+        if (step3PerformanceIndicator) {
+            gsap.to(step3PerformanceIndicator, {
+                opacity: 1,
+                scale: 1.05,
                 duration: 0.5,
-                delay: 4.8 + (index * 0.05),
-                scrollTrigger: {
-                    trigger: '.timeline-step[data-step="3"]',
-                    start: 'top center',
-                    toggleActions: 'play none none reverse'
-                }
-            });
-        });
-
-        // 10. Badge succès avec bounce
-        if (successCircle) {
-            gsap.fromTo(successCircle, {
-                opacity: 0,
-                scale: 0
-            }, {
-                opacity: 1,
-                scale: 0.85,
-                duration: 0.6,
-                delay: 4.5,
-                ease: 'back.out(2)',
+                delay: 5.2,
+                ease: 'back.out(1.7)',
                 scrollTrigger: {
                     trigger: '.timeline-step[data-step="3"]',
                     start: 'top center',
@@ -1485,13 +1500,150 @@ class ApprochePage {
             });
         }
 
-        // 11. Checkmark se dessine
-        if (successCheckmark) {
-            gsap.to(successCheckmark, {
-                strokeDashoffset: 0,
+        // 13. Texte de performance avec compteur animé
+        const performanceValue = document.querySelector('#step3-visual .performance-text-value');
+        if (performanceValue && step3PerformanceTexts.length > 0) {
+            // Animation du compteur de 0% à +45%
+            gsap.fromTo(performanceValue,
+                {
+                    textContent: "+0%",
+                    opacity: 0
+                },
+                {
+                    textContent: "+45%",
+                    opacity: 1,
+                    duration: 1.5,
+                    delay: 5.4,
+                    ease: 'power2.out',
+                    snap: { textContent: 1 },
+                    scrollTrigger: {
+                        trigger: '.timeline-step[data-step="3"]',
+                        start: 'top center',
+                        toggleActions: 'play none none reverse'
+                    },
+                    onUpdate: function() {
+                        const value = Math.round(parseFloat(this.targets()[0].textContent));
+                        this.targets()[0].textContent = `+${value}%`;
+                    }
+                }
+            );
+
+            // Label apparaît
+            const performanceLabel = document.querySelector('#step3-visual .performance-text-label');
+            if (performanceLabel) {
+                gsap.to(performanceLabel, {
+                    opacity: 1,
+                    duration: 0.4,
+                    delay: 5.5,
+                    ease: 'power2.out',
+                    scrollTrigger: {
+                        trigger: '.timeline-step[data-step="3"]',
+                        start: 'top center',
+                        toggleActions: 'play none none reverse'
+                    }
+                });
+            }
+        }
+
+        // 14. Animation de la bulle avec clé à molette (humain 3)
+        const bubbleWrench = document.querySelector('#step3-visual .bubble-3-wrench');
+        if (bubbleWrench) {
+            gsap.to(bubbleWrench, {
+                opacity: 1,
+                y: -5,
                 duration: 0.5,
-                delay: 4.7,
-                ease: 'power2.out',
+                delay: 4.5,
+                ease: 'back.out(1.7)',
+                scrollTrigger: {
+                    trigger: '.timeline-step[data-step="3"]',
+                    start: 'top center',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        }
+
+        // 15. Animation du bas du robot (effet ombre sous la table)
+        if (robotLowerBody) {
+            gsap.to(robotLowerBody, {
+                opacity: 1,
+                duration: 0.6,
+                delay: 1.5,
+                ease: 'power2.inOut',
+                scrollTrigger: {
+                    trigger: '.timeline-step[data-step="3"]',
+                    start: 'top center',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        }
+
+        // 16. Animation des bras de l'humain 3
+        if (human3Arms && human3Arms.length > 0) {
+            human3Arms.forEach((arm, index) => {
+                gsap.to(arm, {
+                    strokeDashoffset: 0,
+                    duration: 0.4,
+                    delay: 1.2 + (index * 0.1),
+                    ease: 'power2.out',
+                    scrollTrigger: {
+                        trigger: '.timeline-step[data-step="3"]',
+                        start: 'top center',
+                        toggleActions: 'play none none reverse'
+                    }
+                });
+            });
+        }
+
+        // 17. Animations continues des bulles pour montrer l'interaction permanente
+        // Bulle gauche - Animation des points "typing"
+        const bubbleDots = document.querySelectorAll('#step3-visual .bubble-1-dot-1, #step3-visual .bubble-1-dot-2, #step3-visual .bubble-1-dot-3');
+        bubbleDots.forEach((dot, index) => {
+            gsap.to(dot, {
+                opacity: 0.3,
+                duration: 0.6,
+                delay: 5 + (index * 0.2),
+                repeat: -1,
+                yoyo: true,
+                ease: 'sine.inOut',
+                scrollTrigger: {
+                    trigger: '.timeline-step[data-step="3"]',
+                    start: 'top center',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        });
+
+        // Bulle droite - Pulse du checkmark
+        const bubbleCheck = document.querySelector('#step3-visual .bubble-2-check');
+        if (bubbleCheck) {
+            gsap.to(bubbleCheck, {
+                scale: 1.15,
+                opacity: 0.7,
+                duration: 1.2,
+                delay: 5.5,
+                repeat: -1,
+                yoyo: true,
+                ease: 'sine.inOut',
+                scrollTrigger: {
+                    trigger: '.timeline-step[data-step="3"]',
+                    start: 'top center',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        }
+
+        // Bulle du bas - Pulse de la clé anglaise entière
+        const wrenchIcon = document.querySelectorAll('#step3-visual .bubble-3-wrench rect:not(:first-child), #step3-visual .bubble-3-wrench path, #step3-visual .bubble-3-wrench .wrench-screw');
+        if (wrenchIcon.length > 0) {
+            gsap.to(wrenchIcon, {
+                scale: 1.1,
+                opacity: 0.8,
+                duration: 1.4,
+                delay: 6,
+                repeat: -1,
+                yoyo: true,
+                ease: 'sine.inOut',
+                transformOrigin: 'center center',
                 scrollTrigger: {
                     trigger: '.timeline-step[data-step="3"]',
                     start: 'top center',
@@ -1636,7 +1788,6 @@ class ApprochePage {
             step2: visualContainer.querySelector('#step2-visual'),
             step3: visualContainer.querySelector('#step3-visual')
         };
-        
 
         // Cache tous les visuels sauf le premier
         gsap.set([visuals.step2, visuals.step3], { opacity: 0 });
@@ -1647,7 +1798,7 @@ class ApprochePage {
                 start: "top center+=150",
                 end: "bottom center-=100",
                 onEnter: () => this.updateTimelineVisual(i + 1, visuals, steps),
-                onEnterBack: () => this.updateTimelineVisual(i + 1, visuals, steps),
+                onEnterBack: () => this.updateTimelineVisual(i + 1, visuals, steps)
             });
         });
     }
