@@ -3096,8 +3096,12 @@ h6 { font-size: var(--text-base); }
 
 @media (max-width: 768px) {
     .explorations {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr !important;
         gap: var(--space-xl);
+    }
+
+    .exploration-card {
+        width: 100% !important;
     }
 }
 
@@ -4754,22 +4758,7 @@ h6 { font-size: var(--text-base); }
 }
 
 /* --- Page Cas d'Usage / Explorations --- */
-
-.explorations {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-2xl);
-    max-width: 1400px;
-    margin: 0 auto;
-}
-
-.exploration-card {
-    background: var(--color-surface);
-    border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-md);
-    border: 1px solid var(--color-gris-moyen);
-    transition: all var(--transition-slow);
-}
+/* Styles déplacés dans la section principale des explorations (ligne 3082) */
 
 .exploration-card:hover {
     transform: translateY(-8px);
