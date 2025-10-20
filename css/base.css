@@ -2679,21 +2679,29 @@ h6 { font-size: var(--text-base); }
     margin-bottom: var(--space-2xl);
   }
 
+  .bento-cards {
+    flex-direction: column !important;
+    overflow-x: visible !important;
+    gap: var(--space-md) !important;
+  }
+
   .bento-cards .solution-card {
-    padding: var(--space-sm);
+    padding: var(--space-lg);
+    flex: 1 1 auto !important;
+    width: 100% !important;
   }
 
   .bento-cards .solution-card__icon {
-    width: 28px;
-    height: 28px;
+    width: 32px;
+    height: 32px;
   }
 
   .bento-cards .solution-card__title {
-    font-size: var(--text-sm);
+    font-size: var(--text-base);
   }
 
   .bento-cards .solution-card__description {
-    font-size: var(--text-xs);
+    font-size: var(--text-sm);
   }
 
   .carousel-btn {
@@ -3083,6 +3091,13 @@ h6 { font-size: var(--text-base); }
     .explorations {
         grid-template-columns: 1fr;
         max-width: 800px;
+    }
+}
+
+@media (max-width: 768px) {
+    .explorations {
+        grid-template-columns: 1fr;
+        gap: var(--space-xl);
     }
 }
 
