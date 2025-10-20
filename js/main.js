@@ -2651,28 +2651,51 @@ class SolutionsCarousel {
 
 class ExplorationsPage {
     constructor() {
-        this.activeCard = null;
-        this.isAnimating = false;
+        this.modal = null;
+        this.modalContent = null;
+        this.backdrop = null;
+        this.closeBtn = null;
         this.init();
     }
 
     init() {
+        // Récupérer les éléments de la modal
+        this.modal = document.getElementById('articleModal');
+        this.modalContent = this.modal?.querySelector('.article-modal__content');
+        this.backdrop = this.modal?.querySelector('.article-modal__backdrop');
+        this.closeBtn = this.modal?.querySelector('.article-modal__close');
+
+        // Ajouter les event listeners sur les cartes
         const cards = document.querySelectorAll('.exploration-card');
         cards.forEach(card => {
             const preview = card.querySelector('.exploration-card__preview');
-            preview.addEventListener('click', () => this.toggleCard(card));
+            preview.addEventListener('click', () => this.openModal(card));
         });
 
-        // Gérer le hash fragment dans l'URL pour ouvrir automatiquement une section
+        // Gérer la fermeture de la modal
+        if (this.closeBtn) {
+            this.closeBtn.addEventListener('click', () => this.closeModal());
+        }
+        if (this.backdrop) {
+            this.backdrop.addEventListener('click', () => this.closeModal());
+        }
+
+        // Fermer avec la touche Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.modal?.classList.contains('article-modal--open')) {
+                this.closeModal();
+            }
+        });
+
+        // Gérer le hash fragment dans l'URL
         this.handleHashNavigation();
 
-        console.log('🔍 ExplorationsPage initialized');
+        console.log('🔍 ExplorationsPage initialized with modal');
     }
 
     handleHashNavigation() {
         const hash = window.location.hash;
         if (hash) {
-            // Retirer le # du hash
             const explorationId = hash.substring(1);
             const targetCard = document.querySelector(`article[data-exploration="${explorationId}"]`);
 
@@ -2684,101 +2707,79 @@ class ExplorationsPage {
                     // Scroll vers la carte
                     targetCard.scrollIntoView({
                         behavior: 'smooth',
-                        block: 'start'
+                        block: 'center'
                     });
 
-                    // Ouvrir la carte automatiquement
+                    // Ouvrir la modal automatiquement
                     setTimeout(() => {
-                        this.openCard(targetCard);
+                        this.openModal(targetCard);
                     }, 600);
                 }, 300);
             }
         }
     }
 
-    toggleCard(card) {
-        if (this.isAnimating) return;
+    openModal(card) {
+        if (!this.modal || !this.modalContent) return;
 
-        const isOpening = !card.classList.contains('is-expanded');
+        // Récupérer le contenu de l'article
+        const articleContent = card.querySelector('.exploration-card__content');
+        if (!articleContent) return;
 
-        // Fermer la carte déjà ouverte s'il y en a une
-        if (this.activeCard && this.activeCard !== card) {
-            this.closeCard(this.activeCard);
+        // Copier le contenu dans la modal
+        this.modalContent.innerHTML = articleContent.innerHTML;
+
+        // Afficher la modal
+        this.modal.style.display = 'flex';
+
+        // Scroller le container de la modal vers le haut
+        const modalContainer = this.modal.querySelector('.article-modal__container');
+        if (modalContainer) {
+            modalContainer.scrollTop = 0;
         }
 
-        if (isOpening) {
-            this.openCard(card);
-        } else {
-            this.closeCard(card);
-        }
+        // Forcer un reflow pour que la transition fonctionne
+        void this.modal.offsetWidth;
+
+        // Ajouter la classe pour l'animation
+        this.modal.classList.add('article-modal--open');
+
+        // Bloquer le scroll du body
+        document.body.style.overflow = 'hidden';
     }
 
-    openCard(card) {
-        this.isAnimating = true;
-        this.activeCard = card;
-        card.classList.add('is-expanded');
+    closeModal() {
+        if (!this.modal) return;
 
-        const content = card.querySelector('.exploration-card__content');
-        content.style.display = 'block';
+        // Retirer la classe d'animation
+        this.modal.classList.remove('article-modal--open');
 
-        gsap.fromTo(content,
-            { height: 0, opacity: 0, paddingTop: 0, paddingBottom: 0 },
-            {
-                height: 'auto',
-                opacity: 1,
-                paddingTop: 'var(--space-2xl)',
-                paddingBottom: 'var(--space-2xl)',
-                duration: 0.6,
-                ease: 'power3.out',
-                onComplete: () => {
-                    this.isAnimating = false;
-                    ScrollTrigger.refresh(); // Met à jour les positions pour le scroll
-                }
-            }
-        );
-    }
+        // Attendre la fin de la transition avant de masquer
+        setTimeout(() => {
+            this.modal.style.display = 'none';
+            this.modalContent.innerHTML = '';
+        }, 300);
 
-    closeCard(card) {
-        this.isAnimating = true;
-        card.classList.remove('is-expanded');
-
-        const content = card.querySelector('.exploration-card__content');
-
-        gsap.to(content,
-            {
-                height: 0,
-                opacity: 0,
-                paddingTop: 0,
-                paddingBottom: 0,
-                duration: 0.4,
-                ease: 'power2.in',
-                onComplete: () => {
-                    content.style.display = 'none';
-                    this.isAnimating = false;
-                    if (this.activeCard === card) {
-                        this.activeCard = null;
-                    }
-                }
-            }
-        );
+        // Rétablir le scroll du body
+        document.body.style.overflow = '';
     }
 
     /**
-     * Fermeture de la carte courante (méthode publique pour les boutons)
+     * Fermeture de la modal (méthode publique pour compatibilité)
      */
     closeCurrentCard(buttonElement) {
-        const card = buttonElement.closest('.exploration-card');
-        if (card) {
-            this.closeCard(card);
-        }
+        this.closeModal();
     }
 
     /**
-     * Nettoyage des animations
+     * Nettoyage
      */
     cleanup() {
-        ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-        gsap.killTweensOf('*');
+        if (this.modal) {
+            this.modal.style.display = 'none';
+            this.modal.classList.remove('article-modal--open');
+        }
+        document.body.style.overflow = '';
     }
 }
 
