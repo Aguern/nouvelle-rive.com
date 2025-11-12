@@ -68,46 +68,6 @@ graph TD
 
 ---
 
-## Compétences démontrées
-
-```mermaid
-mindmap
-  root((Compétences))
-    Design & UX
-      Interface responsive
-        Mobile-first
-        Menu burger adaptatif
-      Animations
-        Scroll-triggered GSAP
-        GPU-accelerated
-      Style moderne
-        Glass morphism
-        Effets visuels
-      Accessibilité
-        ARIA labels
-        Navigation clavier
-    Performance
-      Optimisation
-        Chargement ressources
-        Lazy loading iframes
-        Cache-busting assets
-      Techniques avancées
-        Animations GPU
-        Ressources optimisées
-    Architecture
-      Modularité
-        Icônes SVG modulaires
-        Composants réutilisables
-      Organisation
-        Structure multi-pages
-        Code vanilla JS
-      Composants
-        Cards
-        Timelines
-        Q&A sections
-```
-
----
 
 ## Stack technique détaillée
 
