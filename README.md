@@ -1,4 +1,4 @@
-Nouvelle-Rive.com
+nouvelle-rive.com
 
 Site vitrine de démonstration technique
 
@@ -7,10 +7,9 @@ Démo en ligne : https://nouvelle-rive.vercel.app
 
 A propos
 
-Ce projet est un site vitrine créé pour démontrer mes compétences en développement web front-end. Il présente un concept fictif de services d'automatisation et d'IA, avec plusieurs pages thématiques (cas d'usage, méthodologie, valeurs).
+Ce projet est un site vitrine créé pour démontrer mes compétences en développement web front-end. Il présente une offre de services d'automatisation et d'IA, avec plusieurs pages thématiques (cas d'usage, méthodologie, valeurs).
 
 L'objectif est de montrer ma capacité à créer une interface professionnelle, fluide et accessible, tout en communiquant sur des sujets techniques complexes de manière claire.
-
 
 Technologies utilisées
 
