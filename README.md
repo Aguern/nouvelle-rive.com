@@ -1,93 +1,87 @@
-# Nouvelle-Rive.com
+Nouvelle-Rive.com
 
-> Site vitrine pour Nouvelle Rive - Solutions d'automatisation et d'IA sur-mesure
+Site vitrine de démonstration technique
 
-[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://nouvelle-rive.com)
+Démo en ligne : https://nouvelle-rive.vercel.app
 
-## À propos
 
-**Nouvelle-Rive.com** est le site vitrine de mon activité de conseil en automatisation et intelligence artificielle. Il présente mes services, mon approche méthodologique et des cas d'usage concrets pour différents secteurs (fiscal, assurance, agriculture, etc.).
+A propos
 
-Ce projet démontre ma capacité à créer une expérience web professionnelle et engageante pour communiquer sur des sujets techniques complexes.
+Ce projet est un site vitrine créé pour démontrer mes compétences en développement web front-end. Il présente un concept fictif de services d'automatisation et d'IA, avec plusieurs pages thématiques (cas d'usage, méthodologie, valeurs).
 
-## Stack technique
+L'objectif est de montrer ma capacité à créer une interface professionnelle, fluide et accessible, tout en communiquant sur des sujets techniques complexes de manière claire.
 
-- **HTML5** - Structure sémantique et accessible
-- **CSS3** - Design moderne avec variables CSS, Grid, Flexbox
-- **JavaScript (Vanilla)** - Interactions et logique métier
-- **GSAP** (GreenSock Animation Platform) - Animations fluides et scroll-triggered
-- **SVG** - Icônes et illustrations vectorielles personnalisées
 
-## Structure du projet
+Technologies utilisées
 
-```
+- HTML5 : Structure sémantique et accessible
+- CSS3 : Design moderne (variables CSS, Grid, Flexbox)
+- JavaScript : Vanilla JS pour les interactions
+- GSAP : Animations fluides et scroll-triggered (ScrollTrigger)
+- SVG : Icônes et illustrations vectorielles
+- Vercel : Hébergement et déploiement
+
+
+Structure du projet
+
 nouvelle-rive.com/
-├── index.html              # Page d'accueil
-├── css/
-│   └── base.css            # Styles globaux
-├── js/
-│   └── main.js             # Scripts principaux
-├── approche/               # Méthodologie en 3 étapes
-├── cas-usage/              # Exemples d'assistants IA
-│   └── demos/              # Démos interactives par secteur
-├── Fondations/             # Valeurs et principes
-├── contact/                # Page de contact
-└── demos/                  # Animations hero (factory scene)
-```
+├── index.html
+├── css/base.css
+├── js/main.js
+├── approche/
+├── cas-usage/
+│   └── demos/
+├── Fondations/
+├── contact/
+└── demos/
 
-## Fonctionnalités clés
 
-### 🎨 Design & UX
+Compétences démontrées
+
+Design et UX
 - Interface responsive (mobile-first)
 - Navigation adaptative avec menu burger
-- Animations scroll-triggered (GSAP ScrollTrigger)
+- Animations scroll-triggered avec GSAP
 - Glass morphism et effets visuels modernes
 - Accessibilité (aria-labels, navigation au clavier)
 
-### ⚡ Performance
+Performance
 - Chargement optimisé des ressources
-- Lazy loading des démos
+- Lazy loading des démos iframe
 - Animations GPU-accelerated
-- Versioning des assets CSS/JS
+- Cache-busting sur les assets CSS/JS
 
-### 🧩 Composants réutilisables
+Architecture
 - Système d'icônes SVG modulaire
-- Cards interactives avec hover effects
-- Timeline verticale animée
-- Sections Q&A avec scroll animations
+- Composants réutilisables (cards, timelines, Q&A)
+- Structure multi-pages organisée
+- Code vanilla JS (pas de framework pour un site vitrine léger)
 
-## Développement
 
-```bash
-# Cloner le repository
+Développement local
+
 git clone https://github.com/Aguern/nouvelle-rive.com.git
+cd nouvelle-rive.com
 
-# Ouvrir avec un serveur local (ex: VS Code Live Server)
-# Ou simplement ouvrir index.html dans un navigateur
-```
+Ouvrir index.html avec un serveur local (Live Server, http-server, etc.)
 
-## Points d'attention technique
 
-- **Pas de framework** : Choix délibéré de vanilla JS pour un site vitrine léger et performant
-- **Animations GSAP** : Bibliothèque professionnelle pour des animations fluides et performantes
-- **Structure modulaire** : Chaque page/section est organisée pour faciliter la maintenance
-- **Versioning** : Cache-busting sur les assets CSS/JS (`?v=3.0`)
+Points techniques notables
 
-## Contexte et objectif
+- Pas de framework JavaScript : Choix délibéré pour un site vitrine statique et performant
+- Animations GSAP : Bibliothèque professionnelle pour des animations fluides
+- Structure modulaire : Organisation claire pour faciliter la maintenance
+- Versioning des assets : Cache-busting avec paramètres de version
 
-Ce projet fait partie de mon portfolio technique. Il illustre :
-1. **Ma capacité à communiquer** sur des sujets techniques complexes (IA, automatisation)
-2. **Mon attention au détail** (UX, accessibilité, performance)
-3. **Mon approche pragmatique** (vanilla JS plutôt que frameworks lourds pour un site vitrine)
 
-> **Note** : Ce repository contient uniquement le site vitrine. Mes projets ML/IA (Python, FastAPI, modèles de deep learning) sont dans d'autres repositories privés en raison de la confidentialité des données clients.
+Contexte
 
-## Contact
+Ce projet fait partie de mon portfolio technique. Il illustre ma capacité à :
+1. Structurer et développer un site multi-pages
+2. Créer une expérience utilisateur engageante
+3. Communiquer sur des sujets techniques (IA, automatisation)
+4. Optimiser les performances et l'accessibilité
 
-Pour toute question ou collaboration :
-- 🌐 [nouvelle-rive.com](https://nouvelle-rive.com)
-- 📧 [contact@nouvelle-rive.com](mailto:contact@nouvelle-rive.com)
 
----
-
-**Statut** : En production | **Dernière mise à jour** : Novembre 2024
+Statut : Démo en ligne
+Dernière mise à jour : Novembre 2025
