@@ -6,7 +6,7 @@ Site vitrine de démonstration technique
 
 ---
 
-## 📋 À propos
+## À propos
 
 Ce projet est un site vitrine créé pour démontrer mes compétences en développement web front-end. Il présente une offre de services d'automatisation et d'IA, avec plusieurs pages thématiques (cas d'usage, méthodologie, valeurs).
 
@@ -14,7 +14,7 @@ L'objectif est de montrer ma capacité à créer une interface professionnelle, 
 
 ---
 
-## 🛠️ Technologies utilisées
+## Technologies utilisées
 
 ```mermaid
 mindmap
@@ -45,7 +45,7 @@ mindmap
 
 ---
 
-## 📁 Structure du projet
+## Structure du projet
 
 ```mermaid
 graph TD
@@ -68,7 +68,7 @@ graph TD
 
 ---
 
-## 💡 Compétences démontrées
+## Compétences démontrées
 
 ```mermaid
 mindmap
@@ -109,7 +109,7 @@ mindmap
 
 ---
 
-## 🚀 Stack technique détaillée
+## Stack technique détaillée
 
 ```mermaid
 flowchart LR
@@ -128,7 +128,7 @@ flowchart LR
 
 ---
 
-## 📊 Statut
+## Statut
 
-**Statut** : ✅ Démo en ligne
+**Statut** : Démo en ligne
 **Dernière mise à jour** : Novembre 2025
