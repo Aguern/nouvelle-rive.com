@@ -58,30 +58,5 @@ Architecture
 - Code vanilla JS (pas de framework pour un site vitrine léger)
 
 
-Développement local
-
-git clone https://github.com/Aguern/nouvelle-rive.com.git
-cd nouvelle-rive.com
-
-Ouvrir index.html avec un serveur local (Live Server, http-server, etc.)
-
-
-Points techniques notables
-
-- Pas de framework JavaScript : Choix délibéré pour un site vitrine statique et performant
-- Animations GSAP : Bibliothèque professionnelle pour des animations fluides
-- Structure modulaire : Organisation claire pour faciliter la maintenance
-- Versioning des assets : Cache-busting avec paramètres de version
-
-
-Contexte
-
-Ce projet fait partie de mon portfolio technique. Il illustre ma capacité à :
-1. Structurer et développer un site multi-pages
-2. Créer une expérience utilisateur engageante
-3. Communiquer sur des sujets techniques (IA, automatisation)
-4. Optimiser les performances et l'accessibilité
-
-
 Statut : Démo en ligne
 Dernière mise à jour : Novembre 2025
